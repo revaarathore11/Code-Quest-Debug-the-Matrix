@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 A 5-Level Bug-Catching Game
 
 A browser-based game that gamifies debugging and problem-solving.
@@ -77,5 +76,3 @@ User Input → Game Engine → Rendering (Canvas) → Save Progress → Updated 
 	•	Implement persistent progress
 	•	Ensure keyboard accessibility
 	•	Create an enjoyable, polished browser-based game experience
-
-=======
