@@ -15,10 +15,10 @@ h1 {
     color: #cccccc;
     font-size: 1rem;
 }
-canvas {
+/* canvas {
     background: #000;
-    border: 2px solid #0f0;
-}
+    border: 2px solid #0f0; */
+/* } */
 #intro {
     text-align: center;
     font-size: 18px;
