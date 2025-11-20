@@ -34,10 +34,10 @@ canvas {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s ease; /* smooth hover */
+    transition: 0.3s ease; 
 }
 
 #startBtn:hover {
-    background-color: #45a049; /* slightly darker on hover */
-    transform: scale(1.05);   /* small zoom effect */
+    background-color: #45a049;
+    transform: scale(1.05);
 }
