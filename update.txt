@@ -1,0 +1,12 @@
+revaa rathore 
+date- 20/11/2025
+task did today = 	
+    •	Designed and refined the Home Page UI.
+	•	Added:
+	•	Game title + subtitle
+	•	Menu box with High Score, Difficulty, Levels, Settings
+	•	Start button
+	•	Table-based vertical layout
+	•	ARIA labels for accessibility
+	•	Improved visual styling (sandbox theme colors, glow effects, box styling).
+	•	Added a short game storyline to the homepage with glowing text.
