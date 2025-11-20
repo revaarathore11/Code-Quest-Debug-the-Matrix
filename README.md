@@ -1,52 +1,88 @@
-A 5-Level Bug-Catching Game
+🧩 Code Quest — A 5-Level Debugging Adventure
 
-A browser-based game that gamifies debugging and problem-solving.
+A browser-based game that turns debugging into an exciting, interactive learning experience.
+Instead of catching pixel bugs, players now fix real code bugs inside a virtual coding world — mastering logic, syntax, and problem-solving as they progress through 5 levels.
+
+
 
 📌 Overview
 
-Debugger Dash is a grid-based browser game where players catch bugs, avoid obstacles, and progress through 5 increasingly challenging levels.
-The goal is to make debugging concepts fun, visual, and interactive.
+Code Quest transforms debugging into a game.
+Players are presented with broken JavaScript snippets containing hidden bugs — syntax errors, logic flaws, edge-case traps, and even async issues.
+
+To advance, the player must:
+	•	Read the broken snippet
+	•	Identify what’s wrong
+	•	Fix it in the built-in editor
+	•	Run tests
+	•	Pass all challenges
+
+As levels increase, complexity rises — teaching real programming concepts in a fun, interactive way.
+
+
 
 🎯 Problem Statement
 
-Debugging concepts often feel abstract for beginners.
-This project solves that by converting debugging into a visual game, helping players think like programmers through active interaction.
+Beginners often struggle with debugging because it’s:
+	•	abstract
+	•	frustrating
+	•	difficult to visualize
+
+Code Quest solves this by gamifying the debugging process.
+Instead of reading dry textbook errors, players learn by doing — analyzing real code problems and seeing instant feedback through the game’s test engine.
+
+
 
 📝 Features
 
 🔥 Core Features
-	•	5+ Levels of increasing difficulty
-	•	Score tracking & timer system
-	•	Keyboard controls with ARIA labels for accessibility
-	•	Persistent game progress using LocalStorage or IndexedDB
-	•	Responsive design (desktop + mobile)
-	•	Canvas-based rendering for smooth gameplay
+	•	5+ debugging levels, gradually increasing in difficulty
+	•	Built-in code editor for fixing snippets
+	•	Instant test feedback using an evaluator
+	•	Progress saving using localStorage
+	•	Keyboard-accessible controls using ARIA labels
+	•	Responsive layout for desktop & tablet
+	•	JSON-based challenge system
+	•	No backend required
+
+
 
 🌟 Optional Stretch Features (If Implemented)
-	•	Offline play (Service Worker)
-	•	Simple routing (home, play, leaderboard)
-	•	Export/import game state as JSON
-	•	Multi-language support (i18n)
+	•	Light/dark theme for the editor
+	•	A “Hint” system
+	•	Leaderboard or scoring system
+	•	Code history tracking per level
+	•	Export/import challenge progress
+	•	More advanced levels: recursion, OOP, async, algorithms
+	•	Multi-language support (Python, JS, etc.)
+
+
 
 🛠️ Tech Stack
-	•	HTML5, CSS3, JavaScript (ES6 Modules)
-	•	Canvas API (game rendering)
-	•	LocalStorage / IndexedDB (data persistence)
-	•	Git / GitHub (version control + deployment)
-	•	Chrome DevTools + Lighthouse (testing & optimization)
-  
-⚙️ Game Architecture :
+	•	HTML5
+	•	CSS3
+	•	JavaScript (ES6 Modules)
+	•	localStorage for saving progress
+	•	JSON for challenge definitions
+	•	Chrome DevTools + Lighthouse for testing
+	•	(Optional) CodeMirror/Monaco if you use a real editor
+
+
+⚙️ Game Architecture
 
 🧩 Flow
 
-User Input → Game Engine → Rendering (Canvas) → Save Progress → Updated Output
+Load Level → Display Broken Code → Player Fixes Code → Run Tests → 
+If Passed → Save Progress → Unlock Next Level
 
 🧠 Key Components
-	•	Game Loop: requestAnimationFrame()
-	•	Collision Detection: coordinate-based comparison
-	•	Level Systems: arrays/objects storing obstacles, enemies, speeds
-	•	Event Listeners: keyboard movement controls
-	•	Timers: per-level countdown & difficulty scaling
+	•	Evaluator Engine: uses Function() sandbox to test user code
+	•	Challenge Loader: loads JSON with snippets & test cases
+	•	UI Renderer: displays snippet, editor, results, and feedback
+	•	Storage System: saves completed levels
+	•	Level Manager: handles progression through challenges
+
+
 
 🗂️ Project Structure (Suggested)
 
@@ -55,24 +91,33 @@ User Input → Game Engine → Rendering (Canvas) → Save Progress → Updated 
 │── styles/
 │     └── style.css
 │── scripts/
-│     ├── game.js
-│     ├── engine.js
-│     ├── levels.js
-│     ├── storage.js
-│     └── utils.js
-│── assets/
-│     ├── images/
-│     └── sounds/
+│     ├── engine.js         # game flow + integration
+│     ├── ui.js             # rendering and interactions
+│     ├── evaluator.js      # runs user code & tests
+│     ├── challenges.js     # loads JSON challenge data
+│     └── storage.js        # handles localStorage
+│── data/
+│     └── challenges.json   # all 5+ levels
 └── README.md
 
+
+
+
 🧪 Testing
-	•	Manual gameplay testing
-	•	Lighthouse for performance/accessibility
-	•	Console checks for score & saved data
-	•	FPS monitoring for smooth animations
+	•	Manual test runs for each challenge
+	•	Lighthouse for accessibility, performance, and best practices
+	•	Console debugging for evaluator issues
+	•	JSON validation for challenges
+	•	Try/catch safety tests for error-prone user code
+
+
 
 🚀 Goal of the Project
-	•	Build a smooth, responsive 5-level game
-	•	Implement persistent progress
-	•	Ensure keyboard accessibility
-	•	Create an enjoyable, polished browser-based game experience
+
+The goal of Code Quest is to develop a fully interactive debugging game that:
+	•	Teaches real-world coding and problem-solving
+	•	Makes debugging enjoyable instead of frustrating
+	•	Encourages players to think logically and analytically
+	•	Implements clean UI/UX and accessibility
+	•	Demonstrates modern web development concepts
+	•	Works entirely offline with persistent progress
