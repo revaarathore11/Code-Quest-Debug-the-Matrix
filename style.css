@@ -19,3 +19,25 @@ canvas {
     background: #000;
     border: 2px solid #0f0;
 }
+#intro {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 15px;
+    color: #333;
+}
+
+#startBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease; /* smooth hover */
+}
+
+#startBtn:hover {
+    background-color: #45a049; /* slightly darker on hover */
+    transform: scale(1.05);   /* small zoom effect */
+}
