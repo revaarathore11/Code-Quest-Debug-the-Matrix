@@ -93,3 +93,45 @@ h1 {
         opacity: 1;
     }
 }
+/* Info label styling (High Score, Difficulty, Levels, Settings) */
+.menu-table td:first-child {
+    font-weight: bold;
+    color: #8b6f2f;          
+    padding: 8px;
+    text-align: right;
+    text-shadow: 0px 0px 3px #e6d28a;
+}
+
+/* Info value styling */
+.menu-table td:last-child span,
+.menu-table td:last-child select {
+    background: #fff4cc;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 2px solid #e7d088;
+    box-shadow: 0px 0px 4px #e7d088 inset;
+    font-weight: bold;
+}
+
+/* Dropdown styling */
+.menu-select {
+    width: 100%;
+    padding: 6px;
+    border-radius: 6px;
+    border: 2px solid #c7a957;
+    background: #fff4cc;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: 0.2s ease;
+}
+
+.menu-select:hover {
+    background: #ffeeb3;
+}
+
+/* Align numbers in High Score nicely */
+#highScore {
+    display: inline-block;
+    min-width: 40px;
+    text-align: center;
+}
