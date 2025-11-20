@@ -53,3 +53,15 @@ h1 {
     width: 100%;
     border-radius: 8px;
 }
+.menu-table {
+    margin: 0 auto;
+}
+
+.menu-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    font-size: 1rem;
+}
