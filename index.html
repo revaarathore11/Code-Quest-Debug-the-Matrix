@@ -7,26 +7,76 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="home-wrapper">
 
-        <h1>🧩 Code Quest: Debug the Matrix</h1>
+        <!-- Game Title -->
+        <h1 class="game-title">🧩 Code Quest: Debug the Matrix</h1>
         <p class="subtitle">Catch the bugs before they break the system!</p>
 
-        <div class="info-box" aria-label="Game information panel">
-                <p><strong>Difficulty:</strong> <span id="difficultyLabel">Easy</span></p>
-                <p><strong>High Score:</strong> <span id="highScore">0</span></p>
-            </div>
-        <!-- <canvas id="gameCanvas" width="600" height="400"></canvas> -->
-        <p id="intro">Press the Start button to begin your Code Quest!</p>
-        <button id="startBtn" aria-label="Start the game">Start Game</button>
-        <button id="settingsBtn" aria-label="Open settings">Settings</button>
-    </div>
+        <!-- OUTER BOX -->
+        <div class="outer-box">
 
+            <!-- INNER MENU BOX -->
+            <div class="menu-box" aria-label="Game menu options">
+
+                <table class="menu-table" aria-label="Main game menu" >
+                    <tr>
+                        <td><strong>High Score:</strong></td>
+                        <td><span id="highScore">0</span></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <button id="startBtn" class="menu-btn" aria-label="Start the game">Start</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="difficultySelect">Difficulty</label></td>
+                        <td>
+                            <select id="difficultySelect" class="menu-select" aria-label="Select difficulty">
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="levelSelect">Levels</label></td>
+                        <td>
+                            <select id="levelSelect" class="menu-select" aria-label="Select level">
+                                <option value="1">Level 1</option>
+                                <option value="2">Level 2</option>
+                                <option value="3">Level 3</option>
+                                <option value="4">Level 4</option>
+                                <option value="5">Level 5</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="settingsSelect">Settings</label></td>
+                        <td>
+                            <select id="settingsSelect" class="menu-select" aria-label="Settings menu">
+                                <option value="volume">Volume</option>
+                                <option value="controls">Controls</option>
+                                <option value="about">About Game</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
 
     <footer>
         <p>© 2025 Code Quest | Built by Revaa and Siddhi</p>
     </footer>
-    <script src="script.js"></script>
 
+    <script src="script.js"></script>
 </body>
 </html>
