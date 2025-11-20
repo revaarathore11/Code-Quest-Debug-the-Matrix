@@ -73,3 +73,23 @@ h1 {
     font-size: 1rem;
     margin-bottom: 20px;
 }
+.storyline {
+    max-width: 500px;
+    margin: 10px auto 25px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #e0e0e0;
+    text-align: center;
+    text-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 15px #0f0;
+    animation: glowPulse 2s ease-in-out infinite alternate;
+}
+@keyframes glowPulse {
+    from {
+        text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+        opacity: 0.7;
+    }
+    to {
+        text-shadow: 0 0 12px #0f0, 0 0 20px #0f0, 0 0 28px #0f0;
+        opacity: 1;
+    }
+}
