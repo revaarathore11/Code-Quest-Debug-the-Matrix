@@ -141,3 +141,30 @@ h1 {
     margin-bottom: 5px;
     font-style: italic;
 }
+.how-to-play-box {
+    margin: 25px auto;
+    padding: 15px 20px;
+    width: 80%;
+    max-width: 550px;
+    background: #fffbea;
+    border: 2px solid #e7d088;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(200, 180, 100, 0.3);
+    text-align: left;
+}
+
+.how-to-play-box h2 {
+    margin-bottom: 10px;
+    color: #c39b00;
+    text-shadow: 0 0 5px #ffe599;
+}
+
+.how-to-play-box ul {
+    padding-left: 20px;
+    line-height: 1.6;
+}
+
+.how-to-play-box li {
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
