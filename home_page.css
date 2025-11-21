@@ -135,3 +135,9 @@ h1 {
     min-width: 40px;
     text-align: center;
 }
+.version {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    font-style: italic;
+}
