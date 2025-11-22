@@ -1,0 +1,285 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* NIGHT SKY BACKGROUND */
+
+body {
+    font-family: 'Press Start 2P', monospace;
+    color: #d8ffe6;
+    text-align: center;
+    padding: 20px;
+    overflow-x: hidden;
+
+    /* Deep Minecraft-style night sky */
+    background: radial-gradient(circle at center,
+        #142033 0%,
+        #0c1524 40%,
+        #060b16 70%,
+        #000000 100%
+    );
+    background-attachment: fixed;
+}
+
+/*  Stars Container  */
+.stars {
+    position: fixed;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Small stars */
+.star {
+    position: absolute;
+    background: white;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: twinkle 2s infinite ease-in-out;
+}
+
+/* Plus-shaped sparks */
+.star.plus {
+    width: 8px;
+    height: 8px;
+    background: white;
+    clip-path: polygon(
+        40% 0%, 60% 0%,
+        60% 40%, 100% 40%,
+        100% 60%, 60% 60%,
+        60% 100%, 40% 100%,
+        40% 60%, 0% 60%,
+        0% 40%, 40% 40%
+    );
+    opacity: 0.9;
+    animation: twinkle 1.4s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.5); }
+}
+
+/* TITLE & TEXT */
+
+.game-title {
+    font-size: 32px;
+    margin-bottom: 14px;
+    color: #33f6ff;            /* Minecraft diamond color */
+    text-shadow: 4px 4px #0a4750, 0 0 15px #33f6ff;
+    z-index: 5;
+    position: relative;
+}
+
+.subtitle {
+    color: #afffe3;
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-shadow: 2px 2px #005f47;
+    position: relative;
+    z-index: 5;
+}
+
+.storyline {
+    max-width: 700px;
+    margin: 0 auto 30px auto;
+    font-size: 12px;
+    line-height: 1.8;
+    text-shadow: 1px 1px #003f2c;
+    position: relative;
+    z-index: 5;
+}
+
+/* Optional typewriter (if JS uses it) */
+.typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid #33f6ff;
+    width: 0;
+    animation: typing 4s steps(40) forwards, blink .7s infinite;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink {
+    50% { border-color: transparent; }
+}
+
+/* Dashboard */
+
+.outer-box {
+    width: 460px;
+    background: rgba(20, 20, 20, 0.92);
+    border: 6px solid #00c244;   /* Minecraft emerald border */
+    padding: 25px;
+    margin: 40px auto;
+    box-shadow: 0 0 20px #00c244, inset 0 0 20px #00c244;
+    animation: floatBox 3s ease-in-out infinite;
+    z-index: 5;
+    position: relative;
+}
+
+@keyframes floatBox {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.menu-box {
+    border: 5px solid #33f6ff;
+    padding: 22px;
+    background: #111;
+    box-shadow: inset 0 0 18px #33f6ff;
+}
+
+.menu-table {
+    width: 100%;
+    border-spacing: 12px;
+    font-size: 12px;
+}
+
+.menu-table td {
+    color: #caffef;
+}
+
+/* Buttons */
+
+.menu-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #00c244;         
+    color: #002910;
+    border: 4px solid #002910;
+    box-shadow: 4px 4px #001a0b;
+    transition: 0.15s;
+    position: relative;
+    animation: pulse 1.3s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 6px #00c244; }
+    50% { box-shadow: 0 0 20px #00c244; }
+    100% { box-shadow: 0 0 6px #00c244; }
+}
+
+.menu-btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px #001a0b, 0 0 25px #00ff66;
+}
+
+/* Pixel noise overlay */
+.menu-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("https://i.ibb.co/n7WLRpX/pixel-noise.png");
+    background-size: cover;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.menu-btn:hover::after {
+    opacity: 0.2;
+}
+
+/* Drop-down menus */
+.menu-select {
+    width: 100%;
+    padding: 8px;
+    font-size: 12px;
+    background: #0e0e0e;
+    color: #afffdd;
+    border: 4px solid #33f6ff;
+    box-shadow: 3px 3px #001a0b;
+    cursor: pointer;
+}
+
+.menu-select:hover {
+    border-color: #ffffff;
+}
+
+/*
+   FOOTER
+    */
+footer {
+    margin-top: 40px;
+    font-size: 10px;
+    opacity: 0.7;
+    color: #55ffcc;
+    text-shadow: 1px 1px #003f2c;
+}
+
+footer:hover {
+    opacity: 1;
+}
+
+/* PIXEL CHARACTER WALKING  */
+
+/* .pixel-character {
+    width: 48px;
+    height: 48px;
+    background: url("https://i.ibb.co/Th0vM6F/pixel-walk.png") 0 0;
+    image-rendering: pixelated;
+    position: fixed;
+    bottom: 25px;
+    left: -60px;
+    animation: walkAcross 12s linear infinite, spriteWalk 0.7s steps(4) infinite;
+    z-index: 10;
+} */
+
+@keyframes walkAcross {
+    0% { left: -60px; }
+    100% { left: 110%; }
+}
+
+@keyframes spriteWalk {
+    from { background-position: 0 0; }
+    to   { background-position: -192px 0; }
+}
+
+/* 
+   SCREEN TRANSITION
+  */
+
+#screen-transition {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: black;
+    z-index: 5000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease-out;
+}
+
+#screen-transition.active {
+    opacity: 1;
+}
+
+/* 
+   RESPONSIVE UI
+   */
+
+@media (max-width: 600px) {
+    .outer-box {
+        width: 90%;
+        padding: 15px;
+    }
+    .menu-box {
+        padding: 12px;
+    }
+    .game-title {
+        font-size: 20px;
+    }
+}
