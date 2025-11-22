@@ -224,20 +224,6 @@ footer:hover {
     opacity: 1;
 }
 
-/* PIXEL CHARACTER WALKING  */
-
-/* .pixel-character {
-    width: 48px;
-    height: 48px;
-    background: url("https://i.ibb.co/Th0vM6F/pixel-walk.png") 0 0;
-    image-rendering: pixelated;
-    position: fixed;
-    bottom: 25px;
-    left: -60px;
-    animation: walkAcross 12s linear infinite, spriteWalk 0.7s steps(4) infinite;
-    z-index: 10;
-} */
-
 @keyframes walkAcross {
     0% { left: -60px; }
     100% { left: 110%; }
@@ -267,9 +253,7 @@ footer:hover {
     opacity: 1;
 }
 
-/* 
-   RESPONSIVE UI
-   */
+/* RESPONSIVE UI */
 
 @media (max-width: 600px) {
     .outer-box {
@@ -282,4 +266,51 @@ footer:hover {
     .game-title {
         font-size: 20px;
     }
+}
+/* Minecraft Pixel Character */
+.pixel-character {
+    width: 48px;
+    height: 48px;
+    background: url("https://i.ibb.co/Th0vM6F/pixel-walk.png") 0 0;
+    image-rendering: pixelated;
+    position: fixed;
+    bottom: 25px;
+    left: 0;
+    z-index: 10;
+
+/* animations added below */
+    animation:
+        walkLoop 10s linear infinite,
+        spriteWalk 0.7s steps(4) infinite;
+}
+@keyframes spriteWalk {
+    from { background-position: 0 0; }
+    to   { background-position: -192px 0; }
+}
+/* Walk across → flip → walk back */
+@keyframes walkLoop {
+    0%   { left: 0; transform: scaleX(1); }
+    45%  { left: calc(100% - 50px); transform: scaleX(1); }
+    50%  { transform: scaleX(-1); }
+    95%  { left: 0; transform: scaleX(-1); }
+    100% { transform: scaleX(1); }
+}
+/* For better readability of the written content */
+.storyline {
+    line-height: 1.9;
+    letter-spacing: 0.4px;
+}
+.how-to-play-box ul li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+.how-to-play-box h2 {
+    margin-bottom: 12px;
+}
+.game-title {
+    margin-bottom: 18px;
+}
+
+.subtitle {
+    margin-bottom: 25px;
 }
