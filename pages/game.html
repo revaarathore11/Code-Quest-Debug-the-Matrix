@@ -20,7 +20,11 @@
             <span id="timerDisplay">Time: 60s</span>
             <span id="scoreDisplay">Score: 0</span>
         </div>
-        <div id="levelOverlay" class="overlay hidden">
+        <!-- Game Message Area -->
+        <section id="gameMessage" class="game-message" aria-live="polite">
+            <!-- Messages like “Correct!”, “Wrong!”, “Level Up!” will appear here -->
+        </section>
+                <div id="levelOverlay" class="overlay hidden">
             <h1>Level 1</h1>
             <p>Find all the bugs in the code.</p>
         </div>
@@ -49,7 +53,7 @@
         <section class="game-controls">
             <button id="startGameBtn" aria-label="Start the game">Start Game</button>
             <button id="resetGameBtn" aria-label="Reset the game">Reset Game</button>
-            
+
         </section>
         </div>
     <!-- JS -->
