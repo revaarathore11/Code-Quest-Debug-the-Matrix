@@ -62,3 +62,19 @@
 .hint-text.hidden {
     display: none;
 }
+/* --- Challenge Box (Code Snippet) --- */
+.challenge-box {
+    background: #2b2b2b; /* dark code-editor feel */
+    border: 3px solid #5f5f5f; /* pixel-style border */
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 4px; /* tiny radius = still retro */
+    box-shadow: 0 0 8px #000 inset; 
+}
+
+#codeSnippet {
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+    color: #d1d1d1;
+    white-space: pre-wrap; /* ensures code wraps */
+}
