@@ -4,31 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Quest: Debug the Matrix</title>
-    <link rel="stylesheet" href="style.css">
+
+    <!-- Correct CSS file -->
+    <link rel="stylesheet" href="home_page.css">
+    
 </head>
+
 <body>
 
+    
+    <div class="stars" id="stars"></div>
+
+
+    <div id="screen-transition"></div>
+
+    
+    <div class="pixel-character"></div>
+
+    
     <div class="home-wrapper">
 
         <!-- Game Title -->
         <h1 class="game-title">🧩 Code Quest: Debug the Matrix</h1>
         <p class="subtitle">Catch the bugs before they break the system!</p>
 
-        <p class="storyline">
-        A mysterious virus has infiltrated the system, corrupting lines of code and spawning bugs everywhere.
-        <br><br>
-        Your mission: Dive into the Code Matrix, trace the errors, and squash the bugs before time runs out.
-        <br>
-        Debug wisely… the stability of the digital world depends on you!
+        <!-- STORY TEXT (Typewriter-ready) -->
+        <p class="storyline typewriter">
+            A mysterious virus has infiltrated the system, corrupting lines of code and spawning bugs everywhere.
+            <br><br>
+            Your mission: Dive into the Code Matrix, trace the errors, and squash the bugs before time runs out.
+            <br>
+            Debug wisely… the stability of the digital world depends on you!
         </p>
 
         <!-- OUTER BOX -->
         <div class="outer-box">
 
-            <!-- INNER MENU BOX -->
+            <!-- MENU BOX -->
             <div class="menu-box" aria-label="Game menu options">
 
-                <table class="menu-table" aria-label="Main game menu" >
+                <table class="menu-table" aria-label="Main game menu">
+                    
                     <tr>
                         <td><strong>High Score:</strong></td>
                         <td><span id="highScore">0</span></td>
@@ -36,7 +52,9 @@
 
                     <tr>
                         <td colspan="2">
-                            <button id="startBtn" class="menu-btn" aria-label="Start the game">Start</button>
+                            <button id="startBtn" class="menu-btn" aria-label="Start the game">
+                                Start
+                            </button>
                         </td>
                     </tr>
 
@@ -74,6 +92,7 @@
                             </select>
                         </td>
                     </tr>
+
                 </table>
 
             </div>
@@ -81,10 +100,27 @@
 
     </div>
 
+    <!-- 🕹 How to Play Box -->
+    <div class="how-to-play-box">
+        <h2>🕹️ How to Play</h2>
+        <ul>
+            <li>Each level shows a small code snippet containing hidden <strong>bugs</strong>.</li>
+            <li>Click on the lines that contain the mistake or suspicious pattern.</li>
+            <li>Every correct bug you catch increases your score.</li>
+            <li>Clicking a clean line gives a penalty — debug carefully!</li>
+            <li>Finish all levels before the timer ends to win!</li>
+        </ul>
+    </div>
+
+    <!-- FOOTER -->
     <footer>
-        <p>© 2025 Code Quest | Built by Revaa and Siddhi</p>
+        <p class="version">Version: v1.0.0</p>
+        <p>©️ 2025 Code Quest | Built by Revaa and Siddhi</p>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- JavaScript -->
+     <script src="home_page.js" defer></script>
+
+
 </body>
 </html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Quest — Game</title>
+
+    <!-- Game Page CSS -->
+    <link rel="stylesheet" href="pages_style/game.css">
+</head>
+
+<body>
+
+    <!-- GAME WRAPPER -->
+    <div class="game-container">
+
+        <!-- Top Bar -->
+        <div class="game-header">
+            <span id="levelDisplay">Level 1</span>
+            <span id="timerDisplay">Time: 60s</span>
+            <span id="scoreDisplay">Score: 0</span>
+        </div>
+        <!-- Game Message Area -->
+        <section id="gameMessage" class="game-message" aria-live="polite">
+            <!-- Messages like “Correct!”, “Wrong!”, “Level Up!” will appear here -->
+        </section>
+                <div id="levelOverlay" class="overlay hidden">
+            <h1>Level 1</h1>
+            <p>Find all the bugs in the code.</p>
+        </div>
+        <section class="game-area"></section>
+        <main id="gameArea" aria-label="Gameplay area">
+        </main>
+       <!-- Code Snippet Area -->
+        <section class="challenge-box" aria-label="Code challenge">
+        <pre id="codeSnippet">
+            // Your debugging challenge will appear here...
+        </pre>
+        </section>
+        <!-- Hint Section -->
+        <section class="hint-section">
+            <button id="hintBtn" aria-label="Get a hint">💡 Hint</button>
+            <span id="hintText" class="hint-text hidden"></span>
+        </section>
+
+        <section class="challenge-actions">
+            <button id="submitAnswerBtn" aria-label="Submit your fix">
+                Submit
+            </button>
+        </section>
+
+    
+        <section class="game-controls">
+            <button id="startGameBtn" aria-label="Start the game">Start Game</button>
+            <button id="resetGameBtn" aria-label="Reset the game">Reset Game</button>
+
+        </section>
+        </section>
+        </div>
+    <!-- JS -->
+    <script src="../pages_script/game.js"></script>
+
+</body>
+</html>
