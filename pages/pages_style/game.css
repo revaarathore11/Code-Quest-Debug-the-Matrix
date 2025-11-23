@@ -10,6 +10,55 @@
 .game-header {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
-    margin-bottom: 15px;
+    padding: 12px 20px;
+
+    font-family: 'Press Start 2P', monospace; /* pixel font */
+    font-size: 12px;
+    color: #b8f8ff;
+
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid #00faff;          /* neon cyan border */
+    box-shadow: 0 0 12px #00faff;        /* glow */
+    border-radius: 6px;
+
+    margin-bottom: 20px;
+    
+}
+/* Hint Section — small neon style */
+.hint-section {
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* Hint Button */
+#hintBtn {
+    background: #0aff73;                 /* neon green */
+    border: 2px solid #00ff9d;           /* lighter neon edge */
+    padding: 8px 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: #000;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 0 0 8px #00ff9d;         /* glow */
+    transition: 0.2s ease-in-out;
+}
+
+#hintBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 12px #00ff9d;
+}
+
+/* Hint Text */
+.hint-text {
+    display: block;
+    margin-top: 10px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: #b8f8ff;
+    text-shadow: 0 0 6px #00faff;
+}
+
+.hint-text.hidden {
+    display: none;
 }
