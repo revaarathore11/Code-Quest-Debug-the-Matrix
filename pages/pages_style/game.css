@@ -1,114 +1,225 @@
+/* ---------- RESET ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "JetBrains Mono", monospace;
+}
+
+/* ---------- BODY ---------- */
 body {
-background: #0a0a0a;
-color: #c8f7ff;
-font-family: "JetBrains Mono", monospace;
-background-image: linear-gradient(rgba(0,255,255,0.06) 1px, transparent 1px),
-linear-gradient(90deg, rgba(0,255,255,0.06) 1px, transparent 1px);
-background-size: 40px 40px;
-}
-
-
-.game-container {
-background: rgba(0,0,0,0.7);
-border: 1px solid #00eaff;
-box-shadow: 0 0 20px #00eaff60;
-}
-
-
-.game-header span {
-color: #00eaff;
-text-shadow: 0 0 8px #00eaff;
-}
-
-
-.challenge-box {
-background: #0d0d0d;
-border: 1px solid #00ffcc;
-box-shadow: 0 0 15px #00ffcc80;
-}
-#codeSnippet {
-color: #00ffcc;
-text-shadow: 0 0 8px #00ffcc80;
-}
-
-
-button {
-background: black;
-color: #00f7ff;
-border: 1px solid #00f7ff;
-box-shadow: 0 0 12px #00f7ff80;
-font-family: "JetBrains Mono", monospace;
-transition: 0.25s ease;
-}
-button:hover {
-background: #00f7ff22;
-box-shadow: 0 0 20px #00f7ffcc;
-transform: translateY(-2px);
-}
-body {
-background: #000;
-font-family: 'Share Tech Mono', monospace;
-color: #00f8ff;
-text-shadow: 0 0 8px #00f8ff;
-}
-.game-container {
-border: 2px solid #0ff;
-box-shadow: 0 0 25px #00ff99, 0 0 60px #009966 inset;
-background: rgba(0,0,0,0.65);
-padding: 20px;
-border-radius: 12px;
-}
-.challenge-box,
-.game-header,
-.timer-wrapper,
-#codeSnippet {
-border: 2px solid #0ff;
-background: rgba(0,0,0,0.45);
-box-shadow: 0 0 12px #00ffff;
-}
-button {
-background: rgba(0,255,170,0.15);
-border: 1px solid #00ffcc;
-color: #00ffee;
-padding: 8px 14px;
-border-radius: 6px;
-cursor: pointer;
-box-shadow: 0 0 8px #00ffcc;
-}
-button:hover {
-box-shadow: 0 0 14px #00ffee;
-transform: scale(1.04);
-}
-#levelOverlay h1 {
-font-size: 3rem;
-color: #baffff;
-text-shadow: 0 0 20px #00eaff, 0 0 40px #00ffaa;
-}
-#levelOverlay p {
-font-size: 1.3rem;
-color: #aaffdd;
-}
-.challenge-box {
-    min-height: 420px !important;   /* Increased height */
+    background: #0a0f1f;
+    color: #e0e7ff;
+    display: flex;
+    justify-content: center;
     padding: 20px;
 }
 
-#codeSnippet {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    white-space: pre-wrap;
+/* ---------- GAME CONTAINER ---------- */
+.game-container {
+    width: 90%;
+    max-width: 1100px;
+    padding: 20px;
+    background: rgba(20, 25, 45, 0.6);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 16px;
+
+    /* neon glow */
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.25);
+
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.8s ease;
 }
-.challenge-actions,
-.hint-section,
-.game-controls {
+
+/* ---------- TOP BAR ---------- */
+.game-header {
     display: flex;
-    justify-content: center;
-    gap: 20px;   /* spacing between buttons */
-    margin-top: 15px;
+    justify-content: space-between;
+    padding: 12px 20px;
+    margin-bottom: 6px;
+    background: rgba(255, 255, 255, 0.05);
+
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 12px;
+
+    /* subtle neon glow */
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+/* ---------- GAME AREA ---------- */
+#gameArea {
+    height: 200px;
+    margin-bottom: 20px;
+
+    background: radial-gradient(circle at center,
+        rgba(0, 100, 255, 0.25),
+        rgba(0, 0, 0, 0.8)
+    );
+
+    border: 1px solid rgba(0, 180, 255, 0.4);
+    border-radius: 12px;
+
+    box-shadow: 0 0 20px rgba(0, 180, 255, 0.3);
+
+    /* animated neon grid */
+    background-image: 
+        linear-gradient(rgba(0,255,255,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,255,0.07) 1px, transparent 1px);
+    background-size: 35px 35px;
+    animation: gridGlow 4s linear infinite;
+}
+
+@keyframes gridGlow {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.9; }
+    100% { opacity: 0.6; }
+}
+.challenge-box {
+    min-height: 480px; /* Bigger challenge area */
+    padding: 10px;
+    margin-top: 5px;
+    background: rgba(0,0,0,0.45);
+    border: 2px solid #00ffcc;
+    box-shadow: 0 0 25px #00ffaa80;
+    border-radius: 10px;
+}
+#codeSnippet {
+    color: #00ffcc;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    text-shadow: 0 0 10px #00ffcc;
 }
 .game-container {
-    max-width: 900px;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
+/* ---------- HINT SECTION ---------- */
+.hint-section {
+    margin-bottom: 10px;
+}
 
+#hintBtn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #00ffc8;
+    background: #022b2b;
+    color: #00ffd5;
+
+    transition: 0.2s;
+}
+
+#hintBtn:hover {
+    background: #00ffd5;
+    color: #022b2b;
+    box-shadow: 0 0 10px #00ffd5;
+}
+
+.hint-text {
+    display: block;
+    margin-top: 10px;
+    color: #00ffe0;
+}
+
+/* ---------- SUBMIT + CONTROLS ---------- */
+button {
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 18px;
+
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: cyan;
+
+    border-radius: 8px;
+
+    transition: 0.25s ease;
+}
+
+button:hover {
+    background: rgba(0, 255, 255, 0.35);
+    color: #002224;
+    box-shadow: 0 0 14px cyan;
+}
+
+/* ---------- OVERLAY ---------- */
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px 40px;
+
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid #00ffe5;
+    border-radius: 12px;
+
+    box-shadow: 0 0 25px #00fff2;
+
+    text-align: center;
+    z-index: 10;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* REMOVE that neon grid area entirely */
+.game-area,
+#gameArea {
+    display: none !important;   /* hides the whole section */
+}
+.challenge-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+/* SUBMIT button — hero button */
+#submitAnswerBtn {
+    background: linear-gradient(135deg, #00ffd5 0%, #00b8ff 100%);
+    color: #002a33;
+    padding: 12px 32px;
+    font-size: 1.2rem;
+    font-weight: 600;
+
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+
+    box-shadow: 0 0 15px #00eaffaa, 0 0 40px #00eaff55;
+    transition: 0.25s ease;
+    text-shadow: 0 0 4px #002326;
+}
+
+/* Hover */
+#submitAnswerBtn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 25px #00faff, 0 0 60px #00bfff;
+}
+
+/* Focus Outline Animation */
+#submitAnswerBtn:focus {
+    outline: none;
+    box-shadow: 
+        0 0 10px #00eaff,
+        0 0 30px #00eaff,
+        0 0 60px #00eaff;
+    animation: pulse-glow 1s infinite alternate;
+}
+
+/* Keyframes for pulse glow */
+@keyframes pulse-glow {
+    from {
+        box-shadow: 0 0 15px #00eaffaa;
+    }
+    to {
+        box-shadow: 0 0 35px #00eaffff;
+    }
+}
