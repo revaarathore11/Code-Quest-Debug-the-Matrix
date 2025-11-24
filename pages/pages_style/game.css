@@ -63,21 +63,29 @@
     display: none;
 }
 /* --- Challenge Box (Code Snippet) --- */
+/* Challenge Box — bigger and more spacious */
 .challenge-box {
-    background: #2b2b2b; /* dark code-editor feel */
-    border: 3px solid #5f5f5f; /* pixel-style border */
-    padding: 12px;
+    background: #1e1e1e; /* dark code editor feel */
+    border: 3px solid #5f5f5f;
+    padding: 16px;
     margin-top: 20px;
-    border-radius: 4px; /* tiny radius = still retro */
-    box-shadow: 0 0 8px #000 inset; 
+    border-radius: 6px;
+    box-shadow: 0 0 12px #000 inset;
+    width: 100%;
+    max-width: 900px;
+    min-height: 300px; /* make it taller */
+    overflow-y: auto;  /* scroll if code is long */
 }
 
+/* Code snippet text */
 #codeSnippet {
-    font-family: "Courier New", monospace;
+    font-family: 'Courier New', monospace;
     font-size: 14px;
     color: #d1d1d1;
-    white-space: pre-wrap; /* ensures code wraps */
+    white-space: pre-wrap;
+    line-height: 1.5;   /* more spacing between lines */
 }
+
 /* --- Submit Button --- */
 #submitAnswerBtn {
     background: #4CAF50; /* retro green */
@@ -126,3 +134,4 @@
     transform: translateY(2px);
     box-shadow: 0 2px #093f44;
 }
+
