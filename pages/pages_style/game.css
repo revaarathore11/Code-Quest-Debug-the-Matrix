@@ -1,137 +1,114 @@
-/* Basic layout structure */
+body {
+background: #0a0a0a;
+color: #c8f7ff;
+font-family: "JetBrains Mono", monospace;
+background-image: linear-gradient(rgba(0,255,255,0.06) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,255,255,0.06) 1px, transparent 1px);
+background-size: 40px 40px;
+}
+
+
 .game-container {
-    width: 90%;
-    max-width: 900px;
-    margin: 0 auto;
+background: rgba(0,0,0,0.7);
+border: 1px solid #00eaff;
+box-shadow: 0 0 20px #00eaff60;
+}
+
+
+.game-header span {
+color: #00eaff;
+text-shadow: 0 0 8px #00eaff;
+}
+
+
+.challenge-box {
+background: #0d0d0d;
+border: 1px solid #00ffcc;
+box-shadow: 0 0 15px #00ffcc80;
+}
+#codeSnippet {
+color: #00ffcc;
+text-shadow: 0 0 8px #00ffcc80;
+}
+
+
+button {
+background: black;
+color: #00f7ff;
+border: 1px solid #00f7ff;
+box-shadow: 0 0 12px #00f7ff80;
+font-family: "JetBrains Mono", monospace;
+transition: 0.25s ease;
+}
+button:hover {
+background: #00f7ff22;
+box-shadow: 0 0 20px #00f7ffcc;
+transform: translateY(-2px);
+}
+body {
+background: #000;
+font-family: 'Share Tech Mono', monospace;
+color: #00f8ff;
+text-shadow: 0 0 8px #00f8ff;
+}
+.game-container {
+border: 2px solid #0ff;
+box-shadow: 0 0 25px #00ff99, 0 0 60px #009966 inset;
+background: rgba(0,0,0,0.65);
+padding: 20px;
+border-radius: 12px;
+}
+.challenge-box,
+.game-header,
+.timer-wrapper,
+#codeSnippet {
+border: 2px solid #0ff;
+background: rgba(0,0,0,0.45);
+box-shadow: 0 0 12px #00ffff;
+}
+button {
+background: rgba(0,255,170,0.15);
+border: 1px solid #00ffcc;
+color: #00ffee;
+padding: 8px 14px;
+border-radius: 6px;
+cursor: pointer;
+box-shadow: 0 0 8px #00ffcc;
+}
+button:hover {
+box-shadow: 0 0 14px #00ffee;
+transform: scale(1.04);
+}
+#levelOverlay h1 {
+font-size: 3rem;
+color: #baffff;
+text-shadow: 0 0 20px #00eaff, 0 0 40px #00ffaa;
+}
+#levelOverlay p {
+font-size: 1.3rem;
+color: #aaffdd;
+}
+.challenge-box {
+    min-height: 420px !important;   /* Increased height */
     padding: 20px;
 }
 
-/* Top bar layout */
-.game-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 20px;
-
-    font-family: 'Press Start 2P', monospace; /* pixel font */
-    font-size: 12px;
-    color: #b8f8ff;
-
-    background: rgba(0, 0, 0, 0.4);
-    border: 2px solid #00faff;          /* neon cyan border */
-    box-shadow: 0 0 12px #00faff;        /* glow */
-    border-radius: 6px;
-
-    margin-bottom: 20px;
-    
+#codeSnippet {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
 }
-/* Hint Section — small neon style */
-.hint-section {
-    text-align: center;
+.challenge-actions,
+.hint-section,
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;   /* spacing between buttons */
     margin-top: 15px;
 }
-
-/* Hint Button */
-#hintBtn {
-    background: #0aff73;                 /* neon green */
-    border: 2px solid #00ff9d;           /* lighter neon edge */
-    padding: 8px 16px;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 12px;
-    color: #000;
-    cursor: pointer;
-    border-radius: 4px;
-    box-shadow: 0 0 8px #00ff9d;         /* glow */
-    transition: 0.2s ease-in-out;
-}
-
-#hintBtn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 12px #00ff9d;
-}
-
-/* Hint Text */
-.hint-text {
-    display: block;
-    margin-top: 10px;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 11px;
-    color: #b8f8ff;
-    text-shadow: 0 0 6px #00faff;
-}
-
-.hint-text.hidden {
-    display: none;
-}
-/* --- Challenge Box (Code Snippet) --- */
-/* Challenge Box — bigger and more spacious */
-.challenge-box {
-    background: #1e1e1e; /* dark code editor feel */
-    border: 3px solid #5f5f5f;
-    padding: 16px;
-    margin-top: 20px;
-    border-radius: 6px;
-    box-shadow: 0 0 12px #000 inset;
-    width: 100%;
+.game-container {
     max-width: 900px;
-    min-height: 300px; /* make it taller */
-    overflow-y: auto;  /* scroll if code is long */
+    margin: 0 auto;
 }
 
-/* Code snippet text */
-#codeSnippet {
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    color: #d1d1d1;
-    white-space: pre-wrap;
-    line-height: 1.5;   /* more spacing between lines */
-}
-
-/* --- Submit Button --- */
-#submitAnswerBtn {
-    background: #4CAF50; /* retro green */
-    border: 3px solid #2e6b30; /* pixel border */
-    padding: 10px 20px;
-    font-size: 16px;
-    font-family: "Press Start 2P", monospace, sans-serif;
-    color: white;
-    cursor: pointer;
-    margin-top: 16px;
-    border-radius: 4px;
-    box-shadow: 0 4px #1e4720; /* pixel chunky shadow */
-    transition: transform 0.1s ease-in-out;
-}
-
-#submitAnswerBtn:active {
-    transform: translateY(3px);
-    box-shadow: 0 1px #1e4720;
-}
-/* --- Game Control Buttons (Start / Reset) --- */
-.game-controls {
-    text-align: center;
-    margin-top: 25px;
-}
-
-.game-controls button {
-    background: #00faff;                 /* neon cyan */
-    border: 3px solid #0b6b72;           /* darker cyan pixel edge */
-    padding: 10px 18px;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 12px;
-    color: #002b33;
-    cursor: pointer;
-    border-radius: 4px;
-    box-shadow: 0 4px #093f44;           /* chunky pixel shadow */
-    margin: 0 10px;
-    transition: transform 0.15s ease-in-out;
-}
-
-.game-controls button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px #093f44;
-}
-
-.game-controls button:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px #093f44;
-}
 
