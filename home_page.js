@@ -58,3 +58,26 @@ setInterval(() => {
 }, Math.random() * 3000 + 2000);
 
 /* END OF STARFIELD GENERATION */
+/*TYPEWRITER EFFECT ACTIVATION */
+
+// Automatically expands .typewriter elements to full text width
+window.onload = () => {
+    document.querySelectorAll(".typewriter").forEach(el => {
+        el.style.width = el.scrollWidth + "px";
+    });
+};
+
+/* SCREEN TRANSITION (Start Button) */
+
+const startBtn = document.getElementById("startBtn");
+const transition = document.getElementById("screen-transition");
+
+startBtn.addEventListener("click", () => {
+    // Fade the screen to black
+    transition.classList.add("active");
+
+    // After fade, load next page
+    setTimeout(() => {
+        window.location.href = "game.html";   // change when needed
+    }, 1200);
+});
