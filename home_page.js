@@ -1,6 +1,4 @@
-/* ===============================
-   SCREEN TRANSITION + START BUTTON
-   =============================== */
+/* SCREEN TRANSITION + START BUTTON */
 
 document.addEventListener("DOMContentLoaded", function () {
     const startBtn = document.getElementById("startBtn");
@@ -20,9 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-/* ===============================
-   STARFIELD GENERATION
-   =============================== */
+/* STARFIELD GENERATION */
 
 const starContainer = document.getElementById("stars");
 
@@ -61,9 +57,7 @@ setInterval(() => {
     if (Math.random() < 0.6) createShootingStar();
 }, Math.random() * 3000 + 2000);
 
-/* ===============================
-   TYPEWRITER EXPANSION
-   =============================== */
+/* TYPEWRITER EXPANSION */
 
 window.onload = () => {
     document.querySelectorAll(".typewriter").forEach(el => {
