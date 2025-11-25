@@ -62,12 +62,12 @@ body {
     box-shadow: 0 0 20px rgba(0, 180, 255, 0.3);
 
     /* animated neon grid */
-    background-image: 
+    /* background-image: 
         linear-gradient(rgba(0,255,255,0.07) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0,255,255,0.07) 1px, transparent 1px);
     background-size: 35px 35px;
     animation: gridGlow 4s linear infinite;
-}
+*/}
 
 @keyframes gridGlow {
     0% { opacity: 0.6; }
