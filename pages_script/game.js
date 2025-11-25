@@ -38,3 +38,10 @@ function startGame() {
 
 // ====== EVENT LISTENER ======
 startBtn.addEventListener('click', startGame);
+function enableHint() {
+    document.getElementById("hintBtn").classList.add("hint-available");
+}
+
+function disableHint() {
+    document.getElementById("hintBtn").classList.remove("hint-available");
+}
