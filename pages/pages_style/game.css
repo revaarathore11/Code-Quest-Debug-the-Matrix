@@ -283,3 +283,145 @@ button:hover {
     margin-top: 20px;    /* adjust as needed */
 }
 
+
+/* Enhanced with animations, 3D pixel buttons, responsive design */
+
+/* ROOT COLORS */
+:root {
+    --mc-dark: #2b2b2b;
+    --mc-light: #e0e0e0;
+    --mc-green: #4CAF50;
+    --mc-green-dark: #3e8e41;
+    --mc-brown: #5c3d1e;
+    --mc-yellow: #ffeb3b;
+    --accent-blue: #4fc3f7;
+    --pixel-border: 4px solid #000;
+}
+
+/* GLOBAL STYLES */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Press Start 2P', monospace;
+    background: url('../assets/pixel-grass.png');
+    background-size: 300px;
+    color: var(--mc-light);
+}
+
+.game-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background: rgba(20, 20, 20, 0.7);
+    border: var(--pixel-border);
+    border-radius: 8px;
+    box-shadow: 0 0 20px #000;
+}
+
+/* OVERLAY (LEVEL INTRO) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    text-align: center;
+    animation: fadeIn 0.7s ease-in-out;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.overlay h1 {
+    font-size: 32px;
+    color: var(--mc-yellow);
+    text-shadow: 3px 3px #000;
+}
+
+.overlay p {
+    font-size: 18px;
+    color: var(--mc-light);
+}
+
+/* GAME MESSAGE */
+.game-message {
+    min-height: 40px;
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: var(--accent-blue);
+    animation: pop 0.3s ease-out;
+}
+
+/* ADDITIONAL BUTTON STYLES (Pixel 3D) */
+button {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    padding: 12px 18px;
+    margin: 5px;
+    background: var(--mc-green);
+    color: #fff;
+    border: var(--pixel-border);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    box-shadow: 0 6px #000;
+}
+
+button:hover {
+    background: var(--mc-green-dark);
+}
+
+button:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px #000;
+}
+
+/* RESET BUTTON STYLE */
+#resetGameBtn {
+    background: #c62828;
+}
+#resetGameBtn:hover {
+    background: #b71c1c;
+}
+
+/* ---------- RESPONSIVE DESIGN ---------- */
+@media (max-width: 700px) {
+    .game-container {
+        padding: 10px;
+        max-width: 95%;
+    }
+
+    .game-header {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+
+    button {
+        width: 90%;
+        font-size: 12px;
+    }
+
+    #codeSnippet {
+        font-size: 12px;
+    }
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+/* ---------- END OF GAME.CSS ---------- */
