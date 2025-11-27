@@ -1,6 +1,9 @@
-// ====== DOM ELEMENTS ======
+// ================== DOM ELEMENTS ==================
 const startBtn = document.getElementById('startGameBtn');
 const resetBtn = document.getElementById('resetGameBtn');
+const submitBtn = document.getElementById('submitAnswerBtn');
+const hintBtn = document.getElementById('hintBtn');
+
 const levelDisplay = document.getElementById('levelDisplay');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const timerDisplay = document.getElementById('timerDisplay');
@@ -9,22 +12,30 @@ const codeSnippetEl = document.getElementById('codeSnippet');
 
 let timer = 60;
 let timerInterval;
+let currentScore = 0;
+let hintStep = 0; // Track number of hints used
 
-// ====== START BUTTON FUNCTION ======
+
+// ================== START GAME ==================
 function startGame() {
-    // Reset timer and display
+    // Reset timing + UI
     timer = 60;
+    currentScore = 0;
     levelDisplay.textContent = "Level 1";
     scoreDisplay.textContent = "Score: 0";
     timerDisplay.textContent = `Time: ${timer}s`;
-
-    // Display a basic code snippet
-    codeSnippetEl.textContent = `let x = 5\nconsole.log(x)`;
-
-    // Show start message
     gameMessage.textContent = "🚀 Game Started!";
+    
+    // Load a buggy snippet **editable**
+    codeSnippetEl.textContent =
+`items = ["pen", "book", "bag"]
+print(items[3])      
+print(len(items.lenght))  `;// Error: misspelled 'length'
+//index out of range
 
-     // enable hint example (if you want)
+    codeSnippetEl.setAttribute("contenteditable", "true");
+
+    // Enable hint glow if needed
     if (hintBtn) hintBtn.classList.add('hint-available');
 
     // Start countdown timer
@@ -40,43 +51,87 @@ function startGame() {
     }, 1000);
 }
 
-// ====== resetGame (robust) ======
+
+// ================== RESET GAME ==================
 function resetGame() {
-    // stop timer
-    if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
+    clearInterval(timerInterval);
+    timerInterval = null;
 
-    // reset state
     timer = 60;
-    if (timerDisplay) timerDisplay.textContent = `Time: ${timer}s`;
-    if (levelDisplay) levelDisplay.textContent = "Level 1";
-    if (scoreDisplay) scoreDisplay.textContent = "Score: 0";
+    currentScore = 0;
 
-    // clear code + messages
-    if (codeSnippetEl) codeSnippetEl.textContent = "Click Start Game to begin!";
-    if (gameMessage) gameMessage.textContent = "🔄 Game Reset!";
+    timerDisplay.textContent = `Time: ${timer}s`;
+    levelDisplay.textContent = "Level 1";
+    scoreDisplay.textContent = "Score: 0";
 
-    // remove hint glow if present
+    codeSnippetEl.textContent = "Click Start Game to begin!";
+    codeSnippetEl.removeAttribute("contenteditable");
+
+    gameMessage.textContent = "🔄 Game Reset!";
     if (hintBtn) hintBtn.classList.remove('hint-available');
 
-    console.log('resetGame(): UI reset and timer cleared');
+    console.log("resetGame(): perfect reset done");
+    hintStep = 0;
+    document.getElementById("hintText").classList.add("hidden");
+    document.getElementById("hintText").textContent = "";
+    }
+
+
+// ================== CHECK USER'S FIX ==================
+function checkAnswer() {
+    const userCode = codeSnippetEl.textContent;
+
+    // Condition for correct fix
+    const isCorrect =
+        userCode.includes("length") &&
+        !userCode.includes("lenght");
+
+    if (isCorrect) {
+        currentScore = 10;
+        scoreDisplay.textContent = `Score: ${currentScore}`;
+        gameMessage.textContent = "✅ Correct fix!";
+    } else {
+        gameMessage.textContent = "❌ Incorrect. Try again!";
+    }
 }
 
-// ====== Attach listeners safely ======
-if (startBtn) startBtn.addEventListener('click', startGame);
-else console.warn('startGameBtn not found — Start will not work.');
+// ================== HINT FUNCTION ==================
+function showHint() {
+    const hintText = document.getElementById("hintText");
 
-if (resetBtn) resetBtn.addEventListener('click', resetGame);
-else console.warn('resetGameBtn not found — Reset will not work.');
+    hintStep++;
 
-/* Optional: keyboard shortcut for quick testing
-   Press R to reset, S to start (useful during dev) */
-document.addEventListener('keydown', (e) => {
-    if (e.key.toLowerCase() === 'r') {
-        resetGame();
-    } else if (e.key.toLowerCase() === 's') {
-        startGame();
+    if (hintStep === 1) {
+        hintText.textContent = "Hint 1: Python lists start at index 0. The last valid index is items[2].";
+        hintText.classList.remove("hidden");
+        gameMessage.textContent = "💡 Hint 1 revealed!";
     }
+    else if (hintStep === 2) {
+        hintText.textContent = "Hint 2: Check the spelling of 'length'.";
+        gameMessage.textContent = "💡 Hint 2 revealed!";
+        hintBtn.classList.remove("hint-available"); // stop glow after 2nd hint
+    }
+    else {
+        hintText.textContent = "⚠️ No more hints available!";
+        gameMessage.textContent = "❗ You've used all hints.";
+    }
+
+    // Reduce glow when hint is used
+    if (hintBtn) hintBtn.classList.remove("hint-available");
+
+    gameMessage.textContent = "💡 Hint revealed!";
+}
+
+
+// ================== EVENT LISTENERS ==================
+if (startBtn) startBtn.addEventListener('click', startGame);
+if (resetBtn) resetBtn.addEventListener('click', resetGame);
+if (submitBtn) submitBtn.addEventListener('click', checkAnswer);
+if (hintBtn) hintBtn.addEventListener('click', showHint);
+
+
+// ================== KEYBOARD SHORTCUTS ==================
+document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'r') resetGame();
+    if (e.key.toLowerCase() === 's') startGame();
 });
