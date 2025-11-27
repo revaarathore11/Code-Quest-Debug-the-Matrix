@@ -85,17 +85,6 @@ body {
     position: relative;
     z-index: 5;
 }
-
-.storyline {
-    max-width: 700px;
-    margin: 0 auto 30px auto;
-    font-size: 10px;
-    line-height: 1.8;
-    text-shadow: 1px 1px #003f2c;
-    position: relative;
-    z-index: 5;
-}
-
 /* Optional typewriter (if JS uses it) */
 .typewriter {
     overflow: hidden;
@@ -271,7 +260,7 @@ footer:hover {
 .pixel-character {
     width: 64px;                /* Width of ONE frame */
     height: 64px;               /* Height of ONE frame */
-    background: url("/mnt/data/A_pixel_art_sprite_sheet_features_four_2D_pixel_ar.png") 0 0;
+    background: url("assets/sprites/image.png") 0 0;
     image-rendering: pixelated;    /* Keeps pixel art sharp */
     position: fixed;
     bottom: 25px;
@@ -293,15 +282,19 @@ footer:hover {
 /* Move from left → right → flip → return */
 @keyframes knightWalkAcross {
     0%   { left: 0; transform: scaleX(1); }
-    45%  { left: calc(100% - 70px); transform: scaleX(1); }
+    45%  { left: calc(100% - 80px); transform: scaleX(1); }
     50%  { transform: scaleX(-1); }                 /* flip horizontally */
     95%  { left: 0; transform: scaleX(-1); }
     100% { transform: scaleX(1); }
 }
 /* For better readability of the written content */
 .storyline {
+    max-width: 700px;
+    margin: 0 auto 30px auto;
+    font-size: 10px;
     line-height: 1.4;
     letter-spacing: 0.4px;
+    text-shadow: 1px 1px #003f2c;
 }
 .how-to-play-box ul li {
     margin-bottom: 10px;
@@ -316,4 +309,24 @@ footer:hover {
 
 .subtitle {
     margin-bottom: 20px;
+}
+.shooting-star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px white;
+    animation: shooting 1.2s linear forwards;
+}
+
+@keyframes shooting {
+    from {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translate(200px, 120px) scale(0.2);
+        opacity: 0;
+    }
 }
