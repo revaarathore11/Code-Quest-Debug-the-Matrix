@@ -35,7 +35,7 @@ body {
 .game-header {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0px;
+    padding: 10px 8px;
     margin-bottom: 6px;
     background: rgba(255, 255, 255, 0.05);
 
@@ -232,37 +232,38 @@ button:hover {
     justify-content: center;
     margin-top: 10px;
 }
-/* SUBMIT button — hero button */
 #submitAnswerBtn {
-    background: linear-gradient(135deg, #00ffd5 0%, #00b8ff 100%);
-    color: #002a33;
-    padding: 12px 32px;
-    font-size: 1.2rem;
-    font-weight: 600;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+
+    background: linear-gradient(135deg, #00eaff 0%, #00bcd4 100%);
+    color: #002024;
 
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
+
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 600;
+
     cursor: pointer;
 
-    box-shadow: 0 0 15px #00eaffaa, 0 0 40px #00eaff55;
+    box-shadow:
+        0 0 12px #00eaff,
+        0 0 25px #00eaff66;
+
     transition: 0.25s ease;
-    text-shadow: 0 0 4px #002326;
 }
 
-/* Hover */
 #submitAnswerBtn:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 0 25px #00faff, 0 0 60px #00bfff;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow:
+        0 0 18px #00eaff,
+        0 0 40px #00eaffaa;
 }
 
-/* Focus Outline Animation */
-#submitAnswerBtn:focus {
-    outline: none;
-    box-shadow: 
-        0 0 10px #00eaff,
-        0 0 30px #00eaff,
-        0 0 60px #00eaff;
-    animation: pulse-glow 1s infinite alternate;
+#submitAnswerBtn:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 0 10px #00eaff88;
 }
 
 /* Keyframes for pulse glow */

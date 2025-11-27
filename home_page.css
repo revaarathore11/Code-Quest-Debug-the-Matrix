@@ -267,31 +267,34 @@ footer:hover {
         font-size: 20px;
     }
 }
-/* Minecraft Pixel Character */
+/* Knight Pixel Character */
 .pixel-character {
-    width: 48px;
-    height: 48px;
-    background: url("https://i.ibb.co/Th0vM6F/pixel-walk.png") 0 0;
-    image-rendering: pixelated;
+    width: 64px;                /* Width of ONE frame */
+    height: 64px;               /* Height of ONE frame */
+    background: url("/mnt/data/A_pixel_art_sprite_sheet_features_four_2D_pixel_ar.png") 0 0;
+    image-rendering: pixelated;    /* Keeps pixel art sharp */
     position: fixed;
     bottom: 25px;
     left: 0;
     z-index: 10;
 
-/* animations added below */
+    /* Combine movement + sprite animation */
     animation:
-        walkLoop 10s linear infinite,
-        spriteWalk 0.7s steps(4) infinite;
+        knightWalkAcross 10s linear infinite,
+        knightSpriteWalk 0.8s steps(4) infinite;
 }
-@keyframes spriteWalk {
+
+/* Loop through 4 walking frames */
+@keyframes knightSpriteWalk {
     from { background-position: 0 0; }
-    to   { background-position: -192px 0; }
+    to   { background-position: -256px 0; }  /* 64px × 4 frames = 256px */
 }
-/* Walk across → flip → walk back */
-@keyframes walkLoop {
+
+/* Move from left → right → flip → return */
+@keyframes knightWalkAcross {
     0%   { left: 0; transform: scaleX(1); }
-    45%  { left: calc(100% - 50px); transform: scaleX(1); }
-    50%  { transform: scaleX(-1); }
+    45%  { left: calc(100% - 70px); transform: scaleX(1); }
+    50%  { transform: scaleX(-1); }                 /* flip horizontally */
     95%  { left: 0; transform: scaleX(-1); }
     100% { transform: scaleX(1); }
 }
