@@ -452,3 +452,37 @@ body::before {
     background: rgba(0, 0, 0, 0.55);  /* adjust darkness here */
     z-index: -1;   /* stays behind everything */
 }
+
+/* Level Complete Animation */
+.level-complete {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 255, 100, 0.9);
+    color: black;
+    padding: 30px 50px;
+    border-radius: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+    opacity: 0;
+    z-index: 9999;
+    pointer-events: none;
+    animation: popIn 1s ease-out forwards;
+}
+
+/* Animation Keyframes */
+@keyframes popIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0.4);
+        opacity: 0;
+    }
+    40% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
