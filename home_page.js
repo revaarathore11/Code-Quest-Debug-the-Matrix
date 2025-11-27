@@ -64,3 +64,38 @@ window.onload = () => {
         el.style.width = el.scrollWidth + "px";
     });
 };
+/* MULTILINE TYPEWRITER EFFECT */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const textElement = document.getElementById("story-text");
+    const cursor = document.getElementById("cursor");
+
+    let fullText = textElement.innerHTML;  // Includes <br>
+    let cleanedText = fullText.replace(/\s+/g, ' ').trim();
+
+    let index = 0;
+    let typingSpeed = 35;  // milliseconds per letter
+
+    let displayedText = "";
+
+    textElement.innerHTML = ""; // Clear original text
+
+    function typeWriter() {
+        if (index < fullText.length) {
+
+            // Add one character at a time
+            displayedText += fullText.charAt(index);
+
+            // Preserve <br> behavior
+            textElement.innerHTML = displayedText;
+
+            index++;
+
+            setTimeout(typeWriter, typingSpeed);
+        } else {
+            cursor.style.display = "none"; // Hide cursor when finished
+        }
+    }
+
+    typeWriter();
+});
