@@ -286,3 +286,24 @@ function createShootingStar() {
 setInterval(() => {
     if (Math.random() < 0.65) createShootingStar();
 }, Math.random() * 2200 + 1800);
+/* STARFIELD GENERATION */
+
+const starContainer = document.getElementById("stars");
+
+function createStar() {
+    const star = document.createElement("div");
+    star.classList.add("star");
+
+    if (Math.random() < 0.15) {
+        star.classList.add("plus");
+    }
+
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.animationDelay = Math.random() * 3 + "s";
+    starContainer.appendChild(star);
+}
+
+for (let i = 0; i < 200; i++) {
+    createStar();
+}
