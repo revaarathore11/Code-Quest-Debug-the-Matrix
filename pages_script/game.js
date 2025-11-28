@@ -42,23 +42,58 @@ print(len(items.lenght))`,
         !code.includes("lenght")
     },
 
-    {
-      number: 2,
-      snippet: `numbers = [1,2,3,4]
-for i in range(5):
-    print(numbers[i])`,
-      hints: [
-        "Hint: range(5) is too large for this list.",
-        "Hint: Use range(4) or range(len(numbers))."
-      ],
-      check: (code) =>
-        code.includes("range(4)") ||
-        code.includes("range(len(numbers))")
-    }
-  ];
+   {
+  number: 2,
+  snippet: `numbers = [1, 2, 3]
+total = 0
 
-  // ====== UI Helper ======
-  function setText(el, txt) {
+for n in numbers:
+    total += n
+
+print(totla)`,
+  hints: [
+    "Hint 1: Look closely at the loop variable — are you iterating the correct list?",
+    "Hint 2: You cannot use .append() on an integer.",
+    "Hint 3: Is the final print statement using the correct variable name?"
+  ],
+  check: (code) =>
+    code.includes("for n in numbers") &&
+    !code.includes("append") &&
+    code.includes("total = total + n") &&
+    code.includes("print(total)")
+    },
+
+    {
+    number: 3,
+    snippet: `def sumList(nums)
+total = 0
+for i in range(len(num)):
+    sum += nums[i]
+    nums = nums + 1
+  return totalSum
+
+numbers = [4, 5, 6]
+print(sumlist(numbers))`,
+    hints: [
+      "Hint 1: Check the function definition — is the syntax valid?",
+      "Hint 2: Are you looping over the correct list name?",
+      "Hint 3: Be careful! You’re modifying the list inside the loop.",
+      "Hint 4: Are you returning the correct variable name?",
+      "Hint 5: Python is case-sensitive… check your function call 👀"
+    ],
+    check: (code) =>
+      code.includes("def sumList(nums):") &&
+      code.includes("total = 0") &&
+      code.includes("for i in range(len(nums))") &&
+      code.includes("total += nums[i]") &&
+      !code.includes("nums = nums + 1") &&
+      code.includes("return total") &&
+      code.includes("print(sumList(numbers))")
+  }
+  ];
+  
+    // ====== UI Helper ======
+    function setText(el, txt) {
     if (el) el.textContent = txt;
   }
 
