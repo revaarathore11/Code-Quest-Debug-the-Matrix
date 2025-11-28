@@ -248,3 +248,20 @@ for i in range(5):
 
   console.log("game.js initialized");
 });
+// FLOATING PIXEL PARTICLES
+const pixelContainer = document.querySelector(".pixel-particles");
+
+function spawnPixel() {
+    const p = document.createElement("div");
+    p.classList.add("pixel");
+
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.top = Math.random() * 100 + "vh";
+    p.style.animationDelay = (Math.random() * 5) + "s";
+
+    pixelContainer.appendChild(p);
+
+    setTimeout(() => p.remove(), 7000);
+}
+
+setInterval(spawnPixel, 300);
