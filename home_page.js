@@ -57,37 +57,24 @@ setInterval(() => {
     if (Math.random() < 0.65) createShootingStar();
 }, Math.random() * 2200 + 1800);
 /* MULTILINE TYPEWRITER EFFECT */
+const storyEl = document.getElementById("story-text");
+const cursor = document.getElementById("cursor");
 
-document.addEventListener("DOMContentLoaded", function () {
-    const textElement = document.getElementById("story-text");
-    const cursor = document.getElementById("cursor");
+if (storyEl && cursor) {
+    const raw = storyEl.innerHTML;
+    storyEl.innerHTML = "";
+    let i = 0;
+    const speed = 28;
 
-    let fullText = textElement.innerHTML;  // Includes <br>
-    let cleanedText = fullText.replace(/\s+/g, ' ').trim();
-
-    let index = 0;
-    let typingSpeed = 35;  // milliseconds per letter
-
-    let displayedText = "";
-
-    textElement.innerHTML = ""; // Clear original text
-
-    function typeWriter() {
-        if (index < fullText.length) {
-
-            // Add one character at a time
-            displayedText += fullText.charAt(index);
-
-            // Preserve <br> behavior
-            textElement.innerHTML = displayedText;
-
-            index++;
-
-            setTimeout(typeWriter, typingSpeed);
+    function typeStep() {
+        if (i < raw.length) {
+            storyEl.innerHTML += raw.charAt(i);
+            i++;
+            setTimeout(typeStep, speed);
         } else {
-            cursor.style.display = "none"; // Hide cursor when finished
+            cursor.style.display = "none";
         }
     }
 
-    typeWriter();
-});
+    setTimeout(typeStep, 300);
+}
