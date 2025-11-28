@@ -258,32 +258,30 @@ footer:hover {
 }
 /* Knight Pixel Character */
 .pixel-character {
-    width: 64px;                /* Width of ONE frame */
-    height: 64px;               /* Height of ONE frame */
-    background: url("assets/sprites/image.png") 0 0;
-    image-rendering: pixelated;    /* Keeps pixel art sharp */
+    width: 64px;               
+    height: 64px;              
+    background: url("assets/sprites/knight.png") 0 0 no-repeat;
+    background-size: 256px 64px; /* 4 frames = 256px */
+    image-rendering: pixelated;
     position: fixed;
     bottom: 25px;
     left: 0;
-    z-index: 10;
+    z-index: 15;
 
-    /* Combine movement + sprite animation */
     animation:
         knightWalkAcross 10s linear infinite,
         knightSpriteWalk 0.8s steps(4) infinite;
 }
 
-/* Loop through 4 walking frames */
 @keyframes knightSpriteWalk {
     from { background-position: 0 0; }
-    to   { background-position: -256px 0; }  /* 64px × 4 frames = 256px */
+    to   { background-position: -256px 0; }
 }
 
-/* Move from left → right → flip → return */
 @keyframes knightWalkAcross {
     0%   { left: 0; transform: scaleX(1); }
     45%  { left: calc(100% - 80px); transform: scaleX(1); }
-    50%  { transform: scaleX(-1); }                 /* flip horizontally */
+    50%  { transform: scaleX(-1); }
     95%  { left: 0; transform: scaleX(-1); }
     100% { transform: scaleX(1); }
 }
