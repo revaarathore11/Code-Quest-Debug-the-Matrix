@@ -12,6 +12,11 @@ body {
 
     padding: 10px;
     overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     background: radial-gradient(circle at center,
         #0e1629 0%,
@@ -73,6 +78,7 @@ body {
     text-shadow: 4px 4px #0a4750, 0 0 15px #33f6ff;
     z-index: 5;
     position: relative;
+    text-align: center;
 }
 
 .subtitle {
@@ -82,6 +88,7 @@ body {
     text-shadow: 2px 2px #005f47;
     position: relative;
     z-index: 5;
+    text-align: center;
 }
 /* Optional typewriter (if JS uses it) */
 .typewriter {
@@ -101,6 +108,18 @@ body {
     50% { border-color: transparent; }
 }
 
+/* Home Wrapper - Centers all content */
+.home-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    z-index: 5;
+    position: relative;
+}
+
 /* Dashboard */
 
 .outer-box {
@@ -108,7 +127,6 @@ body {
     background: rgba(20, 20, 20, 0.92);
     border: 6px solid #00c244;   /* Minecraft emerald border */
     padding: 20px;
-    margin: 40px auto;
     box-shadow: 0 0 20px #00c244, inset 0 0 20px #00c244;
     animation: floatBox 3s ease-in-out infinite;
     z-index: 5;
