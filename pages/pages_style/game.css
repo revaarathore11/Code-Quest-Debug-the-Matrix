@@ -486,3 +486,28 @@ body::before {
         opacity: 1;
     }
 }
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* NIGHT SKY BACKGROUND */
+
+body {
+    font-family: 'Press Start 2P', monospace;
+    color: #d8ffe6;
+    text-align: center;
+    padding: 10px;
+    overflow-x: hidden;
+
+    /* Deep Minecraft-style night sky */
+    background: radial-gradient(circle at center,
+        #142033 0%,
+        #0c1524 40%,
+        #060b16 70%,
+        #000000 100%
+    );
+    background-attachment: fixed;
+}
