@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const gameMessage = document.getElementById('gameMessage');
   const codeSnippetEl = document.getElementById('codeSnippet');
   const hintTextEl = document.getElementById('hintText');
-  const levelAnim = document.getElementById('levelCompleteAnimation'); // animation box
+  const levelAnim = document.getElementById('levelCompleteAnimation');
+  const nextLevelBtn = document.getElementById('nextLevelBtn');
 
   // ====== State ======
   let timer = 60;
@@ -22,182 +23,221 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentScore = 0;
   let hintStep = 0;
   let gameStarted = false;
+  let currentLevel = 1;
 
-  // ====== Helpers ======
+  // ====== LEVEL DATA ======
+  const levels = [
+    {
+      number: 1,
+      snippet: `items = ["pen", "book", "bag"]
+print(items[3])
+print(len(items.lenght))`,
+      hints: [
+        "Hint: Lists are 0-indexed. items[3] will fail.",
+        "Hint: The correct spelling is length → len(items)."
+      ],
+      check: (code) =>
+        code.includes("items[2]") &&
+        code.includes("len(") &&
+        !code.includes("lenght")
+    },
+
+    {
+      number: 2,
+      snippet: `numbers = [1,2,3,4]
+for i in range(5):
+    print(numbers[i])`,
+      hints: [
+        "Hint: range(5) is too large for this list.",
+        "Hint: Use range(4) or range(len(numbers))."
+      ],
+      check: (code) =>
+        code.includes("range(4)") ||
+        code.includes("range(len(numbers))")
+    }
+  ];
+
+  // ====== UI Helper ======
   function setText(el, txt) {
     if (el) el.textContent = txt;
   }
 
   function enableHintButton(enable) {
     hintBtn.disabled = !enable;
-    if (enable) hintBtn.classList.add('hint-available');
-    else hintBtn.classList.remove('hint-available');
+    hintBtn.classList.toggle("hint-available", enable);
   }
 
-  // Initial UI
-  enableHintButton(false);
-  setText(codeSnippetEl, "Click Start Game to begin!");
-  setText(gameMessage, "");
+  // Hide Next Level initially
+  nextLevelBtn.classList.add("hidden");
 
   // ==========================================================
-  //      FIXED LEVEL COMPLETE ANIMATION FUNCTION 🎉
+  //             LEVEL COMPLETE ANIMATION 🎉
   // ==========================================================
   function playLevelCompleteAnimation() {
     if (!levelAnim) return;
 
     levelAnim.textContent = "🎉 LEVEL COMPLETE! 🎉";
-
-    // 1️⃣ Remove previous animation classes
-    levelAnim.classList.remove("level-complete");
     levelAnim.classList.remove("hidden");
+    levelAnim.classList.remove("level-complete");
 
-    // 2️⃣ Force reflow to restart animation
-    void levelAnim.offsetWidth;
+    void levelAnim.offsetWidth; // restart animation
 
-    // 3️⃣ Add animation class
     levelAnim.classList.add("level-complete");
 
-    // 4️⃣ Auto-hide after animation finishes
     setTimeout(() => {
       levelAnim.classList.add("hidden");
       levelAnim.classList.remove("level-complete");
       levelAnim.textContent = "";
-    }, 1800); 
+    }, 1800);
   }
 
-  // ====== START GAME ======
-  function startGame() {
-    console.log("startGame()");
+  // ==========================================================
+  //                     LOAD LEVEL ⭐
+  // ==========================================================
+  function loadLevel(levelNum) {
+    const level = levels[levelNum - 1];
+
+    console.log("Loading level:", levelNum);
 
     gameStarted = true;
     hintStep = 0;
     currentScore = 0;
-
     timer = 60;
 
-    setText(levelDisplay, "Level 1");
+    // UI updates
+    setText(levelDisplay, `Level ${level.number}`);
     setText(scoreDisplay, "Score: 0");
     setText(timerDisplay, `Time: ${timer}s`);
-    setText(gameMessage, "🚀 Game Started!");
+    setText(gameMessage, `🚀 Level ${level.number} Started!`);
 
-    const snippet =
-`items = ["pen", "book", "bag"]
-print(items[3])
-print(len(items.lenght))`;
-
-    codeSnippetEl.textContent = snippet;
+    codeSnippetEl.textContent = level.snippet;
     codeSnippetEl.setAttribute("contenteditable", "true");
     codeSnippetEl.style.pointerEvents = "auto";
 
-    enableHintButton(true);
     hintTextEl.classList.add("hidden");
     hintTextEl.textContent = "";
 
-    // Reset timer
-    if (timerInterval) clearInterval(timerInterval);
+    enableHintButton(true);
+    nextLevelBtn.classList.add("hidden");
 
+    // Timer
+    clearInterval(timerInterval);
     timerInterval = setInterval(() => {
       timer--;
       setText(timerDisplay, `Time: ${timer}s`);
+
       if (timer <= 0) {
         clearInterval(timerInterval);
-        timerInterval = null;
         setText(gameMessage, "⏰ Time's up!");
       }
     }, 1000);
   }
 
-  // ====== RESET GAME ======
-  function resetGame() {
-    console.log("resetGame()");
+  // ==========================================================
+  //                   NEXT LEVEL BUTTON
+  // ==========================================================
+  function goToNextLevel() {
+    currentLevel++;
 
+    if (currentLevel > levels.length) {
+      setText(gameMessage, "🎉 All levels complete!");
+      nextLevelBtn.classList.add("hidden");
+      return;
+    }
+
+    loadLevel(currentLevel);
+  }
+
+  nextLevelBtn.addEventListener("click", goToNextLevel);
+
+  // ==========================================================
+  //                     START GAME
+  // ==========================================================
+  function startGame() {
+    currentLevel = 1;
+    loadLevel(1);
+  }
+
+  // ==========================================================
+  //                     RESET GAME
+  // ==========================================================
+  function resetGame() {
     gameStarted = false;
     hintStep = 0;
     currentScore = 0;
 
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+    clearInterval(timerInterval);
 
     timer = 60;
-
     setText(timerDisplay, `Time: ${timer}s`);
     setText(levelDisplay, "Level 1");
     setText(scoreDisplay, "Score: 0");
+
     setText(codeSnippetEl, "Click Start Game to begin!");
     codeSnippetEl.removeAttribute("contenteditable");
     codeSnippetEl.style.pointerEvents = "auto";
 
     setText(gameMessage, "🔄 Game Reset!");
-
     enableHintButton(false);
 
+    nextLevelBtn.classList.add("hidden");
     hintTextEl.classList.add("hidden");
-    hintTextEl.textContent = "";
   }
 
-  // ====== CHECK ANSWER ======
+  // ==========================================================
+  //                     CHECK ANSWER
+  // ==========================================================
   function checkAnswer() {
     const userCode = codeSnippetEl.textContent || "";
 
-    const correct =
-      userCode.includes("len(") &&
-      userCode.includes("items[2]") &&
-      !userCode.includes("lenght");
+    const isCorrect = levels[currentLevel - 1].check(userCode);
 
-    if (correct) {
-      currentScore = 10;
-      setText(scoreDisplay, `Score: ${currentScore}`);
-      setText(gameMessage, "✅ Correct fix!");
-
-      // Stop timer
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
-
-      // Disable editing
-      codeSnippetEl.setAttribute("contenteditable", "false");
-      codeSnippetEl.style.pointerEvents = "none";
-
-      // Disable hints
-      enableHintButton(false);
-
-      // 🎉 Play success animation
-      playLevelCompleteAnimation();
-
-    } else {
+    if (!isCorrect) {
       setText(gameMessage, "❌ Incorrect. Try again!");
+      return;
+    }
+
+    // Correct answer
+    currentScore = 10;
+    setText(scoreDisplay, `Score: ${currentScore}`);
+    setText(gameMessage, "✅ Correct fix!");
+
+    clearInterval(timerInterval);
+
+    codeSnippetEl.setAttribute("contenteditable", "false");
+    codeSnippetEl.style.pointerEvents = "none";
+
+    enableHintButton(false);
+
+    playLevelCompleteAnimation();
+
+    if (currentLevel < levels.length) {
+      nextLevelBtn.classList.remove("hidden");
+    } else {
+      setText(gameMessage, "🎉 You finished all levels!");
     }
   }
 
   // ==========================================================
-  //                        HINTS
+  //                         HINTS
   // ==========================================================
-  function showHint(e) {
+  function showHint() {
     if (!gameStarted) {
       setText(gameMessage, "❗ Start the game first!");
       return;
     }
 
+    const levelHints = levels[currentLevel - 1].hints;
+
     hintStep++;
 
-    if (hintStep === 1) {
-      hintTextEl.textContent =
-        "Hint 1: Lists are 0-indexed. items[3] is out of range.";
-      hintTextEl.classList.remove("hidden");
-      setText(gameMessage, "💡 Hint 1 revealed!");
-    } else if (hintStep === 2) {
-      hintTextEl.textContent =
-        "Hint 2: Correct spelling is 'len(items)' — not lenght.";
-      setText(gameMessage, "💡 Hint 2 revealed!");
+    if (hintStep <= levelHints.length) {
+      hintTextEl.textContent = levelHints[hintStep - 1];
     } else {
       hintTextEl.textContent = "⚠️ No more hints!";
-      setText(gameMessage, "❗ You've used all hints.");
     }
 
-    hintBtn.classList.remove("hint-available");
+    hintTextEl.classList.remove("hidden");
   }
 
   // ====== EVENT LISTENERS ======
@@ -205,17 +245,6 @@ print(len(items.lenght))`;
   resetBtn.addEventListener("click", resetGame);
   submitBtn.addEventListener("click", checkAnswer);
   hintBtn.addEventListener("click", showHint);
-
-  // ====== KEYBOARD SHORTCUTS ======
-  document.addEventListener("keydown", (e) => {
-    if (document.activeElement === codeSnippetEl) return;
-
-    if (e.key.toLowerCase() === "r") resetGame();
-    if (e.key.toLowerCase() === "s") startGame();
-    if (e.key.toLowerCase() === "h" && gameStarted && !hintBtn.disabled) {
-      showHint({ type: "click" });
-    }
-  });
 
   console.log("game.js initialized");
 });
