@@ -269,3 +269,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const samurai = document.querySelector(".samurai-walker");
     if (samurai) samurai.style.display = "block";
 });
+/* Shooting stars */
+function createShootingStar() {
+    const s = document.createElement("div");
+    s.classList.add("shooting-star");
+
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.top = Math.random() * 50 + "vh";
+
+    starContainer.appendChild(s);
+
+    setTimeout(() => s.remove(), 1400);
+}
+
+// Spawn every 1.8–4 seconds
+setInterval(() => {
+    if (Math.random() < 0.65) createShootingStar();
+}, Math.random() * 2200 + 1800);
