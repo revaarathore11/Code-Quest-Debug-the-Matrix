@@ -265,3 +265,7 @@ function spawnPixel() {
 }
 
 setInterval(spawnPixel, 300);
+document.addEventListener("DOMContentLoaded", () => {
+    const samurai = document.querySelector(".samurai-walker");
+    if (samurai) samurai.style.display = "block";
+});
