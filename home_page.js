@@ -39,7 +39,6 @@ function createStar() {
 for (let i = 0; i < 200; i++) {
     createStar();
 }
-
 /* Shooting stars */
 function createShootingStar() {
     const s = document.createElement("div");
@@ -50,20 +49,13 @@ function createShootingStar() {
 
     starContainer.appendChild(s);
 
-    setTimeout(() => s.remove(), 1500);
+    setTimeout(() => s.remove(), 1400);
 }
 
+// Spawn every 1.8–4 seconds
 setInterval(() => {
-    if (Math.random() < 0.6) createShootingStar();
-}, Math.random() * 3000 + 2000);
-
-/* TYPEWRITER EXPANSION */
-
-window.onload = () => {
-    document.querySelectorAll(".typewriter").forEach(el => {
-        el.style.width = el.scrollWidth + "px";
-    });
-};
+    if (Math.random() < 0.65) createShootingStar();
+}, Math.random() * 2200 + 1800);
 /* MULTILINE TYPEWRITER EFFECT */
 
 document.addEventListener("DOMContentLoaded", function () {
