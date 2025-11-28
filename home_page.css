@@ -6,19 +6,17 @@
 }
 
 /* NIGHT SKY BACKGROUND */
-
 body {
     font-family: 'Press Start 2P', monospace;
     color: #d8ffe6;
-    text-align: center;
+
     padding: 10px;
     overflow-x: hidden;
 
-    /* Deep Minecraft-style night sky */
     background: radial-gradient(circle at center,
-        #142033 0%,
-        #0c1524 40%,
-        #060b16 70%,
+        #0e1629 0%,
+        #0a1120 40%,
+        #050a14 70%,
         #000000 100%
     );
     background-attachment: fixed;
