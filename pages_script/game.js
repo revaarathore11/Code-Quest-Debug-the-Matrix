@@ -418,3 +418,11 @@ if (starContainer) {
 
   for (let i = 0; i < 200; i++) createStar();
 }
+function saveProgress(level, score) {
+    const data = {
+        level: level,
+        score: score,
+        timestamp: Date.now()
+    };
+    localStorage.setItem("codeQuestSave", JSON.stringify(data));
+}
