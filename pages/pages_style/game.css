@@ -626,3 +626,11 @@ body {
     95%  { left: -80px; transform: scaleX(-1); }
     100% { transform: scaleX(1); }
 }
+
+.hud-score {
+    font-family: var(--pixel-font);
+    font-size: 20px;
+    color: #00ff9d;
+    text-shadow: 0 0 6px #00ff9d;
+    margin-top: 10px;
+}
