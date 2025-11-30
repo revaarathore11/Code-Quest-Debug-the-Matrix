@@ -13,10 +13,34 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 1200);
     });
 
+<<<<<<< HEAD
     /* CONTINUE BUTTON → show if save exists */
     const savedGame = localStorage.getItem("codeQuestSave");
     if (savedGame) {
         continueBtn.classList.remove("hidden");
+=======
+            // Fade the screen to black
+            transition.classList.add("active");
+
+            // Redirect after fade animation
+            setTimeout(() => {
+                window.location.href = "levels/level1.html";
+            }, 1200);
+        });
+    }
+});
+
+/* STARFIELD GENERATION */
+
+const starContainer = document.getElementById("stars");
+
+function createStar() {
+    const star = document.createElement("div");
+    star.classList.add("star");
+
+    if (Math.random() < 0.15) {
+        star.classList.add("plus");
+>>>>>>> fa741fc (all levels added with separate level pages)
     }
 
     continueBtn?.addEventListener("click", () => {
