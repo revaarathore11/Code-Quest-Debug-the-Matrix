@@ -42,23 +42,58 @@ print(len(items.lenght))`,
         !code.includes("lenght")
     },
 
-    {
-      number: 2,
-      snippet: `numbers = [1,2,3,4]
-for i in range(5):
-    print(numbers[i])`,
-      hints: [
-        "Hint: range(5) is too large for this list.",
-        "Hint: Use range(4) or range(len(numbers))."
-      ],
-      check: (code) =>
-        code.includes("range(4)") ||
-        code.includes("range(len(numbers))")
-    }
-  ];
+   {
+  number: 2,
+  snippet: `numbers = [1, 2, 3]
+total = 0
 
-  // ====== UI Helper ======
-  function setText(el, txt) {
+for n in numbers:
+    total += n
+
+print(totla)`,
+  hints: [
+    "Hint 1: Look closely at the loop variable — are you iterating the correct list?",
+    "Hint 2: You cannot use .append() on an integer.",
+    "Hint 3: Is the final print statement using the correct variable name?"
+  ],
+  check: (code) =>
+    code.includes("for n in numbers") &&
+    !code.includes("append") &&
+    code.includes("total = total + n") &&
+    code.includes("print(total)")
+    },
+
+    {
+    number: 3,
+    snippet: `def sumList(nums)
+total = 0
+for i in range(len(num)):
+    sum += nums[i]
+    nums = nums + 1
+  return totalSum
+
+numbers = [4, 5, 6]
+print(sumlist(numbers))`,
+    hints: [
+      "Hint 1: Check the function definition — is the syntax valid?",
+      "Hint 2: Are you looping over the correct list name?",
+      "Hint 3: Be careful! You’re modifying the list inside the loop.",
+      "Hint 4: Are you returning the correct variable name?",
+      "Hint 5: Python is case-sensitive… check your function call 👀"
+    ],
+    check: (code) =>
+      code.includes("def sumList(nums):") &&
+      code.includes("total = 0") &&
+      code.includes("for i in range(len(nums))") &&
+      code.includes("total += nums[i]") &&
+      !code.includes("nums = nums + 1") &&
+      code.includes("return total") &&
+      code.includes("print(sumList(numbers))")
+  }
+  ];
+  
+    // ====== UI Helper ======
+    function setText(el, txt) {
     if (el) el.textContent = txt;
   }
 
@@ -248,3 +283,62 @@ for i in range(5):
 
   console.log("game.js initialized");
 });
+// FLOATING PIXEL PARTICLES
+const pixelContainer = document.querySelector(".pixel-particles");
+
+function spawnPixel() {
+    const p = document.createElement("div");
+    p.classList.add("pixel");
+
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.top = Math.random() * 100 + "vh";
+    p.style.animationDelay = (Math.random() * 5) + "s";
+
+    pixelContainer.appendChild(p);
+
+    setTimeout(() => p.remove(), 7000);
+}
+
+setInterval(spawnPixel, 300);
+document.addEventListener("DOMContentLoaded", () => {
+    const samurai = document.querySelector(".samurai-walker");
+    if (samurai) samurai.style.display = "block";
+});
+/* Shooting stars */
+function createShootingStar() {
+    const s = document.createElement("div");
+    s.classList.add("shooting-star");
+
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.top = Math.random() * 50 + "vh";
+
+    starContainer.appendChild(s);
+
+    setTimeout(() => s.remove(), 1400);
+}
+
+// Spawn every 1.8–4 seconds
+setInterval(() => {
+    if (Math.random() < 0.65) createShootingStar();
+}, Math.random() * 2200 + 1800);
+/* STARFIELD GENERATION */
+
+const starContainer = document.getElementById("stars");
+
+function createStar() {
+    const star = document.createElement("div");
+    star.classList.add("star");
+
+    if (Math.random() < 0.15) {
+        star.classList.add("plus");
+    }
+
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.animationDelay = Math.random() * 3 + "s";
+    starContainer.appendChild(star);
+}
+
+for (let i = 0; i < 200; i++) {
+    createStar();
+}

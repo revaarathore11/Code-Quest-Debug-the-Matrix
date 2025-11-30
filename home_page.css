@@ -6,19 +6,22 @@
 }
 
 /* NIGHT SKY BACKGROUND */
-
 body {
     font-family: 'Press Start 2P', monospace;
     color: #d8ffe6;
-    text-align: center;
+
     padding: 10px;
     overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-    /* Deep Minecraft-style night sky */
     background: radial-gradient(circle at center,
-        #142033 0%,
-        #0c1524 40%,
-        #060b16 70%,
+        #0e1629 0%,
+        #0a1120 40%,
+        #050a14 70%,
         #000000 100%
     );
     background-attachment: fixed;
@@ -75,6 +78,7 @@ body {
     text-shadow: 4px 4px #0a4750, 0 0 15px #33f6ff;
     z-index: 5;
     position: relative;
+    text-align: center;
 }
 
 .subtitle {
@@ -84,6 +88,7 @@ body {
     text-shadow: 2px 2px #005f47;
     position: relative;
     z-index: 5;
+    text-align: center;
 }
 /* Optional typewriter (if JS uses it) */
 .typewriter {
@@ -103,6 +108,18 @@ body {
     50% { border-color: transparent; }
 }
 
+/* Home Wrapper - Centers all content */
+.home-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    z-index: 5;
+    position: relative;
+}
+
 /* Dashboard */
 
 .outer-box {
@@ -110,7 +127,6 @@ body {
     background: rgba(20, 20, 20, 0.92);
     border: 6px solid #00c244;   /* Minecraft emerald border */
     padding: 20px;
-    margin: 40px auto;
     box-shadow: 0 0 20px #00c244, inset 0 0 20px #00c244;
     animation: floatBox 3s ease-in-out infinite;
     z-index: 5;
@@ -258,32 +274,30 @@ footer:hover {
 }
 /* Knight Pixel Character */
 .pixel-character {
-    width: 64px;                /* Width of ONE frame */
-    height: 64px;               /* Height of ONE frame */
-    background: url("assets/sprites/image.png") 0 0;
-    image-rendering: pixelated;    /* Keeps pixel art sharp */
+    width: 64px;               
+    height: 64px;              
+    background: url("assets/sprites/knight.png") 0 0 no-repeat;
+    background-size: 256px 64px; /* 4 frames = 256px */
+    image-rendering: pixelated;
     position: fixed;
     bottom: 25px;
     left: 0;
-    z-index: 10;
+    z-index: 15;
 
-    /* Combine movement + sprite animation */
     animation:
         knightWalkAcross 10s linear infinite,
         knightSpriteWalk 0.8s steps(4) infinite;
 }
 
-/* Loop through 4 walking frames */
 @keyframes knightSpriteWalk {
     from { background-position: 0 0; }
-    to   { background-position: -256px 0; }  /* 64px × 4 frames = 256px */
+    to   { background-position: -256px 0; }
 }
 
-/* Move from left → right → flip → return */
 @keyframes knightWalkAcross {
     0%   { left: 0; transform: scaleX(1); }
     45%  { left: calc(100% - 80px); transform: scaleX(1); }
-    50%  { transform: scaleX(-1); }                 /* flip horizontally */
+    50%  { transform: scaleX(-1); }
     95%  { left: 0; transform: scaleX(-1); }
     100% { transform: scaleX(1); }
 }
@@ -313,20 +327,24 @@ footer:hover {
 .shooting-star {
     position: absolute;
     width: 3px;
-    height: 3px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 0 10px white;
+    height: 80px;
+    background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+    border-radius: 2px;
+    transform-origin: left top;
+    transform: rotate(-35deg);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.7));
+    z-index: 2;
     animation: shooting 1.2s linear forwards;
 }
 
 @keyframes shooting {
     from {
-        transform: translate(0, 0) scale(1);
+        transform: translate(0,0) rotate(-35deg) scaleY(1);
         opacity: 1;
     }
     to {
-        transform: translate(200px, 120px) scale(0.2);
+        transform: translate(240px,150px) rotate(-35deg) scaleY(0.2);
         opacity: 0;
     }
 }
