@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,21 +8,21 @@
 
     <!-- Correct CSS file -->
     <link rel="stylesheet" href="home_page.css">
-    
+
 </head>
 
 <body>
 
-    
+
     <div class="stars" id="stars"></div>
 
 
     <div id="screen-transition"></div>
 
-    
+
     <div class="pixel-character"></div>
 
-    
+
     <div class="home-wrapper">
 
         <!-- Game Title -->
@@ -29,14 +30,14 @@
         <p class="subtitle">Catch the bugs before they break the system!</p>
 
         <!-- STORY TEXT (Typewriter-ready) -->
-     <p id="story-text" class="storyline">
-    A mysterious virus has infiltrated the system.
-    Your mission: Dive into the Code Matrix and trace the errors.
-    Squash the bugs before they corrupt the world.
-    Debug wisely… the stability of the digital realm depends on you!
-</p>
+        <p id="story-text" class="storyline">
+            A mysterious virus has infiltrated the system.
+            Your mission: Dive into the Code Matrix and trace the errors.
+            Squash the bugs before they corrupt the world.
+            Debug wisely… the stability of the digital realm depends on you!
+        </p>
 
-<span id="cursor" class="type-cursor">|</span>
+        <span id="cursor" class="type-cursor">|</span>
 
         <!-- OUTER BOX -->
         <div class="outer-box">
@@ -45,7 +46,7 @@
             <div class="menu-box" aria-label="Game menu options">
 
                 <table class="menu-table" aria-label="Main game menu">
-                    
+
                     <tr>
                         <td><strong>High Score:</strong></td>
                         <td><span id="highScore">0</span></td>
@@ -58,7 +59,13 @@
                             </button>
                         </td>
                     </tr>
-
+                    <tr>
+                        <td colspan="2">
+                            <button id="continueBtn" class="menu-btn hidden" aria-label="Continue saved game">
+                                Continue Game
+                            </button>
+                        </td>
+                    </tr>
                     <tr>
                         <td><label for="difficultySelect">Difficulty</label></td>
                         <td>
@@ -119,8 +126,9 @@
     </footer>
 
     <!-- JavaScript -->
-     <script src="home_page.js" defer></script>
+    <script src="home_page.js" defer></script>
 
 
 </body>
+
 </html>

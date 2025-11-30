@@ -1,4 +1,17 @@
-// pages_script/game.js
+/* pages_script/game.js
+   Cleaned & merged version
+*/
+
+function saveProgress(level, score) {
+  const data = { level, score, timestamp: Date.now() };
+  localStorage.setItem("codeQuestSave", JSON.stringify(data));
+}
+
+function loadProgress() {
+  const save = localStorage.getItem("codeQuestSave");
+  return save ? JSON.parse(save) : null;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   console.log('game.js loaded — DOMContentLoaded');
 
@@ -18,6 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextLevelBtn = document.getElementById('nextLevelBtn');
   const hintCostEl = document.getElementById('hintCost');
 
+  // particle / star containers (optional — guard if not present)
+  const pixelContainer = document.querySelector(".pixel-particles");
+  const starContainer = document.getElementById("stars");
+  const samurai = document.querySelector(".samurai-walker");
+
   // ====== LEVEL DATA ======
   const levels = [
     {
@@ -34,7 +52,6 @@ print(len(items.lenght))`,
         code.includes("len(") &&
         !code.includes("lenght")
     },
-
     {
       number: 2,
       snippet: `numbers = [1, 2, 3]
@@ -55,7 +72,6 @@ print(totla)`,
         (code.includes("total = total + n") || code.includes("total += n")) &&
         code.includes("print(total)")
     },
-
     {
       number: 3,
       snippet: `def sumList(nums)
@@ -83,27 +99,26 @@ print(sumlist(numbers))`,
         code.includes("return total") &&
         code.includes("print(sumList(numbers))")
     },
-
     {
-  number: 4,
-  snippet: `values = [10, 20, 30]
+      number: 4,
+      snippet: `values = [10, 20, 30]
 sum = 0
 
 for i in range(4):
     sum = sum + values[i]
 
 print(summ)`,
-  hints: [
-    "Hint 1: The loop iterates 4 times, but the list has only 3 items.",
-    "Hint 2: Printing 'summ' will break — it doesn't exist.",
-    "Hint 3: Avoid shadowing Python's built-in 'sum'."
-  ],
-  check: (code) =>
-    code.includes("for i in range(3)") &&
-    code.includes("total") &&
-    code.includes("total +") &&
-    code.includes("print(total)") &&
-    !code.includes("summ")
+      hints: [
+        "Hint 1: The loop iterates 4 times, but the list has only 3 items.",
+        "Hint 2: Printing 'summ' will break — it doesn't exist.",
+        "Hint 3: Avoid shadowing Python's built-in 'sum'."
+      ],
+      check: (code) =>
+        code.includes("for i in range(3)") &&
+        code.includes("total") &&
+        code.includes("total +") &&
+        code.includes("print(total)") &&
+        !code.includes("summ")
     }
   ];
 
@@ -115,7 +130,7 @@ print(summ)`,
   let gameStarted = false;
   let currentLevel = 1;
   let totalScore = 0;
-  let perProblemScore = 100 / levels.length;
+  let perProblemScore = 100 / Math.max(1, levels.length);
 
   // ====== UI Helper ======
   function setText(el, txt) {
@@ -153,6 +168,21 @@ print(summ)`,
   // ==========================================================
   //                     LOAD LEVEL ⭐
   // ==========================================================
+  function updateHintCostUI() {
+    if (!hintCostEl) return;
+    const nextHintIndex = hintStep; // 0-based index
+
+    // First two hints are free → hide cost completely
+    if (nextHintIndex < 2) {
+      hintCostEl.textContent = "";
+      return;
+    }
+
+    // Paid hints start from hint #3
+    const cost = 10 * (nextHintIndex - 1);
+    hintCostEl.textContent = `Cost: ${cost}`;
+  }
+
   function loadLevel(levelNum) {
     const level = levels[levelNum - 1];
     if (!level) return console.warn('Level not found:', levelNum);
@@ -219,12 +249,26 @@ print(summ)`,
 
   if (nextLevelBtn) nextLevelBtn.addEventListener("click", goToNextLevel);
 
-  // ==========================================================
-  //                     START / RESET
-  // ==========================================================
+  // ================= START / RESET =================
   function startGame() {
-    totalScore = totalScore || 0; // keep existing totalScore unless explicitly reset
+    const params = new URLSearchParams(location.search);
+    const continueMode = params.get("continue");
+
+    if (continueMode) {
+      const saved = loadProgress();
+      if (saved) {
+        currentLevel = saved.level || 1;
+        totalScore = saved.score || 0;
+
+        if (scoreDisplay) scoreDisplay.textContent = `Score: ${Math.round(totalScore)}`;
+        loadLevel(currentLevel);
+        return;
+      }
+    }
+
+    // Default fresh start
     currentLevel = 1;
+    totalScore = 0;
     loadLevel(1);
   }
 
@@ -254,9 +298,7 @@ print(summ)`,
     if (hintTextEl) hintTextEl.classList.add("hidden");
   }
 
-  // ==========================================================
-  //                     CHECK ANSWER
-  // ==========================================================
+  // ================= CHECK ANSWER =================
   function checkAnswer() {
     if (!codeSnippetEl) return;
     const userCode = codeSnippetEl.textContent || "";
@@ -286,6 +328,9 @@ print(summ)`,
     enableHintButton(false);
     playLevelCompleteAnimation();
 
+    // Save progress on success
+    saveProgress(currentLevel, Math.round(totalScore));
+
     if (currentLevel < levels.length && nextLevelBtn) {
       nextLevelBtn.classList.remove("hidden");
     } else {
@@ -293,73 +338,53 @@ print(summ)`,
     }
   }
 
-  // ==========================================================
-  //                         HINTS
-  // ==========================================================
+  // ================= HINTS =================
   function showHint() {
-  if (!gameStarted) {
-    setText(gameMessage, "❗ Start the game first!");
-    return;
+    if (!gameStarted) {
+      setText(gameMessage, "❗ Start the game first!");
+      return;
+    }
+
+    const levelHints = (levels[currentLevel - 1] && levels[currentLevel - 1].hints) || [];
+    const nextHintIndex = hintStep; // 0-based
+
+    // No more hints left
+    if (nextHintIndex >= levelHints.length) {
+      setText(gameMessage, "⚠️ No more hints available!");
+      return;
+    }
+
+    // Determine cost:
+    // Hint 1 = free
+    // Hint 2 = free
+    // Hint 3 = cost 10, then 20, ...
+    let hintCost = 0;
+    if (nextHintIndex >= 2) {
+      hintCost = 10 * (nextHintIndex - 1);
+    }
+
+    // If hint requires points but user doesn't have enough
+    if (hintCost > 0 && totalScore < hintCost) {
+      setText(gameMessage, `⚠️ Not enough score! Need ${hintCost} points`);
+      return;
+    }
+
+    // Deduct points only for paid hints
+    if (hintCost > 0) {
+      totalScore -= hintCost;
+      setText(scoreDisplay, `Score: ${Math.round(totalScore)}`);
+    }
+
+    // Show the hint text
+    if (hintTextEl) {
+      hintTextEl.textContent = levelHints[nextHintIndex];
+      hintTextEl.classList.remove("hidden");
+    }
+
+    // Move to next hint
+    hintStep++;
+    updateHintCostUI();
   }
-
-  const levelHints = (levels[currentLevel - 1] && levels[currentLevel - 1].hints) || [];
-  const nextHintIndex = hintStep; // 0-based
-
-  // No more hints left
-  if (nextHintIndex >= levelHints.length) {
-    setText(gameMessage, "⚠️ No more hints available!");
-    return;
-  }
-
-  // Determine cost:
-  // Hint 1 = free
-  // Hint 2 = free
-  // Hint 3 = cost 10
-  // Hint 4 = cost 20
-  // Hint 5 = cost 30
-  let hintCost = 0;
-  if (nextHintIndex >= 2) {
-    hintCost = 10 * (nextHintIndex - 1);
-  }
-
-  // If hint requires points but user doesn't have enough
-  if (hintCost > 0 && totalScore < hintCost) {
-    setText(gameMessage, `⚠️ Not enough score! Need ${hintCost} points`);
-    return;
-  }
-
-  // Deduct points only for paid hints
-  if (hintCost > 0) {
-    totalScore -= hintCost;
-    setText(scoreDisplay, `Score: ${Math.round(totalScore)}`);
-  }
-
-  
-
-  // Show the hint text
-  hintTextEl.textContent = levelHints[nextHintIndex];
-  hintTextEl.classList.remove("hidden");
-
-  // Move to next hint
-  hintStep++;
-
-  // Update cost label for next hint
-  updateHintCostUI();
-}
-function updateHintCostUI() {
-  const nextHintIndex = hintStep; // 0-based index
-
-  // First two hints are free → hide cost completely
-  if (nextHintIndex < 2) {
-    hintCostEl.textContent = "";
-    return;
-  }
-
-  // Paid hints start from hint #3
-  const cost = 10 * (nextHintIndex - 1);
-  hintCostEl.textContent = `Cost: ${cost}`;
-}
-
 
   // ====== EVENT LISTENERS ======
   if (startBtn) startBtn.addEventListener("click", startGame);
@@ -367,62 +392,54 @@ function updateHintCostUI() {
   if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
   if (hintBtn) hintBtn.addEventListener("click", showHint);
 
+  // ====== PARTICLES / STARS / SAMURAI ======
+  // Pixel particles (optional)
+  if (pixelContainer) {
+    function spawnPixel() {
+      const p = document.createElement("div");
+      p.classList.add("pixel");
+      p.style.left = Math.random() * 100 + "vw";
+      p.style.top = Math.random() * 100 + "vh";
+      p.style.animationDelay = (Math.random() * 5) + "s";
+      pixelContainer.appendChild(p);
+      setTimeout(() => p.remove(), 7000);
+    }
+    setInterval(spawnPixel, 300);
+  }
+
+  // Samurai walker (ensure it is visible)
+  if (samurai) {
+    samurai.style.display = "block";
+    // If you want to pause/resume or control you can add listeners here
+  }
+
+  // Starfield and shooting stars
+  if (starContainer) {
+    function createShootingStar() {
+      const s = document.createElement("div");
+      s.classList.add("shooting-star");
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.top = Math.random() * 50 + "vh";
+      starContainer.appendChild(s);
+      setTimeout(() => s.remove(), 1400);
+    }
+
+    setInterval(() => {
+      if (Math.random() < 0.65) createShootingStar();
+    }, Math.random() * 2200 + 1800);
+
+    function createStar() {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      if (Math.random() < 0.15) star.classList.add("plus");
+      star.style.left = Math.random() * 100 + "vw";
+      star.style.top = Math.random() * 100 + "vh";
+      star.style.animationDelay = Math.random() * 3 + "s";
+      starContainer.appendChild(star);
+    }
+
+    for (let i = 0; i < 200; i++) createStar();
+  }
+
   console.log("game.js initialized");
 }); // end DOMContentLoaded
-
-/* ---------- PARTICLES / STARS (kept outside main block) ---------- */
-const pixelContainer = document.querySelector(".pixel-particles");
-if (pixelContainer) {
-  function spawnPixel() {
-    const p = document.createElement("div");
-    p.classList.add("pixel");
-    p.style.left = Math.random() * 100 + "vw";
-    p.style.top = Math.random() * 100 + "vh";
-    p.style.animationDelay = (Math.random() * 5) + "s";
-    pixelContainer.appendChild(p);
-    setTimeout(() => p.remove(), 7000);
-  }
-  setInterval(spawnPixel, 300);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const samurai = document.querySelector(".samurai-walker");
-  if (samurai) samurai.style.display = "block";
-});
-
-/* Shooting stars + starfield */
-const starContainer = document.getElementById("stars");
-if (starContainer) {
-  function createShootingStar() {
-    const s = document.createElement("div");
-    s.classList.add("shooting-star");
-    s.style.left = Math.random() * 100 + "vw";
-    s.style.top = Math.random() * 50 + "vh";
-    starContainer.appendChild(s);
-    setTimeout(() => s.remove(), 1400);
-  }
-
-  setInterval(() => {
-    if (Math.random() < 0.65) createShootingStar();
-  }, Math.random() * 2200 + 1800);
-
-  function createStar() {
-    const star = document.createElement("div");
-    star.classList.add("star");
-    if (Math.random() < 0.15) star.classList.add("plus");
-    star.style.left = Math.random() * 100 + "vw";
-    star.style.top = Math.random() * 100 + "vh";
-    star.style.animationDelay = Math.random() * 3 + "s";
-    starContainer.appendChild(star);
-  }
-
-  for (let i = 0; i < 200; i++) createStar();
-}
-function saveProgress(level, score) {
-    const data = {
-        level: level,
-        score: score,
-        timestamp: Date.now()
-    };
-    localStorage.setItem("codeQuestSave", JSON.stringify(data));
-}

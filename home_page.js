@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+const continueBtn = document.getElementById("continueBtn");
 
 /* STARFIELD GENERATION */
 
@@ -78,3 +79,14 @@ if (storyEl && cursor) {
 
     setTimeout(typeStep, 300);
 }
+// Check if saved data exists
+const savedGame = localStorage.getItem("codeQuestSave");
+
+if (savedGame) {
+    continueBtn.classList.remove("hidden");
+}
+
+// Continue Game → Go directly to game.html & load saved level
+continueBtn.addEventListener("click", () => {
+    window.location.href = "pages/game.html?continue=true";
+});
