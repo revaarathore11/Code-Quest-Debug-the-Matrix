@@ -218,15 +218,27 @@ print(summ)`,
   }
 
   if (nextLevelBtn) nextLevelBtn.addEventListener("click", goToNextLevel);
-
-  // ==========================================================
   //                     START / RESET
-  // ==========================================================
   function startGame() {
-    totalScore = totalScore || 0; // keep existing totalScore unless explicitly reset
+    const params = new URLSearchParams(location.search);
+    const continueMode = params.get("continue");
+
+    if (continueMode) {
+        const saved = loadProgress();
+        if (saved) {
+            currentLevel = saved.level;
+            currentScore = saved.score;
+
+            scoreDisplay.textContent = `Score: ${currentScore}`;
+            loadLevel(currentLevel);
+            return;
+        }
+    }
+
+    // Default fresh start
     currentLevel = 1;
     loadLevel(1);
-  }
+}
 
   function resetGame() {
     totalScore = 0; // reset overall score only on reset
