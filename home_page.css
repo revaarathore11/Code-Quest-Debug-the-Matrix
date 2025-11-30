@@ -276,7 +276,7 @@ footer:hover {
 .pixel-character {
     width: 64px;               
     height: 64px;              
-    background: url("assets/sprites/knight.png") 0 0 no-repeat;
+    background: url("assets/sprites/blue_knight.png") 0 0 no-repeat;
     background-size: 256px 64px; /* 4 frames = 256px */
     image-rendering: pixelated;
     position: fixed;
