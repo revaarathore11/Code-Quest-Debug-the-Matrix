@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+const continueBtn = document.getElementById("continueBtn");
 
 /* STARFIELD GENERATION */
 
