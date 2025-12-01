@@ -1,5 +1,6 @@
 //                GAME.JS — MULTI-PAGE VERSION (FINAL)
 //     HINTS CAN TAKE SCORE NEGATIVE (OPTION 1 ENABLED)
+
 function saveGameProgress(level, score, difficulty) {
     const data = {
         level,
@@ -11,10 +12,11 @@ function saveGameProgress(level, score, difficulty) {
     localStorage.setItem("codeQuestSave", JSON.stringify(data));
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("game.js loaded — DOMContentLoaded");
+console.log("game.js loaded");
 
-    // DOM ELEMENTS 
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ====== DOM ELEMENTS ======
     const startBtn = document.getElementById("startGameBtn");
     const resetBtn = document.getElementById("resetGameBtn");
     const submitBtn = document.getElementById("submitAnswerBtn");
@@ -26,14 +28,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameMessage = document.getElementById("gameMessage");
     const codeSnippetEl = document.getElementById("codeSnippet");
     const hintTextEl = document.getElementById("hintText");
-    const levelAnim = document.getElementById("levelCompleteAnimation");
     const nextLevelBtn = document.getElementById("nextLevelBtn");
     const hintCostEl = document.getElementById("hintCost");
+    const levelAnim = document.getElementById("levelCompleteAnimation");
 
-    // READ CURRENT PAGE LEVEL 
+    // ===== SHOW ANSWER POPUP ELEMENTS =====
+    const showAnswerBtn = document.getElementById("showAnswerBtn");
+    const popup = document.getElementById("showAnswerPopup");
+    const confirmBtn = document.getElementById("confirmShowAnswer");
+    const cancelBtn = document.getElementById("cancelShowAnswer");
+    const doneBtn = document.getElementById("doneShowAnswer");
+
+    // CURRENT PAGE LEVEL (from HTML script: window.currentLevel = X)
     let currentLevel = Number(window.currentLevel) || 1;
 
-    // LEVEL DATA 
+    // ==========================================================
+    //                      LEVEL DATA
+    // ==========================================================
     const levels = [
         {
             number: 1,
@@ -44,6 +55,10 @@ print(len(items.lenght))`,
                 "Hint: Lists are 0-indexed—items[3] will fail.",
                 "Hint: length is spelled wrong."
             ],
+            answer:
+`items = ["pen", "book", "bag"]
+print(items[2])
+print(len(items))`,
             check: (code) =>
                 code.includes("items[2]") &&
                 code.includes("len(") &&
@@ -66,6 +81,14 @@ print(totl)`,
                 "Check the colon after for loop.",
                 "Make sure total is updated each loop."
             ],
+            answer:
+`numbers = [1, 2, 3, 4]
+total = 0
+
+for i in range(len(numbers)):
+    total += numbers[i]
+
+print(total)`,
             check: (code) =>
                 code.includes("for i in range(len(numbers)):") &&
                 (code.includes("total = total + numbers[i]") || code.includes("total += numbers[i]")) &&
@@ -90,6 +113,15 @@ print(sumlist(numbers))`,
                 "Return total, not totalSum.",
                 "Function name case matters."
             ],
+            answer:
+`def sumList(nums):
+    total = 0
+    for i in range(len(nums)):
+        total += nums[i]
+    return total
+
+numbers = [4, 5, 6]
+print(sumList(numbers))`,
             check: (code) =>
                 code.includes("def sumList(nums):") &&
                 code.includes("total = 0") &&
@@ -101,8 +133,8 @@ print(sumlist(numbers))`,
         },
 
         {
-    number: 4,
-    snippet: `def collect_unique_words(text):
+            number: 4,
+            snippet: `def collect_unique_words(text):
     words = text.split()
     unique = []
 
@@ -110,29 +142,40 @@ print(sumlist(numbers))`,
         cleaned = word.lower().strip(".,!?")
         
         if cleaned not in unique:
-            unique = cleaned     # BUG 1: overwrites list
+            unique = cleaned     
         else:
             pass
 
-    return len(unique)    # BUG 2: unique may no longer be a list
+    return len(unique)    
         
 
 sentence = "Hello hello world! This world is big, big world."
 print( collect_unique_words(sentence) )`,
-    
-    hints: [
-        "Hint 1: Something is wrong with 'unique' inside the loop.",
-        "Hint 2: Are you replacing the entire list instead of adding to it?",
-        "Hint 3: unique = cleaned → should be unique.append(cleaned).",
-        "Hint 4: If unique becomes a string, len(unique) will be wrong."
-    ],
+            hints: [
+                "Hint 1: Something is wrong with 'unique'.",
+                "Hint 2: You're replacing the list instead of adding.",
+                "Hint 3: unique.append(cleaned) is correct.",
+                "Hint 4: If unique becomes a string, len(unique) breaks."
+            ],
+            answer:
+`def collect_unique_words(text):
+    words = text.split()
+    unique = []
 
-    check: (code) =>
-        code.includes("unique.append(cleaned)") &&
-        code.includes("return len(unique)") &&
-        !code.includes("unique = cleaned")
-},
+    for word in words:
+        cleaned = word.lower().strip(".,!?")
+        if cleaned not in unique:
+            unique.append(cleaned)
 
+    return len(unique)
+
+sentence = "Hello hello world! This world is big, big world."
+print(collect_unique_words(sentence))`,
+            check: (code) =>
+                code.includes("unique.append(cleaned)") &&
+                code.includes("return len(unique)") &&
+                !code.includes("unique = cleaned")
+        },
 
         {
             number: 5,
@@ -150,37 +193,50 @@ print(get_user_age("Alice", users))`,
             hints: [
                 "Arguments are reversed.",
                 "get_user_age(users, name)",
-                "Check function call order.",
-                "Swap the parameters.",
-                "List first, name second."
+                "Fix the function call.",
+                "List first, name second.",
+                "Swap the arguments."
             ],
+            answer:
+`def get_user_age(users, name):
+    for user in users:
+        if user["name"] == name:
+            return user["age"]
+
+users = [
+    {"name": "Alice", "age": 21},
+    {"name": "Bob", "age": 25}
+]
+
+print(get_user_age(users, "Alice"))`,
             check: (code) =>
-                code.includes("get_user_age(users, \"Alice\")") ||
+                code.includes('get_user_age(users, "Alice")') ||
                 code.includes("get_user_age(users, 'Alice')")
         }
     ];
 
-    // STATE 
+    // ==========================================================
+    //                   SESSION STATE
+    // ==========================================================
     let timer = 60;
     let timerInterval = null;
     let totalScore = 0;
     let hintStep = 0;
     let gameStarted = false;
 
-    // HELPERS
-    function setText(el, txt) {
-        if (el) el.textContent = txt;
-    }
-
     function getHintCost() {
-        return 10 * (hintStep + 1); // always cost, even if negative score
+        return 10 * (hintStep + 1); // 10, 20, 30...
     }
 
     function updateHintCostUI() {
+        if (!hintCostEl) return;
         const cost = getHintCost();
-        hintCostEl.textContent = cost > 0 ? `Cost: ${cost}` : "";
+        hintCostEl.textContent = hintStep < 1 ? "" : `Cost: ${cost}`;
     }
-    // LOAD LEVEL
+
+    // ==========================================================
+    //                    LOAD LEVEL
+    // ==========================================================
     function loadLevel(levelNum) {
         const level = levels[levelNum - 1];
         if (!level) return;
@@ -189,13 +245,13 @@ print(get_user_age("Alice", users))`,
         hintStep = 0;
         timer = 60;
 
-        setText(levelDisplay, `Level ${level.number}`);
-        setText(timerDisplay, `Time: ${timer}s`);
-        setText(scoreDisplay, `Score: ${totalScore}`);
-        setText(gameMessage, `🚀 Level ${level.number} Started!`);
+        levelDisplay.textContent = `Level ${level.number}`;
+        timerDisplay.textContent = `Time: ${timer}s`;
+        scoreDisplay.textContent = `Score: ${totalScore}`;
+        gameMessage.textContent = `🚀 Level ${level.number} Started!`;
 
         codeSnippetEl.textContent = level.snippet;
-        codeSnippetEl.setAttribute("contenteditable", "true");
+        codeSnippetEl.contentEditable = "true";
         codeSnippetEl.style.pointerEvents = "auto";
 
         hintTextEl.classList.add("hidden");
@@ -208,30 +264,33 @@ print(get_user_age("Alice", users))`,
         clearInterval(timerInterval);
         timerInterval = setInterval(() => {
             timer--;
-            setText(timerDisplay, `Time: ${timer}s`);
+            timerDisplay.textContent = `Time: ${timer}s`;
             if (timer <= 0) {
                 clearInterval(timerInterval);
-                setText(gameMessage, "⏰ Time's up!");
+                gameMessage.textContent = "⏰ Time's up!";
             }
         }, 1000);
     }
-    // CHECK ANSWER
-    function checkAnswer() {
-        const userCode = codeSnippetEl.textContent || "";
-        const isCorrect = levels[currentLevel - 1].check(userCode);
 
-        if (!isCorrect) {
-            setText(gameMessage, "❌ Incorrect. Try again!");
+    // ==========================================================
+    //                    CHECK ANSWER
+    // ==========================================================
+    function checkAnswer() {
+        const code = codeSnippetEl.textContent;
+
+        if (!levels[currentLevel - 1].check(code)) {
+            gameMessage.textContent = "❌ Incorrect. Try again!";
             return;
         }
 
-        totalScore += 20;
-        setText(scoreDisplay, `Score: ${totalScore}`);
-        setText(gameMessage, "✅ Correct!");
+        // fixed 50 points per level
+        totalScore += 50;
+        scoreDisplay.textContent = `Score: ${totalScore}`;
+        gameMessage.textContent = "✅ Correct!";
 
         clearInterval(timerInterval);
 
-        codeSnippetEl.setAttribute("contenteditable", "false");
+        codeSnippetEl.contentEditable = "false";
         codeSnippetEl.style.pointerEvents = "none";
 
         levelAnim.textContent = "🎉 LEVEL COMPLETE! 🎉";
@@ -241,30 +300,30 @@ print(get_user_age("Alice", users))`,
 
         setTimeout(() => {
             levelAnim.classList.add("hidden");
-            levelAnim.textContent = "";
-        }, 1800);
+        }, 1500);
 
         nextLevelBtn.classList.remove("hidden");
     }
-    // SHOW HINT
+
+    // ==========================================================
+    //                         HINTS
+    // ==========================================================
     function showHint() {
         if (!gameStarted) {
-            setText(gameMessage, "❗ Start the game first!");
+            gameMessage.textContent = "❗ Start the game first!";
             return;
         }
 
         const hints = levels[currentLevel - 1].hints;
 
         if (hintStep >= hints.length) {
-            setText(gameMessage, "⚠️ No more hints!");
+            gameMessage.textContent = "⚠️ No more hints!";
             return;
         }
 
         const cost = getHintCost();
-
-        // deduct cost even if negative
-        totalScore -= cost;
-        setText(scoreDisplay, `Score: ${totalScore}`);
+        totalScore -= cost; // can go negative
+        scoreDisplay.textContent = `Score: ${totalScore}`;
 
         hintTextEl.textContent = hints[hintStep];
         hintTextEl.classList.remove("hidden");
@@ -274,23 +333,77 @@ print(get_user_age("Alice", users))`,
     }
 
     // ==========================================================
-    //                BUTTON EVENT LISTENERS
+    //                GAME BUTTON EVENT LISTENERS
     // ==========================================================
     if (startBtn) startBtn.addEventListener("click", () => loadLevel(currentLevel));
-    if (resetBtn) resetBtn.addEventListener("click", () => window.location.reload());
+    if (resetBtn) resetBtn.addEventListener("click", () => location.reload());
     if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
     if (hintBtn) hintBtn.addEventListener("click", showHint);
+
+    // ==========================================================
+    //                 SHOW ANSWER SYSTEM — FINAL
+    // ==========================================================
+    if (showAnswerBtn) {
+        showAnswerBtn.addEventListener("click", () => {
+            if (popup) popup.classList.remove("hidden");
+        });
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+            if (!popup) return;
+            popup.classList.add("hidden");
+        });
+    }
+
+    if (confirmBtn) {
+        confirmBtn.addEventListener("click", () => {
+            const levelData = levels[currentLevel - 1];
+            if (!levelData) return;
+
+            // Show correct answer
+            codeSnippetEl.textContent = levelData.answer;
+            codeSnippetEl.style.pointerEvents = "none";
+            codeSnippetEl.contentEditable = "false";
+
+            // Update popup message text
+            const popupText = popup.querySelector("p");
+            if (popupText) {
+                popupText.textContent = "Answer shown! Click Done to restart at Level 1.";
+            }
+
+            // Disable scoring logically (optional: reset score)
+            totalScore = 0;
+            scoreDisplay.textContent = "Score: 0";
+
+            // Hide confirm/cancel, show DONE
+            confirmBtn.classList.add("hidden");
+            cancelBtn.classList.add("hidden");
+            if (doneBtn) doneBtn.classList.remove("hidden");
+
+            // Keep popup visible until DONE is clicked
+        });
+    }
+
+    if (doneBtn) {
+        doneBtn.addEventListener("click", () => {
+            // Close popup & restart game at level 1
+            if (popup) popup.classList.add("hidden");
+            window.location.href = "level1.html";
+        });
+    }
 });
-// NEXT LEVEL PAGE NAVIGATION (FIXED)
+
+// ==========================================================
+//               NEXT LEVEL PAGE NAVIGATION (FIXED)
+// ==========================================================
 function goToNextLevel() {
     const next = Number(window.currentLevel) + 1;
-
     if (next > 5) {
         alert("🎉 You completed all levels!");
         window.location.href = "../home_page.html";
         return;
     }
-
     window.location.href = `level${next}.html`;
 }
 
@@ -298,7 +411,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextBtn = document.getElementById("nextLevelBtn");
     if (nextBtn) nextBtn.addEventListener("click", goToNextLevel);
 });
-// PARTICLES + STARS
+
+// ==========================================================
+//                     PARTICLES + STARS
+// ==========================================================
 const pixelContainer = document.querySelector(".pixel-particles");
 if (pixelContainer) {
     function spawnPixel() {

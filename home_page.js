@@ -5,7 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const transition = document.getElementById("screen-transition");
     const starContainer = document.getElementById("stars");
 
-    /* START BUTTON → Fade to black → Go to story/game */
+    /* ----------------------------------------------------
+       START BUTTON → Fade → Go to game.html
+    ----------------------------------------------------- */
     startBtn?.addEventListener("click", () => {
         transition.classList.add("active");
         setTimeout(() => {
@@ -13,29 +15,37 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 1200);
     });
 
-/* CONTINUE BUTTON → Load saved level */
-const savedGame = localStorage.getItem("codeQuestSave");
+    /* ----------------------------------------------------
+       CONTINUE BUTTON — Load saved game
+    ----------------------------------------------------- */
+    const savedGame = localStorage.getItem("codeQuestSave");
+    let savedData = null;
 
-if (savedGame) {
-    continueBtn.classList.remove("hidden");
+    try {
+        savedData = JSON.parse(savedGame);
+    } catch (e) {
+        savedData = null;
+    }
 
-    continueBtn.addEventListener("click", () => {
-        const data = JSON.parse(savedGame);
-        const level = data?.level ?? 1;
+    if (savedData && savedData.level) {
+        continueBtn.classList.remove("hidden");
 
-        transition.classList.add("active");
-        setTimeout(() => {
-            window.location.href = `levels/level${level}.html`;
-        }, 1200);
-    });
-}
+        continueBtn.addEventListener("click", () => {
+            transition.classList.add("active");
 
-    /* STARFIELD SETUP */
+            setTimeout(() => {
+                window.location.href = "pages/game.html?continue=true";
+            }, 1200);
+        });
+    }
+
+    /* ----------------------------------------------------
+       BACKGROUND STARFIELD
+    ----------------------------------------------------- */
     function createStar() {
         const star = document.createElement("div");
         star.classList.add("star");
 
-        // 15% chance that it's a larger, glowing star
         if (Math.random() < 0.15) {
             star.classList.add("plus");
         }
@@ -47,7 +57,6 @@ if (savedGame) {
         starContainer.appendChild(star);
     }
 
-    // Generate 200 stars
     for (let i = 0; i < 200; i++) createStar();
 
     /* SHOOTING STARS */
@@ -63,35 +72,44 @@ if (savedGame) {
         setTimeout(() => s.remove(), 1400);
     }
 
-    // Random interval for shooting stars
     setInterval(() => {
-        if (Math.random() < 0.65) {
-            createShootingStar();
-        }
+        if (Math.random() < 0.65) createShootingStar();
     }, Math.random() * 2200 + 1800);
 
-    /* MULTILINE TYPEWRITER EFFECT */
+    /* ----------------------------------------------------
+       MULTILINE TYPEWRITER EFFECT (FULLY FIXED)
+    ----------------------------------------------------- */
     const storyEl = document.getElementById("story-text");
     const cursor = document.getElementById("cursor");
 
     if (storyEl && cursor) {
-        const text = storyEl.innerText.trim();
-        storyEl.innerText = "";
+        const text = storyEl.textContent.trim();
+        storyEl.innerHTML = "";
+        cursor.style.display = "inline-block";
 
         let i = 0;
-        const speed = 28;
+        const speed = 25;
 
         function typeStep() {
             if (i < text.length) {
-                storyEl.innerText += text.charAt(i++);
+                if (text[i] === "\n") {
+                    storyEl.innerHTML += "<br>";
+                } else {
+                    storyEl.innerHTML += text[i]
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;");
+                }
+
+                i++;
                 setTimeout(typeStep, speed);
+
             } else {
                 cursor.style.display = "none";
             }
         }
 
-        // slight delay before typing
-        setTimeout(typeStep, 300);
+        setTimeout(typeStep, 350);
     }
 
-});
+}); // END DOMContentLoaded
