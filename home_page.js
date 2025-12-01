@@ -5,9 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const transition = document.getElementById("screen-transition");
     const starContainer = document.getElementById("stars");
 
-    /* ----------------------------------------------------
-       START BUTTON → Fade to black → Go to story/game
-    ----------------------------------------------------- */
+    /* START BUTTON → Fade to black → Go to story/game */
     startBtn?.addEventListener("click", () => {
         transition.classList.add("active");
         setTimeout(() => {
@@ -15,25 +13,24 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 1200);
     });
 
-    /* ----------------------------------------------------
-       CONTINUE BUTTON → Only show if saved data exists
-    ----------------------------------------------------- */
-    const savedGame = localStorage.getItem("codeQuestSave");
+/* CONTINUE BUTTON → Load saved level */
+const savedGame = localStorage.getItem("codeQuestSave");
 
-    if (savedGame) {
-        continueBtn.classList.remove("hidden");
+if (savedGame) {
+    continueBtn.classList.remove("hidden");
 
-        continueBtn.addEventListener("click", () => {
-            transition.classList.add("active");
-            setTimeout(() => {
-                window.location.href = "levels/level1.html";
-            }, 1200);
-        });
-    }
+    continueBtn.addEventListener("click", () => {
+        const data = JSON.parse(savedGame);
+        const level = data?.level ?? 1;
 
-    /* ----------------------------------------------------
-       STARFIELD SETUP
-    ----------------------------------------------------- */
+        transition.classList.add("active");
+        setTimeout(() => {
+            window.location.href = `levels/level${level}.html`;
+        }, 1200);
+    });
+}
+
+    /* STARFIELD SETUP */
     function createStar() {
         const star = document.createElement("div");
         star.classList.add("star");
@@ -53,9 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Generate 200 stars
     for (let i = 0; i < 200; i++) createStar();
 
-    /* ----------------------------------------------------
-       SHOOTING STARS
-    ----------------------------------------------------- */
+    /* SHOOTING STARS */
     function createShootingStar() {
         const s = document.createElement("div");
         s.classList.add("shooting-star");
@@ -75,9 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }, Math.random() * 2200 + 1800);
 
-    /* ----------------------------------------------------
-       MULTILINE TYPEWRITER EFFECT
-    ----------------------------------------------------- */
+    /* MULTILINE TYPEWRITER EFFECT */
     const storyEl = document.getElementById("story-text");
     const cursor = document.getElementById("cursor");
 
