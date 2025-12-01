@@ -52,9 +52,25 @@
     <section class="game-controls">
         <button id="startGameBtn">Start Game</button>
         <button id="resetGameBtn">Reset Game</button>
+        <button id="showAnswerBtn" class="show-answer-btn">Show Answer</button>
     </section>
 
 </div>
+
+<div id="showAnswerPopup" class="popup-overlay hidden">
+    <div class="popup-box">
+        <h2>Show Answer?</h2>
+        <p>This will reveal the full solution and restart the game at Level 1.</p>
+
+        <div class="popup-buttons">
+            <button id="confirmShowAnswer" class="confirm-btn">Yes, show answer</button>
+            <button id="cancelShowAnswer" class="cancel-btn">Cancel</button>
+            
+        </div>
+        <button id="doneShowAnswer" class="hidden done-btn">Done</button>
+    </div>
+</div>
+
 
 <script>
     window.currentLevel = 5;
