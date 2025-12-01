@@ -365,3 +365,10 @@ footer:hover {
 .hidden {
     display: none !important;
 }
+#story-text {
+    white-space: pre-line;
+}
+.type-cursor {
+    position: relative;
+    top: -2px;
+}
