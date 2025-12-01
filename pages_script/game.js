@@ -272,10 +272,7 @@ print(get_user_age("Alice", users))`,
         hintStep++;
         updateHintCostUI();
     }
-
-    // ==========================================================
-    //                BUTTON EVENT LISTENERS
-    // ==========================================================
+    // BUTTON EVENT LISTENERS
     if (startBtn) startBtn.addEventListener("click", () => loadLevel(currentLevel));
     if (resetBtn) resetBtn.addEventListener("click", () => window.location.reload());
     if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
