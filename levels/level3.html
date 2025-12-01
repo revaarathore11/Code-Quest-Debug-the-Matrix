@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 3 — CodeQuest</title>
+
+    <link rel="stylesheet" href="../pages/pages_style/game.css">
+
+</head>
+<body>
+
+<div class="samurai-walker"></div>
+<div class="stars" id="stars"></div>
+<div class="pixel-particles"></div>
+
+<div class="game-container">
+
+    <div id="levelCompleteAnimation"></div>
+
+    <header class="game-header">
+        <span id="levelDisplay">Level 3</span>
+        <span id="timerDisplay">Time: 60s</span>
+        <span id="scoreDisplay">Score: 0</span>
+    </header>
+
+    <div id="levelOverlay" class="overlay hidden">
+        <h1>Level 3</h1>
+        <p>Correct the code and identify vulnerabilities.</p>
+    </div>
+
+    <section id="gameMessage" class="game-message"></section>
+
+    <main id="gameArea" class="game-area"></main>
+
+    <section class="challenge-box">
+        <pre id="codeSnippet" contenteditable="true"></pre>
+    </section>
+
+    <section class="hint-section">
+        <button id="hintBtn">Hint</button>
+        <span id="hintCost" class="hint-cost"></span>
+        <span id="hintText" class="hint-text hidden"></span>
+    </section>
+
+    <section class="challenge-actions">
+        <button id="submitAnswerBtn">Submit</button>
+    </section>
+
+    <button id="nextLevelBtn" class="hidden">Next Level →</button>
+
+    <section class="game-controls">
+        <button id="startGameBtn">Start Game</button>
+        <button id="resetGameBtn">Reset Game</button>
+    </section>
+
+</div>
+
+<script>
+    window.currentLevel = 3;
+</script>
+
+
+<script src="../pages_script/game.js"></script>
+
+</body>
+</html>
