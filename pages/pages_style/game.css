@@ -742,3 +742,71 @@ body {
 .done-btn.hidden {
     display: none;
 }
+/* ===== Improved Show Answer Popup — Bottom Floating Card ===== */
+
+.popup-overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 40px; /* lifts it up a bit */
+    top: auto;
+    width: 100%;
+    height: auto;
+    background: none !important; /* remove dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    pointer-events: none; /* allow clicks behind */
+    z-index: 9999;
+}
+
+.popup-box {
+    pointer-events: all; /* re-enable buttons inside */
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid #00eaff;
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+    width: 320px;
+    color: #fff;
+    box-shadow: 0 0 20px #00eaff60;
+    backdrop-filter: blur(6px);
+    animation: popupFloat 0.35s ease-out;
+}
+
+/* Smooth floating entry animation */
+@keyframes popupFloat {
+    0% {
+        transform: translateY(25px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+/* DONE button styling */
+.done-btn {
+    background: #45f3ff;
+    color: #000;
+    padding: 8px 16px;
+    margin-top: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    border: none;
+}
+
+.done-btn:hover {
+    background: #2ad9ea;
+    transform: scale(1.05);
+}
+
+/* Hide Confirm/Cancel after clicking Show Answer */
+.confirm-btn.hidden,
+.cancel-btn.hidden {
+    display: none !important;
+}

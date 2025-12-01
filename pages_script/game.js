@@ -1,6 +1,6 @@
-<<<<<<< HEAD
 //                GAME.JS — MULTI-PAGE VERSION (FINAL)
 //     HINTS CAN TAKE SCORE NEGATIVE (OPTION 1 ENABLED)
+
 function saveGameProgress(level, score, difficulty) {
     const data = {
         level,
@@ -11,17 +11,12 @@ function saveGameProgress(level, score, difficulty) {
 
     localStorage.setItem("codeQuestSave", JSON.stringify(data));
 }
-=======
-// ==========================================================
-//                  GAME.JS — FINAL WORKING VERSION
-// ==========================================================
->>>>>>> 2fc8b86 (show answer working)
 
 console.log("game.js loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // DOM ELEMENTS 
+    // ====== DOM ELEMENTS ======
     const startBtn = document.getElementById("startGameBtn");
     const resetBtn = document.getElementById("resetGameBtn");
     const submitBtn = document.getElementById("submitAnswerBtn");
@@ -37,12 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const hintCostEl = document.getElementById("hintCost");
     const levelAnim = document.getElementById("levelCompleteAnimation");
 
-<<<<<<< HEAD
-    // READ CURRENT PAGE LEVEL 
-    let currentLevel = Number(window.currentLevel) || 1;
-
-    // LEVEL DATA 
-=======
     // ===== SHOW ANSWER POPUP ELEMENTS =====
     const showAnswerBtn = document.getElementById("showAnswerBtn");
     const popup = document.getElementById("showAnswerPopup");
@@ -50,13 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancelBtn = document.getElementById("cancelShowAnswer");
     const doneBtn = document.getElementById("doneShowAnswer");
 
-    // CURRENT PAGE LEVEL
+    // CURRENT PAGE LEVEL (from HTML script: window.currentLevel = X)
     let currentLevel = Number(window.currentLevel) || 1;
 
     // ==========================================================
     //                      LEVEL DATA
     // ==========================================================
->>>>>>> 2fc8b86 (show answer working)
     const levels = [
         {
             number: 1,
@@ -227,13 +215,9 @@ print(get_user_age(users, "Alice"))`,
         }
     ];
 
-<<<<<<< HEAD
-    // STATE 
-=======
     // ==========================================================
     //                   SESSION STATE
     // ==========================================================
->>>>>>> 2fc8b86 (show answer working)
     let timer = 60;
     let timerInterval = null;
     let totalScore = 0;
@@ -241,21 +225,18 @@ print(get_user_age(users, "Alice"))`,
     let gameStarted = false;
 
     function getHintCost() {
-        return 10 * (hintStep + 1);
+        return 10 * (hintStep + 1); // 10, 20, 30...
     }
 
     function updateHintCostUI() {
+        if (!hintCostEl) return;
         const cost = getHintCost();
         hintCostEl.textContent = hintStep < 1 ? "" : `Cost: ${cost}`;
     }
-<<<<<<< HEAD
-    // LOAD LEVEL
-=======
 
     // ==========================================================
     //                    LOAD LEVEL
     // ==========================================================
->>>>>>> 2fc8b86 (show answer working)
     function loadLevel(levelNum) {
         const level = levels[levelNum - 1];
         if (!level) return;
@@ -290,14 +271,10 @@ print(get_user_age(users, "Alice"))`,
             }
         }, 1000);
     }
-<<<<<<< HEAD
-    // CHECK ANSWER
-=======
 
     // ==========================================================
     //                    CHECK ANSWER
     // ==========================================================
->>>>>>> 2fc8b86 (show answer working)
     function checkAnswer() {
         const code = codeSnippetEl.textContent;
 
@@ -306,6 +283,7 @@ print(get_user_age(users, "Alice"))`,
             return;
         }
 
+        // fixed 50 points per level
         totalScore += 50;
         scoreDisplay.textContent = `Score: ${totalScore}`;
         gameMessage.textContent = "✅ Correct!";
@@ -326,25 +304,25 @@ print(get_user_age(users, "Alice"))`,
 
         nextLevelBtn.classList.remove("hidden");
     }
-<<<<<<< HEAD
-    // SHOW HINT
-=======
 
     // ==========================================================
     //                         HINTS
     // ==========================================================
->>>>>>> 2fc8b86 (show answer working)
     function showHint() {
-        if (!gameStarted)
-            return gameMessage.textContent = "❗ Start the game first!";
+        if (!gameStarted) {
+            gameMessage.textContent = "❗ Start the game first!";
+            return;
+        }
 
         const hints = levels[currentLevel - 1].hints;
 
-        if (hintStep >= hints.length)
-            return gameMessage.textContent = "⚠️ No more hints!";
+        if (hintStep >= hints.length) {
+            gameMessage.textContent = "⚠️ No more hints!";
+            return;
+        }
 
         const cost = getHintCost();
-        totalScore -= cost;
+        totalScore -= cost; // can go negative
         scoreDisplay.textContent = `Score: ${totalScore}`;
 
         hintTextEl.textContent = hints[hintStep];
@@ -354,7 +332,9 @@ print(get_user_age(users, "Alice"))`,
         updateHintCostUI();
     }
 
-    // BUTTON EVENTS
+    // ==========================================================
+    //                GAME BUTTON EVENT LISTENERS
+    // ==========================================================
     if (startBtn) startBtn.addEventListener("click", () => loadLevel(currentLevel));
     if (resetBtn) resetBtn.addEventListener("click", () => location.reload());
     if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
@@ -364,45 +344,59 @@ print(get_user_age(users, "Alice"))`,
     //                 SHOW ANSWER SYSTEM — FINAL
     // ==========================================================
     if (showAnswerBtn) {
-        showAnswerBtn.addEventListener("click", () => popup.classList.remove("hidden"));
+        showAnswerBtn.addEventListener("click", () => {
+            if (popup) popup.classList.remove("hidden");
+        });
     }
 
     if (cancelBtn) {
-        cancelBtn.addEventListener("click", () => popup.classList.add("hidden"));
+        cancelBtn.addEventListener("click", () => {
+            if (!popup) return;
+            popup.classList.add("hidden");
+        });
     }
 
     if (confirmBtn) {
         confirmBtn.addEventListener("click", () => {
-
-            popup.classList.add("hidden");
-
             const levelData = levels[currentLevel - 1];
+            if (!levelData) return;
+
+            // Show correct answer
             codeSnippetEl.textContent = levelData.answer;
             codeSnippetEl.style.pointerEvents = "none";
+            codeSnippetEl.contentEditable = "false";
 
-            gameMessage.textContent = "✔️ Answer shown. Click DONE to restart.";
+            // Update popup message text
+            const popupText = popup.querySelector("p");
+            if (popupText) {
+                popupText.textContent = "Answer shown! Click Done to restart at Level 1.";
+            }
+
+            // Disable scoring logically (optional: reset score)
+            totalScore = 0;
+            scoreDisplay.textContent = "Score: 0";
 
             // Hide confirm/cancel, show DONE
             confirmBtn.classList.add("hidden");
             cancelBtn.classList.add("hidden");
-            doneBtn.classList.remove("hidden");
+            if (doneBtn) doneBtn.classList.remove("hidden");
+
+            // Keep popup visible until DONE is clicked
         });
     }
 
     if (doneBtn) {
         doneBtn.addEventListener("click", () => {
+            // Close popup & restart game at level 1
+            if (popup) popup.classList.add("hidden");
             window.location.href = "level1.html";
         });
     }
 });
-<<<<<<< HEAD
-// NEXT LEVEL PAGE NAVIGATION (FIXED)
-=======
 
 // ==========================================================
-//               NEXT LEVEL PAGE NAVIGATION
+//               NEXT LEVEL PAGE NAVIGATION (FIXED)
 // ==========================================================
->>>>>>> 2fc8b86 (show answer working)
 function goToNextLevel() {
     const next = Number(window.currentLevel) + 1;
     if (next > 5) {
@@ -416,9 +410,11 @@ function goToNextLevel() {
 document.addEventListener("DOMContentLoaded", () => {
     const nextBtn = document.getElementById("nextLevelBtn");
     if (nextBtn) nextBtn.addEventListener("click", goToNextLevel);
-<<<<<<< HEAD
 });
-// PARTICLES + STARS
+
+// ==========================================================
+//                     PARTICLES + STARS
+// ==========================================================
 const pixelContainer = document.querySelector(".pixel-particles");
 if (pixelContainer) {
     function spawnPixel() {
@@ -465,6 +461,3 @@ if (starContainer) {
 
     for (let i = 0; i < 200; i++) createStar();
 }
-=======
-});
->>>>>>> 2fc8b86 (show answer working)
