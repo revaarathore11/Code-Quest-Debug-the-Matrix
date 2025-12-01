@@ -12,25 +12,26 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = "pages/game.html";
         }, 1200);
     });
-
-/* CONTINUE BUTTON → Load saved level */
+/* CONTINUE BUTTON — Load saved game */
 const savedGame = localStorage.getItem("codeQuestSave");
 
+let savedData = null;
+
 try {
-    const data = JSON.parse(savedGame);
-    if (data && data.level) {
-        continueBtn.classList.remove("hidden");
-    }
+    savedData = JSON.parse(savedGame);
 } catch (e) {
+    savedData = null;
+}
+
+if (savedData && savedData.level) {
     continueBtn.classList.remove("hidden");
 
     continueBtn.addEventListener("click", () => {
-        const data = JSON.parse(savedGame);
-        const level = data?.level ?? 1;
-
         transition.classList.add("active");
+
         setTimeout(() => {
-            window.location.href = `levels/level${level}.html`;
+            // Always load game.html with continue mode
+            window.location.href = "pages/game.html?continue=true";
         }, 1200);
     });
 }
