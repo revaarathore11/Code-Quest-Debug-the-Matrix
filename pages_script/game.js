@@ -1,12 +1,20 @@
-// ==========================================================
 //                GAME.JS — MULTI-PAGE VERSION (FINAL)
 //     HINTS CAN TAKE SCORE NEGATIVE (OPTION 1 ENABLED)
-// ==========================================================
+function saveGameProgress(level, score, difficulty) {
+    const data = {
+        level,
+        score,
+        difficulty,
+        timestamp: Date.now()
+    };
+
+    localStorage.setItem("codeQuestSave", JSON.stringify(data));
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("game.js loaded — DOMContentLoaded");
 
-    // ====== DOM ELEMENTS ======
+    // DOM ELEMENTS 
     const startBtn = document.getElementById("startGameBtn");
     const resetBtn = document.getElementById("resetGameBtn");
     const submitBtn = document.getElementById("submitAnswerBtn");
@@ -22,10 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextLevelBtn = document.getElementById("nextLevelBtn");
     const hintCostEl = document.getElementById("hintCost");
 
-    // ====== READ CURRENT PAGE LEVEL ======
+    // READ CURRENT PAGE LEVEL 
     let currentLevel = Number(window.currentLevel) || 1;
 
-    // ====== LEVEL DATA ======
+    // LEVEL DATA 
     const levels = [
         {
             number: 1,
@@ -152,7 +160,7 @@ print(get_user_age("Alice", users))`,
         }
     ];
 
-    // ===== STATE =====
+    // STATE 
     let timer = 60;
     let timerInterval = null;
     let totalScore = 0;
@@ -172,10 +180,7 @@ print(get_user_age("Alice", users))`,
         const cost = getHintCost();
         hintCostEl.textContent = cost > 0 ? `Cost: ${cost}` : "";
     }
-
-    // ==========================================================
-    //                     LOAD LEVEL
-    // ==========================================================
+    // LOAD LEVEL
     function loadLevel(levelNum) {
         const level = levels[levelNum - 1];
         if (!level) return;
@@ -210,10 +215,7 @@ print(get_user_age("Alice", users))`,
             }
         }, 1000);
     }
-
-    // ==========================================================
-    //                     CHECK ANSWER
-    // ==========================================================
+    // CHECK ANSWER
     function checkAnswer() {
         const userCode = codeSnippetEl.textContent || "";
         const isCorrect = levels[currentLevel - 1].check(userCode);
@@ -244,10 +246,7 @@ print(get_user_age("Alice", users))`,
 
         nextLevelBtn.classList.remove("hidden");
     }
-
-    // ==========================================================
-    //                      SHOW HINT
-    // ==========================================================
+    // SHOW HINT
     function showHint() {
         if (!gameStarted) {
             setText(gameMessage, "❗ Start the game first!");
@@ -282,10 +281,7 @@ print(get_user_age("Alice", users))`,
     if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
     if (hintBtn) hintBtn.addEventListener("click", showHint);
 });
-
-// ==========================================================
-//               NEXT LEVEL PAGE NAVIGATION (FIXED)
-// ==========================================================
+// NEXT LEVEL PAGE NAVIGATION (FIXED)
 function goToNextLevel() {
     const next = Number(window.currentLevel) + 1;
 
@@ -302,10 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextBtn = document.getElementById("nextLevelBtn");
     if (nextBtn) nextBtn.addEventListener("click", goToNextLevel);
 });
-
-// ==========================================================
-//                     PARTICLES + STARS
-// ==========================================================
+// PARTICLES + STARS
 const pixelContainer = document.querySelector(".pixel-particles");
 if (pixelContainer) {
     function spawnPixel() {
