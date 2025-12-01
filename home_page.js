@@ -16,7 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
 /* CONTINUE BUTTON → Load saved level */
 const savedGame = localStorage.getItem("codeQuestSave");
 
-if (savedGame) {
+try {
+    const data = JSON.parse(savedGame);
+    if (data && data.level) {
+        continueBtn.classList.remove("hidden");
+    }
+} catch (e) {
     continueBtn.classList.remove("hidden");
 
     continueBtn.addEventListener("click", () => {
