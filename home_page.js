@@ -113,3 +113,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 }); // END DOMContentLoaded
+const dustContainer = document.getElementById("dust-container");
+setInterval(() => {
+    const d = document.createElement("div");
+    d.classList.add("dust");
+
+    // spawn near character feet
+    d.style.left = (parseInt(getComputedStyle(document.querySelector(".pixel-character")).left) + 25) + "px";
+
+    dustContainer.appendChild(d);
+
+    setTimeout(() => d.remove(), 600);
+}, 180); // rate of dust puffs
