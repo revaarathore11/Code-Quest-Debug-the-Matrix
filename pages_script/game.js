@@ -1,6 +1,10 @@
-//                GAME.JS — MULTI-PAGE VERSION (FINAL)
-//     HINTS CAN TAKE SCORE NEGATIVE (OPTION 1 ENABLED)
+// ==========================================================
+//                GAME.JS — FINAL MULTI-PAGE VERSION
+// ==========================================================
 
+console.log("game.js loaded");
+
+// Save progress if needed later
 function saveGameProgress(level, score, difficulty) {
     const data = {
         level,
@@ -8,15 +12,12 @@ function saveGameProgress(level, score, difficulty) {
         difficulty,
         timestamp: Date.now()
     };
-
     localStorage.setItem("codeQuestSave", JSON.stringify(data));
 }
 
-console.log("game.js loaded");
-
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ====== DOM ELEMENTS ======
+    // ===== DOM ELEMENTS =====
     const startBtn = document.getElementById("startGameBtn");
     const resetBtn = document.getElementById("resetGameBtn");
     const submitBtn = document.getElementById("submitAnswerBtn");
@@ -32,43 +33,44 @@ document.addEventListener("DOMContentLoaded", () => {
     const hintCostEl = document.getElementById("hintCost");
     const levelAnim = document.getElementById("levelCompleteAnimation");
 
-    // ===== SHOW ANSWER POPUP ELEMENTS =====
+    // ===== SHOW ANSWER POPUP =====
     const showAnswerBtn = document.getElementById("showAnswerBtn");
     const popup = document.getElementById("showAnswerPopup");
-    const popupBox = popup ? popup.querySelector(".popup-box") : null;
     const confirmBtn = document.getElementById("confirmShowAnswer");
     const cancelBtn = document.getElementById("cancelShowAnswer");
     const doneBtn = document.getElementById("doneShowAnswer");
 
-    // CURRENT PAGE LEVEL
+    // Current page LEVEL
     let currentLevel = Number(window.currentLevel) || 1;
 
     // ==========================================================
     //                      LEVEL DATA
     // ==========================================================
     const levels = [
-      {
-    number: 1,
-    snippet: `items = ["pen", "book", "bag"]
+        // LEVEL 1
+        {
+            number: 1,
+            snippet: `items = ["pen", "book", "bag"]
 print(items[3])
 print(items.length)`,
-    hints: [
-        "Hint: Lists are 0-indexed — items[3] does not exist.",
-        "Hint: Python lists do NOT have a .length or .lenght attribute.",
-        "Hint: Use len(items) to get the length of a list."
-    ],
-    answer:
+            hints: [
+                "Hint: Lists are 0-indexed — items[3] does not exist.",
+                "Hint: Python lists do NOT have a .length or .lenght attribute.",
+                "Hint: Use len(items) to get the length of a list."
+            ],
+            answer:
 `items = ["pen", "book", "bag"]
 print(items[2])
 print(len(items))`,
-    check: (code) =>
-        code.includes("items[2]") &&
-        code.includes("len(items)") &&
-        !code.includes("lenght") &&
-        !code.includes("length") &&
-        !code.includes("items.length") // prevents JavaScript-style mistakes
-},
+            check: (code) =>
+                code.includes("items[2]") &&
+                code.includes("len(items)") &&
+                !code.includes("lenght") &&
+                !code.includes("length") &&
+                !code.includes("items.length")
+        },
 
+        // LEVEL 2
         {
             number: 2,
             snippet: `numbers = [1, 2, 3, 4]
@@ -95,10 +97,11 @@ for i in range(len(numbers)):
 print(total)`,
             check: (code) =>
                 code.includes("for i in range(len(numbers)):") &&
-                (code.includes("total = total + numbers[i]") || code.includes("total += numbers[i]")) &&
+                (code.includes("total += numbers[i]") || code.includes("total = total + numbers[i]")) &&
                 code.includes("print(total)")
         },
 
+        // LEVEL 3
         {
             number: 3,
             snippet: `def sumList(nums)
@@ -136,6 +139,7 @@ print(sumList(numbers))`,
                 code.includes("print(sumList(numbers))")
         },
 
+        // LEVEL 4
         {
             number: 4,
             snippet: `def collect_unique_words(text):
@@ -156,10 +160,10 @@ print(sumList(numbers))`,
 sentence = "Hello hello world! This world is big, big world."
 print( collect_unique_words(sentence) )`,
             hints: [
-                "Hint 1: Something is wrong with 'unique'.",
-                "Hint 2: You're replacing the list instead of adding.",
-                "Hint 3: unique.append(cleaned) is correct.",
-                "Hint 4: If unique becomes a string, len(unique) breaks."
+                "Hint: unique = cleaned is wrong.",
+                "Use unique.append(cleaned).",
+                "unique should always be a list.",
+                "Returning len(unique) only works if unique is a list."
             ],
             answer:
 `def collect_unique_words(text):
@@ -181,6 +185,7 @@ print(collect_unique_words(sentence))`,
                 !code.includes("unique = cleaned")
         },
 
+        // LEVEL 5
         {
             number: 5,
             snippet: `def get_user_age(users, name):
@@ -196,10 +201,9 @@ users = [
 print(get_user_age("Alice", users))`,
             hints: [
                 "Arguments are reversed.",
-                "get_user_age(users, name)",
-                "Fix the function call.",
-                "List first, name second.",
-                "Swap the arguments."
+                "Call as get_user_age(users, name).",
+                "List comes first, name second.",
+                "Swap them."
             ],
             answer:
 `def get_user_age(users, name):
@@ -220,16 +224,18 @@ print(get_user_age(users, "Alice"))`,
     ];
 
     // ==========================================================
-    //                   SESSION STATE
+    //                   GAME STATE
     // ==========================================================
     let timer = 60;
     let timerInterval = null;
-    let totalScore = 0;
+    let totalScore = Number(localStorage.getItem("codequestScore")) || 0;
     let hintStep = 0;
     let gameStarted = false;
 
+    let levelCompleted = false; // 🔥 Prevent repeated scoring
+
     function getHintCost() {
-        return 10 * (hintStep + 1); 
+        return 10 * (hintStep + 1);
     }
 
     function updateHintCostUI() {
@@ -237,11 +243,13 @@ print(get_user_age(users, "Alice"))`,
     }
 
     // ==========================================================
-    //                    LOAD LEVEL
+    //                        LOAD LEVEL
     // ==========================================================
     function loadLevel(levelNum) {
         const level = levels[levelNum - 1];
         if (!level) return;
+
+        levelCompleted = false; // 🔥 Reset scoring lock
 
         gameStarted = true;
         hintStep = 0;
@@ -265,7 +273,6 @@ print(get_user_age(users, "Alice"))`,
         timerInterval = setInterval(() => {
             timer--;
             timerDisplay.textContent = `Time: ${timer}s`;
-
             if (timer <= 0) {
                 clearInterval(timerInterval);
                 gameMessage.textContent = "⏰ Time's up!";
@@ -274,7 +281,7 @@ print(get_user_age(users, "Alice"))`,
     }
 
     // ==========================================================
-    //                    CHECK ANSWER
+    //                        CHECK ANSWER
     // ==========================================================
     function checkAnswer() {
         const code = codeSnippetEl.textContent;
@@ -284,7 +291,13 @@ print(get_user_age(users, "Alice"))`,
             return;
         }
 
-        totalScore += 50;
+        // 🔥 Prevent multiple scoring on same level
+        if (!levelCompleted) {
+            totalScore += 50;
+            localStorage.setItem("codequestScore", totalScore);
+            levelCompleted = true;
+        }
+
         scoreDisplay.textContent = `Score: ${totalScore}`;
         gameMessage.textContent = "✅ Correct!";
 
@@ -293,7 +306,7 @@ print(get_user_age(users, "Alice"))`,
         codeSnippetEl.contentEditable = "false";
         codeSnippetEl.style.pointerEvents = "none";
 
-        levelAnim.textContent = "🎉 LEVEL COMPLETE! 🎉";
+        levelAnim.textContent = "🎉 LEVEL COMPLETE!";
         levelAnim.classList.remove("hidden");
         void levelAnim.offsetWidth;
         levelAnim.classList.add("level-complete");
@@ -306,7 +319,7 @@ print(get_user_age(users, "Alice"))`,
     }
 
     // ==========================================================
-    //                         HINTS
+    //                           HINTS
     // ==========================================================
     function showHint() {
         if (!gameStarted) {
@@ -315,13 +328,13 @@ print(get_user_age(users, "Alice"))`,
         }
 
         const hints = levels[currentLevel - 1].hints;
-
         if (hintStep >= hints.length) {
             gameMessage.textContent = "⚠️ No more hints!";
             return;
         }
 
         totalScore -= getHintCost();
+        localStorage.setItem("codequestScore", totalScore);
         scoreDisplay.textContent = `Score: ${totalScore}`;
 
         hintTextEl.textContent = hints[hintStep];
@@ -332,7 +345,7 @@ print(get_user_age(users, "Alice"))`,
     }
 
     // ==========================================================
-    //                BUTTON EVENT LISTENERS
+    //                      BUTTON HANDLERS
     // ==========================================================
     if (startBtn) startBtn.addEventListener("click", () => loadLevel(currentLevel));
     if (resetBtn) resetBtn.addEventListener("click", () => location.reload());
@@ -340,7 +353,7 @@ print(get_user_age(users, "Alice"))`,
     if (hintBtn) hintBtn.addEventListener("click", showHint);
 
     // ==========================================================
-    //              SHOW ANSWER SYSTEM — FIXED UX VERSION
+    //               SHOW ANSWER — BEST UX VERSION
     // ==========================================================
     if (showAnswerBtn) {
         showAnswerBtn.addEventListener("click", () => popup.classList.remove("hidden"));
@@ -351,40 +364,39 @@ print(get_user_age(users, "Alice"))`,
     }
 
     if (confirmBtn) {
-    confirmBtn.addEventListener("click", () => {
+        confirmBtn.addEventListener("click", () => {
 
-        const levelData = levels[currentLevel - 1];
-        if (!levelData) return;
+            const levelData = levels[currentLevel - 1];
+            if (!levelData) return;
 
-        // Show correct answer
-        codeSnippetEl.textContent = levelData.answer;
-        codeSnippetEl.style.pointerEvents = "none";
-        codeSnippetEl.contentEditable = "false";
+            codeSnippetEl.textContent = levelData.answer;
+            codeSnippetEl.style.pointerEvents = "none";
+            codeSnippetEl.contentEditable = "false";
 
-        // Reset scoring
-        totalScore = 0;
-        scoreDisplay.textContent = "Score: 0";
+            // Showing answer = reset score for fairness
+            totalScore = 0;
+            localStorage.setItem("codequestScore", totalScore);
+            scoreDisplay.textContent = `Score: 0`;
 
-        // 🔥 CLOSE POPUP IMMEDIATELY
-        popup.classList.add("hidden");
+            popup.classList.add("hidden");
 
-        // 🔥 SHOW DONE BUTTON *AFTER* POPUP CLOSES
-        setTimeout(() => {
-            doneBtn.classList.remove("hidden");
-        }, 150);
-    });
-}
+            // show done button after small delay
+            setTimeout(() => {
+                doneBtn.classList.remove("hidden");
+            }, 120);
+        });
+    }
 
     if (doneBtn) {
         doneBtn.addEventListener("click", () => {
-            popup.classList.add("hidden");
             window.location.href = "level1.html";
         });
     }
+
 });
 
 // ==========================================================
-//               NEXT LEVEL PAGE NAVIGATION
+//               NEXT LEVEL NAVIGATION
 // ==========================================================
 function goToNextLevel() {
     const next = Number(window.currentLevel) + 1;
@@ -402,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==========================================================
-//                     PARTICLES + STARS
+//               PARTICLES + STARS
 // ==========================================================
 const pixelContainer = document.querySelector(".pixel-particles");
 if (pixelContainer) {
