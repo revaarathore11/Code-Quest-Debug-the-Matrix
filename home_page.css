@@ -273,38 +273,6 @@ footer:hover {
     }
 }
 /* Knight Pixel Character */
-.pixel-character {
-    width: 64px;
-    height: 64px;
-    background: url("./assets/sprites/blue_knight.png") 0 0 no-repeat;
-    background-size: 256px 64px; /* 4 frames */
-    image-rendering: pixelated;
-
-    position: fixed;
-    bottom: 30px;
-    left: 0;
-    z-index: 15;
-
-    /* Make the knight bigger */
-    transform: scale(2);
-    transform-origin: bottom left;
-
-    animation:
-        knightWalkAcross 15s linear infinite,
-        knightSpriteWalk 1.2s steps(4) infinite;
-}
-@keyframes knightSpriteWalk {
-    from { background-position: 0 0; }
-    to   { background-position: -256px 0; }
-}
-
-@keyframes knightWalkAcross {
-    0%   { left: 0; transform: scaleX(1); }
-    45%  { left: calc(100% - 80px); transform: scaleX(1); }
-    50%  { transform: scaleX(-1); }
-    95%  { left: 0; transform: scaleX(-1); }
-    100% { transform: scaleX(1); }
-}
 #dust-container {
     position: fixed;
     bottom: 20px;
