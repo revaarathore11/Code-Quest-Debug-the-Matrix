@@ -133,23 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 }); // END DOMContentLoaded
 
-
-// ==========================================================
-//                    KNIGHT ANIMATION
-// ==========================================================
-
-const knight = document.querySelector(".pixel-character");
-const dustContainer = document.getElementById("dust-container");
-
-function idleSwordSwing() {
-    knight.style.animation = "knightIdleSword 0.5s steps(2) 1";
-
-    setTimeout(() => {
-        knight.style.animation =
-            "knightWalkAcross 15s linear infinite, knightSpriteWalk 0.8s steps(4) infinite";
-    }, 600);
-}
-
+// KNIGHT ANIMATION
 // Randomly swing sword every 3–6 seconds
 setInterval(() => {
     if (Math.random() < 0.4) idleSwordSwing();
@@ -171,3 +155,22 @@ setInterval(() => {
 
     setTimeout(() => d.remove(), 500);
 }, 180);
+const knightWrapper = document.querySelector(".knight-wrapper");
+const dustContainer = document.getElementById("dust-container");
+
+setInterval(() => {
+    const rect = knightWrapper.getBoundingClientRect();
+
+    const dust = document.createElement("div");
+    dust.classList.add("dust");
+
+    // Offset dust slightly inward
+    const xOffset = knightWrapper.style.transform.includes("scaleX(-1)") ? 20 : 40;
+
+    dust.style.left = rect.left + xOffset + "px";
+    dust.style.top = rect.bottom - 10 + "px";
+
+    dustContainer.appendChild(dust);
+
+    setTimeout(() => dust.remove(), 450);
+}, 150);
