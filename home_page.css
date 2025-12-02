@@ -331,6 +331,11 @@ footer:hover {
     50%  { transform: scale(1) translateY(-8px); opacity: 0.6; }
     100% { transform: scale(0.2) translateY(3px); opacity: 0; }
 }
+@keyframes knightIdleSword {
+    0% { background-position: 0px 0; }
+    50% { background-position: -64px 0; }
+    100% { background-position: 0px 0; }
+}
 /* For better readability of the written content */
 .storyline {
     max-width: 700px;
