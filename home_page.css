@@ -273,36 +273,41 @@ footer:hover {
     }
 }
 /* Knight Pixel Character */
+/* Dust container FIXED (only one copy) */
 #dust-container {
     position: fixed;
-    bottom: 20px;
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 80px;
+    height: 120px;
     pointer-events: none;
-    z-index: 10;
+    z-index: 5;
 }
 
-#dust-container {
-    position: fixed;
-    left: 0;
-    top: 0;
-    pointer-events: none;
-    z-index: 10;
-}
-
+/* Dust particle */
 .dust {
     position: absolute;
     width: 6px;
     height: 6px;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 50%;
-    animation: dustFade 0.5s ease-out forwards;
+    opacity: 1;
+    image-rendering: pixelated;
+    transform: translateY(0px) scale(1);
+
+    animation: dustFade 0.45s ease-out forwards;
 }
 
+/* Dust fade animation */
 @keyframes dustFade {
-    from { transform: scale(1); opacity: 0.9; }
-    to   { transform: scale(0.2) translateY(-12px); opacity: 0; }
+    0% {
+        opacity: 1;
+        transform: translateY(-4px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.3);
+    }
 }
 /* Knight Wrapper = movement + scaling */
 .knight-wrapper {
