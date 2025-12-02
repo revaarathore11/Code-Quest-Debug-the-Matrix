@@ -310,46 +310,51 @@ footer:hover {
     }
 }
 /* Knight Wrapper = movement + scaling */
+/* Knight container handles movement + direction */
 .knight-wrapper {
     position: fixed;
     bottom: 40px;
-    left: 0;
+    left: -80px;
     width: 64px;
     height: 64px;
     z-index: 20;
-    
-    /* MAKE THE KNIGHT BIGGER */
-    transform: scale(2.1);      /* change size here */
-    transform-origin: bottom left;
 
+    transform-origin: bottom left;
     animation: knightWalkAcross 14s linear infinite;
+    --scale: 2.1; /* You can change size globally here */
 }
 
-/* Knight Sprite = frame animation only */
+/* Knight sprite sheet frames */
 .knight-sprite {
     width: 64px;
     height: 64px;
 
     background: url("./assets/sprites/blue_knight.png") no-repeat;
-    background-size: 256px 64px;  /* 4 frames × 64px */
+    background-size: 256px 64px; /* 4 walking frames */
     image-rendering: pixelated;
 
-    animation: knightSpriteWalk 0.8s steps(4) infinite;
+    animation: knightWalkFrames 0.8s steps(4) infinite;
 }
 
-/* Walking frame animation */
-@keyframes knightSpriteWalk {
-    from { background-position:   0px 0; }
+/* Walking frames */
+@keyframes knightWalkFrames {
+    from { background-position: 0 0; }
     to   { background-position: -256px 0; }
 }
 
-/* Walk across screen + flip */
+/* WALK ACROSS + AUTOMATIC FLIP */
 @keyframes knightWalkAcross {
-    0%   { left: -80px; transform: scale(2.1) scaleX(1); }
-    45%  { left: calc(100% - 140px); transform: scale(2.1) scaleX(1); }
-    50%  { transform: scale(2.1) scaleX(-1); }
-    95%  { left: -80px; transform: scale(2.1) scaleX(-1); }
-    100% { transform: scale(2.1) scaleX(1); }
+    0%   { left: -80px; transform: scale(var(--scale)) scaleX(1); }
+    47%  { left: calc(100% - 160px); transform: scale(var(--scale)) scaleX(1); }
+    50%  { transform: scale(var(--scale)) scaleX(-1); }
+    97%  { left: -80px; transform: scale(var(--scale)) scaleX(-1); }
+    100% { transform: scale(var(--scale)) scaleX(1); }
+}
+
+/* Sword swing (2 frames only) */
+@keyframes knightSwordSwing {
+    from { background-position: 0 -64px; }
+    to   { background-position: -128px -64px; } /* 2 sword frames */
 }
 /* For better readability of the written content */
 .storyline {
