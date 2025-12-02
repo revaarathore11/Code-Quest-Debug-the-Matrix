@@ -1,6 +1,6 @@
 // ==========================================================
 //                GAME.JS — FINAL MULTI-PAGE VERSION
-//      Difficulty-aware: easy / medium (per localStorage)
+//      Difficulty-aware: easy / medium / hard
 // ==========================================================
 
 console.log("game.js loaded");
@@ -85,9 +85,9 @@ total += number[i]
 
 print(totl)`,
                 hints: [
-                    "Indentation missing.",
+                    "Indentation missing inside the loop.",
                     "number[i] should be numbers[i].",
-                    "totl is incorrect.",
+                    "totl is incorrect variable name.",
                     "Check the colon after for loop.",
                     "Make sure total is updated each loop."
                 ],
@@ -245,7 +245,7 @@ for n in numbers:
                 check: (code) =>
                     code.includes("for n in numbers") &&
                     code.includes("n % 2 == 0") &&
-                    code.includes('print("Even"') // loose but fine
+                    code.includes('print("Even"')
             },
 
             {
@@ -268,7 +268,7 @@ print(multiply(5, 3))`,
                     code.includes("def multiply(a, b):") &&
                     code.includes("return a * b") &&
                     code.includes("multiply(") &&
-                    code.includes(",") // ensure 2 args passed
+                    code.includes(",") // ensures 2 args are passed
             },
 
             {
@@ -335,6 +335,142 @@ print(find_max([-5, -10, -3]))`,
                     code.includes("for i in range(1, 5):") &&
                     code.includes("print(i)")
             }
+        ],
+
+        // ---------------------- HARD ----------------------
+        hard: [
+            {
+                number: 1,
+                snippet: `def add_item(item, items=[]):
+    items.append(item)
+    return items
+
+print(add_item("apple"))
+print(add_item("banana"))`,
+                hints: [
+                    "Hint: The same list is being reused across calls.",
+                    "Hint: Mutable default arguments can be dangerous.",
+                    "Hint: Use None as the default and create a new list inside.",
+                    "Hint: Check how many items are in each printed list."
+                ],
+                answer:
+`def add_item(item, items=None):
+    if items is None:
+        items = []
+    items.append(item)
+    return items
+
+print(add_item("apple"))
+print(add_item("banana"))`,
+                check: (code) =>
+                    code.includes("def add_item(item, items=None):") &&
+                    code.includes("if items is None:") &&
+                    code.includes("items = []") &&
+                    code.includes("items.append(item)")
+            },
+
+            {
+                number: 2,
+                snippet: `def factorial(n):
+    if n == 0:
+        return 0
+    else:
+        return n * factorial(n - 1)
+
+print(factorial(0))`,
+                hints: [
+                    "Hint: What is 0! supposed to be mathematically?",
+                    "Hint: Returning 0 here makes every factorial 0.",
+                    "Hint: Only the base case is wrong.",
+                    "Hint: factorial(0) should return 1."
+                ],
+                answer:
+`def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+print(factorial(0))`,
+                check: (code) =>
+                    code.includes("def factorial(n):") &&
+                    code.includes("if n == 0:") &&
+                    code.includes("return 1") &&
+                    code.includes("return n * factorial(n - 1)")
+            },
+
+            {
+                number: 3,
+                snippet: `file = open("data.txt", "r")
+lines = file.readlines()
+for line in lines:
+    print(line.strip())
+file.close`,
+                hints: [
+                    "Hint: file.close is never actually called.",
+                    "Hint: You are missing parentheses after close.",
+                    "Hint: Using 'with open(...) as f:' is safer.",
+                    "Hint: Context managers automatically close the file."
+                ],
+                answer:
+`with open("data.txt", "r") as file:
+    lines = file.readlines()
+    for line in lines:
+        print(line.strip())`,
+                check: (code) =>
+                    code.includes('with open("data.txt", "r") as file:') &&
+                    code.includes("for line in") &&
+                    code.includes("print(line.strip())")
+            },
+
+            {
+                number: 4,
+                snippet: `nums = [1, 2, 3, 4]
+squares = [n * n for i in nums]
+print(squares)`,
+                hints: [
+                    "Hint: Look closely at the variable used in the comprehension.",
+                    "Hint: You're squaring n, but iterating over i.",
+                    "Hint: The loop variable name and expression should match.",
+                    "Hint: It should be 'for n in nums'."
+                ],
+                answer:
+`nums = [1, 2, 3, 4]
+squares = [n * n for n in nums]
+print(squares)`,
+                check: (code) =>
+                    code.includes("squares = [n * n for n in nums]") &&
+                    code.includes("print(squares)")
+            },
+
+            {
+                number: 5,
+                snippet: `def safe_divide(a, b):
+    try:
+        return a / b
+    except:
+        return "error"
+
+print(safe_divide(10, 0))`,
+                hints: [
+                    "Hint: A bare 'except' catches all exceptions silently.",
+                    "Hint: Be specific about the exception you expect.",
+                    "Hint: What error happens when dividing by zero?",
+                    "Hint: Catch ZeroDivisionError explicitly."
+                ],
+                answer:
+`def safe_divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        return "Cannot divide by zero"
+
+print(safe_divide(10, 0))`,
+                check: (code) =>
+                    code.includes("def safe_divide(a, b):") &&
+                    (code.includes("except ZeroDivisionError") || code.includes("except ZeroDivisionError:")) &&
+                    !code.includes("except:")
+            }
         ]
     };
 
@@ -344,15 +480,15 @@ print(find_max([-5, -10, -3]))`,
     // ==========================================================
     //                   GAME STATE
     // ==========================================================
-    let timer         = 60;
-    let timerInterval = null;
-    let hintStep      = 0;
-    let gameStarted   = false;
+    let timer          = 60;
+    let timerInterval  = null;
+    let hintStep       = 0;
+    let gameStarted    = false;
     let levelCompleted = false;
 
     // Score stored per difficulty
-    const scoreKey = `codequestScore_${difficulty}`;
-    let totalScore = Number(localStorage.getItem(scoreKey)) || 0;
+    const scoreKey  = `codequestScore_${difficulty}`;
+    let totalScore  = Number(localStorage.getItem(scoreKey)) || 0;
 
     function getHintCost() {
         return 10 * (hintStep + 1);
@@ -370,17 +506,17 @@ print(find_max([-5, -10, -3]))`,
         if (!level) return;
 
         levelCompleted = false;
-        gameStarted = true;
-        hintStep = 0;
-        timer = 60;
+        gameStarted    = true;
+        hintStep       = 0;
+        timer          = 60;
 
         levelDisplay.textContent = `Level ${level.number} (${difficulty})`;
         timerDisplay.textContent = `Time: ${timer}s`;
         scoreDisplay.textContent = `Score: ${totalScore}`;
-        gameMessage.textContent = `🚀 Level ${level.number} Started!`;
+        gameMessage.textContent  = `🚀 Level ${level.number} Started!`;
 
-        codeSnippetEl.textContent = level.snippet;
-        codeSnippetEl.contentEditable = "true";
+        codeSnippetEl.textContent      = level.snippet;
+        codeSnippetEl.contentEditable  = "true";
         codeSnippetEl.style.pointerEvents = "auto";
 
         hintTextEl.classList.add("hidden");
@@ -422,11 +558,11 @@ print(find_max([-5, -10, -3]))`,
         }
 
         scoreDisplay.textContent = `Score: ${totalScore}`;
-        gameMessage.textContent = "✅ Correct!";
+        gameMessage.textContent  = "✅ Correct!";
 
         clearInterval(timerInterval);
 
-        codeSnippetEl.contentEditable = "false";
+        codeSnippetEl.contentEditable   = "false";
         codeSnippetEl.style.pointerEvents = "none";
 
         levelAnim.textContent = "🎉 LEVEL COMPLETE!";
