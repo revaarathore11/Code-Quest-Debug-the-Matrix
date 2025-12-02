@@ -133,44 +133,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
 }); // END DOMContentLoaded
 
-// KNIGHT ANIMATION
-// Randomly swing sword every 3–6 seconds
-setInterval(() => {
-    if (Math.random() < 0.4) idleSwordSwing();
-}, 3000);
+/* -------- KNIGHT ANIMATION SYSTEM -------- */
 
-// Dust trail behind knight
-setInterval(() => {
-    if (!knight) return;
-
-    const rect = knight.getBoundingClientRect();
-
-    const d = document.createElement("div");
-    d.classList.add("dust");
-
-    d.style.left = rect.left + 30 + "px";
-    d.style.top = rect.bottom - 8 + "px";
-
-    dustContainer.appendChild(d);
-
-    setTimeout(() => d.remove(), 500);
-}, 180);
 const knightWrapper = document.querySelector(".knight-wrapper");
+const knightSprite = document.querySelector(".knight-sprite");
 const dustContainer = document.getElementById("dust-container");
 
-setInterval(() => {
-    const rect = knightWrapper.getBoundingClientRect();
+let isSwinging = false;
 
+/* ---- Walking animation ---- */
+function playWalking() {
+    knightSprite.style.animation =
+        "knightWalkFrames 0.8s steps(4) infinite";
+}
+
+/* ---- Sword animation ---- */
+function playSwordSwing() {
+    if (isSwinging) return; // prevent animation stacking
+
+    isSwinging = true;
+
+    // Play sword animation row (Y = -64px)
+    knightSprite.style.backgroundPosition = "0px -64px";
+    knightSprite.style.animation = "knightSwordSwing 0.45s steps(2) 1";
+
+    // Stop dust during swing
+    stopDust = true;
+
+    setTimeout(() => {
+        playWalking();
+        isSwinging = false;
+        stopDust = false;
+    }, 500);
+}
+
+/* ---- Random sword swings ---- */
+setInterval(() => {
+    if (Math.random() < 0.25) {
+        playSwordSwing();
+    }
+}, 3000);
+
+/* -------- DUST SYSTEM -------- */
+
+let stopDust = false;
+
+setInterval(() => {
+    if (stopDust) return; // Do NOT spawn dust while sword swinging
+
+    const rect = knightWrapper.getBoundingClientRect();
     const dust = document.createElement("div");
     dust.classList.add("dust");
 
-    // Offset dust slightly inward
-    const xOffset = knightWrapper.style.transform.includes("scaleX(-1)") ? 20 : 40;
+    // Detect direction based on scaleX
+    const goingLeft = getComputedStyle(knightWrapper).transform.includes("-1");
+
+    const xOffset = goingLeft ? 20 : 42;
 
     dust.style.left = rect.left + xOffset + "px";
-    dust.style.top = rect.bottom - 10 + "px";
+    dust.style.top = rect.bottom - 8 + "px";
 
     dustContainer.appendChild(dust);
 
-    setTimeout(() => dust.remove(), 450);
-}, 150);
+    setTimeout(() => dust.remove(), 460);
+}, 140);
+
+/* Start default state */
+playWalking();
