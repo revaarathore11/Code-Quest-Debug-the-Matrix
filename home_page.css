@@ -283,26 +283,26 @@ footer:hover {
     z-index: 10;
 }
 
+#dust-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
 .dust {
     position: absolute;
     width: 6px;
     height: 6px;
-    background: #d9d9d9;
-    opacity: 0.8;
-    border-radius: 2px;
-    image-rendering: pixelated;
-    animation: dustPop 0.5s linear forwards;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%;
+    animation: dustFade 0.5s ease-out forwards;
 }
 
-@keyframes dustPop {
-    0%   { transform: scale(0.4) translateY(0); opacity: 0.9; }
-    50%  { transform: scale(1) translateY(-8px); opacity: 0.6; }
-    100% { transform: scale(0.2) translateY(3px); opacity: 0; }
-}
-@keyframes knightIdleSword {
-    0% { background-position: 0px 0; }
-    50% { background-position: -64px 0; }
-    100% { background-position: 0px 0; }
+@keyframes dustFade {
+    from { transform: scale(1); opacity: 0.9; }
+    to   { transform: scale(0.2) translateY(-12px); opacity: 0; }
 }
 /* Knight Wrapper = movement + scaling */
 .knight-wrapper {
