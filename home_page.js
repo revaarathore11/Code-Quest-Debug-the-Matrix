@@ -1,3 +1,7 @@
+// ==========================================================
+//                HOME PAGE – FINAL JS
+// ==========================================================
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const startBtn = document.getElementById("startBtn");
@@ -5,36 +9,53 @@ document.addEventListener("DOMContentLoaded", function () {
     const transition = document.getElementById("screen-transition");
     const starContainer = document.getElementById("stars");
 
+    const levelSelect = document.getElementById("levelSelect");
+    const difficultySelect = document.getElementById("difficultySelect");
+
     /* ----------------------------------------------------
-       START BUTTON → Fade → Go to game.html
+       LOAD HIGH SCORE
+    ----------------------------------------------------- */
+    const highScore = Number(localStorage.getItem("codequestHighScore")) || 0;
+    const highScoreEl = document.getElementById("highScore");
+    if (highScoreEl) highScoreEl.textContent = highScore;
+
+    /* ----------------------------------------------------
+       START BUTTON → Fade → Go to selected difficulty + level
     ----------------------------------------------------- */
     startBtn?.addEventListener("click", () => {
+
+        // Get selected difficulty and level
+        const difficulty = difficultySelect.value || "easy";
+        const level = levelSelect.value || "1";
+
+        // Save difficulty globally
+        localStorage.setItem("codequestDifficulty", difficulty);
+
+        // Reset score for new game
+        localStorage.setItem("codequestScore", "0");
+
+        // Page transition
         transition.classList.add("active");
+
+        // Navigate to correct level page
         setTimeout(() => {
-            window.location.href = "levels/level1.html";
+            window.location.href = `levels/level${level}.html`;
         }, 1200);
     });
 
     /* ----------------------------------------------------
        CONTINUE BUTTON — Load saved game
     ----------------------------------------------------- */
-    const savedGame = localStorage.getItem("codeQuestSave");
-    let savedData = null;
+    const savedData = JSON.parse(localStorage.getItem("codeQuestSave") || "null");
 
-    try {
-        savedData = JSON.parse(savedGame);
-    } catch (e) {
-        savedData = null;
-    }
-
-    if (savedData && savedData.level) {
+    if (savedData?.level) {
         continueBtn.classList.remove("hidden");
 
         continueBtn.addEventListener("click", () => {
             transition.classList.add("active");
 
             setTimeout(() => {
-                window.location.href = "pages/game.html?continue=true";
+                window.location.href = `levels/level${savedData.level}.html`;
             }, 1200);
         });
     }
@@ -77,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }, Math.random() * 2200 + 1800);
 
     /* ----------------------------------------------------
-       MULTILINE TYPEWRITER EFFECT (FULLY FIXED)
+       MULTILINE TYPEWRITER EFFECT (STABLE VERSION)
     ----------------------------------------------------- */
     const storyEl = document.getElementById("story-text");
     const cursor = document.getElementById("cursor");
@@ -100,22 +121,25 @@ document.addEventListener("DOMContentLoaded", function () {
                         .replace(/</g, "&lt;")
                         .replace(/>/g, "&gt;");
                 }
-
                 i++;
                 setTimeout(typeStep, speed);
-
             } else {
                 cursor.style.display = "none";
             }
         }
 
-        setTimeout(typeStep, 350);
+        setTimeout(typeStep, 400);
     }
 
 }); // END DOMContentLoaded
 
 
+// ==========================================================
+//                    KNIGHT ANIMATION
+// ==========================================================
+
 const knight = document.querySelector(".pixel-character");
+const dustContainer = document.getElementById("dust-container");
 
 function idleSwordSwing() {
     knight.style.animation = "knightIdleSword 0.5s steps(2) 1";
@@ -130,10 +154,11 @@ function idleSwordSwing() {
 setInterval(() => {
     if (Math.random() < 0.4) idleSwordSwing();
 }, 3000);
-const knight1 = document.querySelector(".knight-wrapper");
-const dustContainer = document.getElementById("dust-container");
 
+// Dust trail behind knight
 setInterval(() => {
+    if (!knight) return;
+
     const rect = knight.getBoundingClientRect();
 
     const d = document.createElement("div");

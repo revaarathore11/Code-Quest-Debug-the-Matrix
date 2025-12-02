@@ -8,25 +8,26 @@
 
     <!-- Correct CSS file -->
     <link rel="stylesheet" href="home_page.css">
-
 </head>
 
 <body>
 
-
+    <!-- ⭐ Background Stars -->
     <div class="stars" id="stars"></div>
 
-
+    <!-- Screen Transition -->
     <div id="screen-transition"></div>
-    ̱
 
+    <!-- Pixel Effects -->
     <div class="pixel-character"></div>
     <div id="dust-container"></div>
+
+    <!-- Knight Animation -->
     <div class="knight-wrapper">
         <div class="knight-sprite"></div>
     </div>
 
-    <div id="dust-container"></div>
+    <!-- HOME WRAPPER -->
     <div class="home-wrapper">
 
         <!-- Game Title -->
@@ -40,7 +41,6 @@
             Squash the bugs before they corrupt the world.
             Debug wisely… the stability of the digital realm depends on you!
         </p>
-
         <span id="cursor" class="type-cursor">|</span>
 
         <!-- OUTER BOX -->
@@ -51,11 +51,13 @@
 
                 <table class="menu-table" aria-label="Main game menu">
 
+                    <!-- High Score -->
                     <tr>
                         <td><strong>High Score:</strong></td>
                         <td><span id="highScore">0</span></td>
                     </tr>
 
+                    <!-- START -->
                     <tr>
                         <td colspan="2">
                             <button id="startBtn" class="menu-btn" aria-label="Start the game">
@@ -63,6 +65,8 @@
                             </button>
                         </td>
                     </tr>
+
+                    <!-- CONTINUE -->
                     <tr>
                         <td colspan="2">
                             <button id="continueBtn" class="menu-btn hidden" aria-label="Continue saved game">
@@ -70,6 +74,8 @@
                             </button>
                         </td>
                     </tr>
+
+                    <!-- DIFFICULTY -->
                     <tr>
                         <td><label for="difficultySelect">Difficulty</label></td>
                         <td>
@@ -81,6 +87,7 @@
                         </td>
                     </tr>
 
+                    <!-- LEVEL SELECT -->
                     <tr>
                         <td><label for="levelSelect">Levels</label></td>
                         <td>
@@ -94,6 +101,7 @@
                         </td>
                     </tr>
 
+                    <!-- SETTINGS -->
                     <tr>
                         <td><label for="settingsSelect">Settings</label></td>
                         <td>
@@ -111,15 +119,16 @@
         </div>
 
     </div>
-    <!-- 🕹 How to Play Box -->
+
+    <!-- HOW TO PLAY -->
     <div class="how-to-play-box">
         <h2>🕹️ How to Play</h2>
         <ul>
             <li>Each level shows a small code snippet containing hidden <strong>bugs</strong>.</li>
-            <li>Click on the lines that contain the mistake or suspicious pattern.</li>
-            <li>Every correct bug you catch increases your score.</li>
-            <li>Clicking a clean line gives a penalty — debug carefully!</li>
-            <li>Finish all levels before the timer ends to win!</li>
+            <li>Edit the code to fix the errors.</li>
+            <li>You earn points for every correct solution.</li>
+            <li>Hints cost points, so use them wisely.</li>
+            <li>Finish all levels before the timer ends!</li>
         </ul>
     </div>
 
@@ -131,7 +140,6 @@
 
     <!-- JavaScript -->
     <script src="home_page.js" defer></script>
-
 
 </body>
 

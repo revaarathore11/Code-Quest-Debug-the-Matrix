@@ -1,10 +1,11 @@
 // ==========================================================
 //                GAME.JS — FINAL MULTI-PAGE VERSION
+//      Difficulty-aware: easy / medium (per localStorage)
 // ==========================================================
 
 console.log("game.js loaded");
 
-// Save progress if needed later
+// Optional: save progress (not heavily used yet, but kept)
 function saveGameProgress(level, score, difficulty) {
     const data = {
         level,
@@ -16,78 +17,81 @@ function saveGameProgress(level, score, difficulty) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-
     // ===== DOM ELEMENTS =====
-    const startBtn = document.getElementById("startGameBtn");
-    const resetBtn = document.getElementById("resetGameBtn");
-    const submitBtn = document.getElementById("submitAnswerBtn");
-    const hintBtn = document.getElementById("hintBtn");
+    const startBtn      = document.getElementById("startGameBtn");
+    const resetBtn      = document.getElementById("resetGameBtn");
+    const submitBtn     = document.getElementById("submitAnswerBtn");
+    const hintBtn       = document.getElementById("hintBtn");
 
-    const levelDisplay = document.getElementById("levelDisplay");
-    const scoreDisplay = document.getElementById("scoreDisplay");
-    const timerDisplay = document.getElementById("timerDisplay");
-    const gameMessage = document.getElementById("gameMessage");
+    const levelDisplay  = document.getElementById("levelDisplay");
+    const scoreDisplay  = document.getElementById("scoreDisplay");
+    const timerDisplay  = document.getElementById("timerDisplay");
+    const gameMessage   = document.getElementById("gameMessage");
     const codeSnippetEl = document.getElementById("codeSnippet");
-    const hintTextEl = document.getElementById("hintText");
-    const nextLevelBtn = document.getElementById("nextLevelBtn");
-    const hintCostEl = document.getElementById("hintCost");
-    const levelAnim = document.getElementById("levelCompleteAnimation");
+    const hintTextEl    = document.getElementById("hintText");
+    const nextLevelBtn  = document.getElementById("nextLevelBtn");
+    const hintCostEl    = document.getElementById("hintCost");
+    const levelAnim     = document.getElementById("levelCompleteAnimation");
 
     // ===== SHOW ANSWER POPUP =====
     const showAnswerBtn = document.getElementById("showAnswerBtn");
-    const popup = document.getElementById("showAnswerPopup");
-    const confirmBtn = document.getElementById("confirmShowAnswer");
-    const cancelBtn = document.getElementById("cancelShowAnswer");
-    const doneBtn = document.getElementById("doneShowAnswer");
+    const popup         = document.getElementById("showAnswerPopup");
+    const confirmBtn    = document.getElementById("confirmShowAnswer");
+    const cancelBtn     = document.getElementById("cancelShowAnswer");
+    const doneBtn       = document.getElementById("doneShowAnswer");
 
-    // Current page LEVEL
+    // Current page LEVEL (comes from each HTML: window.currentLevel = 1..5)
     let currentLevel = Number(window.currentLevel) || 1;
 
+    // Current difficulty (set on home page)
+    const difficulty = localStorage.getItem("codequestDifficulty") || "easy";
+    console.log("Difficulty:", difficulty);
+
     // ==========================================================
-    //                      LEVEL DATA
+    //                  LEVELS BY DIFFICULTY
     // ==========================================================
-    const levels = [
-        // LEVEL 1
-        {
-            number: 1,
-            snippet: `items = ["pen", "book", "bag"]
+    const levelsByDifficulty = {
+        // ---------------------- EASY ----------------------
+        easy: [
+            {
+                number: 1,
+                snippet: `items = ["pen", "book", "bag"]
 print(items[3])
 print(items.length)`,
-            hints: [
-                "Hint: Lists are 0-indexed — items[3] does not exist.",
-                "Hint: Python lists do NOT have a .length or .lenght attribute.",
-                "Hint: Use len(items) to get the length of a list."
-            ],
-            answer:
+                hints: [
+                    "Hint: Lists are 0-indexed — items[3] does not exist.",
+                    "Hint: Python lists do NOT have a .length or .lenght attribute.",
+                    "Hint: Use len(items) to get the length of a list."
+                ],
+                answer:
 `items = ["pen", "book", "bag"]
 print(items[2])
 print(len(items))`,
-            check: (code) =>
-                code.includes("items[2]") &&
-                code.includes("len(items)") &&
-                !code.includes("lenght") &&
-                !code.includes("length") &&
-                !code.includes("items.length")
-        },
+                check: (code) =>
+                    code.includes("items[2]") &&
+                    code.includes("len(items)") &&
+                    !code.includes("lenght") &&
+                    !code.includes("length") &&
+                    !code.includes("items.length")
+            },
 
-        // LEVEL 2
-        {
-            number: 2,
-            snippet: `numbers = [1, 2, 3, 4]
+            {
+                number: 2,
+                snippet: `numbers = [1, 2, 3, 4]
 total = 0
 
 for i in range(len(numbers)):
 total += number[i]
 
 print(totl)`,
-            hints: [
-                "Indentation missing.",
-                "number[i] should be numbers[i].",
-                "totl is incorrect.",
-                "Check the colon after for loop.",
-                "Make sure total is updated each loop."
-            ],
-            answer:
+                hints: [
+                    "Indentation missing.",
+                    "number[i] should be numbers[i].",
+                    "totl is incorrect.",
+                    "Check the colon after for loop.",
+                    "Make sure total is updated each loop."
+                ],
+                answer:
 `numbers = [1, 2, 3, 4]
 total = 0
 
@@ -95,16 +99,15 @@ for i in range(len(numbers)):
     total += numbers[i]
 
 print(total)`,
-            check: (code) =>
-                code.includes("for i in range(len(numbers)):") &&
-                (code.includes("total += numbers[i]") || code.includes("total = total + numbers[i]")) &&
-                code.includes("print(total)")
-        },
+                check: (code) =>
+                    code.includes("for i in range(len(numbers)):") &&
+                    (code.includes("total += numbers[i]") || code.includes("total = total + numbers[i]")) &&
+                    code.includes("print(total)")
+            },
 
-        // LEVEL 3
-        {
-            number: 3,
-            snippet: `def sumList(nums)
+            {
+                number: 3,
+                snippet: `def sumList(nums)
 total = 0
 for i in range(len(num)):
     sum += nums[i]
@@ -113,14 +116,14 @@ for i in range(len(num)):
 
 numbers = [4, 5, 6]
 print(sumlist(numbers))`,
-            hints: [
-                "Missing colon.",
-                "num ≠ nums.",
-                "Do not modify nums.",
-                "Return total, not totalSum.",
-                "Function name case matters."
-            ],
-            answer:
+                hints: [
+                    "Missing colon after function definition.",
+                    "num ≠ nums.",
+                    "Do not modify nums inside the loop.",
+                    "Return total, not totalSum.",
+                    "Function name spelling & case matters."
+                ],
+                answer:
 `def sumList(nums):
     total = 0
     for i in range(len(nums)):
@@ -129,20 +132,19 @@ print(sumlist(numbers))`,
 
 numbers = [4, 5, 6]
 print(sumList(numbers))`,
-            check: (code) =>
-                code.includes("def sumList(nums):") &&
-                code.includes("total = 0") &&
-                code.includes("for i in range(len(nums))") &&
-                code.includes("total += nums[i]") &&
-                !code.includes("nums = nums + 1") &&
-                code.includes("return total") &&
-                code.includes("print(sumList(numbers))")
-        },
+                check: (code) =>
+                    code.includes("def sumList(nums):") &&
+                    code.includes("total = 0") &&
+                    code.includes("for i in range(len(nums))") &&
+                    code.includes("total += nums[i]") &&
+                    !code.includes("nums = nums + 1") &&
+                    code.includes("return total") &&
+                    code.includes("print(sumList(numbers))")
+            },
 
-        // LEVEL 4
-        {
-            number: 4,
-            snippet: `def collect_unique_words(text):
+            {
+                number: 4,
+                snippet: `def collect_unique_words(text):
     words = text.split()
     unique = []
 
@@ -159,13 +161,13 @@ print(sumList(numbers))`,
 
 sentence = "Hello hello world! This world is big, big world."
 print( collect_unique_words(sentence) )`,
-            hints: [
-                "Hint: unique = cleaned is wrong.",
-                "Use unique.append(cleaned).",
-                "unique should always be a list.",
-                "Returning len(unique) only works if unique is a list."
-            ],
-            answer:
+                hints: [
+                    "Hint: unique = cleaned is wrong.",
+                    "Hint: You should add to the list, not replace it.",
+                    "Hint: unique must always stay a list.",
+                    "Hint: unique.append(cleaned) is the right operation."
+                ],
+                answer:
 `def collect_unique_words(text):
     words = text.split()
     unique = []
@@ -179,16 +181,15 @@ print( collect_unique_words(sentence) )`,
 
 sentence = "Hello hello world! This world is big, big world."
 print(collect_unique_words(sentence))`,
-            check: (code) =>
-                code.includes("unique.append(cleaned)") &&
-                code.includes("return len(unique)") &&
-                !code.includes("unique = cleaned")
-        },
+                check: (code) =>
+                    code.includes("unique.append(cleaned)") &&
+                    code.includes("return len(unique)") &&
+                    !code.includes("unique = cleaned")
+            },
 
-        // LEVEL 5
-        {
-            number: 5,
-            snippet: `def get_user_age(users, name):
+            {
+                number: 5,
+                snippet: `def get_user_age(users, name):
     for user in users:
         if user["name"] == name:
             return user["age"]
@@ -199,13 +200,13 @@ users = [
 ]
 
 print(get_user_age("Alice", users))`,
-            hints: [
-                "Arguments are reversed.",
-                "Call as get_user_age(users, name).",
-                "List comes first, name second.",
-                "Swap them."
-            ],
-            answer:
+                hints: [
+                    "Arguments are reversed in the function call.",
+                    "Call pattern should be get_user_age(users, name).",
+                    "The list of users comes first, then the name.",
+                    "Swap the arguments in the print call."
+                ],
+                answer:
 `def get_user_age(users, name):
     for user in users:
         if user["name"] == name:
@@ -217,22 +218,141 @@ users = [
 ]
 
 print(get_user_age(users, "Alice"))`,
-            check: (code) =>
-                code.includes('get_user_age(users, "Alice")') ||
-                code.includes("get_user_age(users, 'Alice')")
-        }
-    ];
+                check: (code) =>
+                    code.includes('get_user_age(users, "Alice")') ||
+                    code.includes("get_user_age(users, 'Alice')")
+            }
+        ],
+
+        // --------------------- MEDIUM ---------------------
+        medium: [
+            {
+                number: 1,
+                snippet: `numbers = [2, 4, 6, 8]
+for n in numbers:
+    if n % 2 = 0:
+        print("Even")`,
+                hints: [
+                    "Hint: '=' is assignment, not comparison.",
+                    "Hint: Use '==' when comparing values.",
+                    "Hint: n % 2 == 0 checks if n is even."
+                ],
+                answer:
+`numbers = [2, 4, 6, 8]
+for n in numbers:
+    if n % 2 == 0:
+        print("Even")`,
+                check: (code) =>
+                    code.includes("for n in numbers") &&
+                    code.includes("n % 2 == 0") &&
+                    code.includes('print("Even"') // loose but fine
+            },
+
+            {
+                number: 2,
+                snippet: `def multiply(a, b):
+return a * b
+
+print(multiply(5))`,
+                hints: [
+                    "Hint: The function body needs indentation.",
+                    "Hint: multiply(a, b) requires two arguments.",
+                    "Hint: Pass both numbers when calling the function."
+                ],
+                answer:
+`def multiply(a, b):
+    return a * b
+
+print(multiply(5, 3))`,
+                check: (code) =>
+                    code.includes("def multiply(a, b):") &&
+                    code.includes("return a * b") &&
+                    code.includes("multiply(") &&
+                    code.includes(",") // ensure 2 args passed
+            },
+
+            {
+                number: 3,
+                snippet: `user = {"name": "Ava", "age": 20}
+print(user["gender"])`,
+                hints: [
+                    "Hint: 'gender' key does not exist in the dictionary.",
+                    "Hint: Direct indexing causes a KeyError.",
+                    "Hint: Use user.get('gender', 'Not specified')."
+                ],
+                answer:
+`user = {"name": "Ava", "age": 20}
+print(user.get("gender", "Not specified"))`,
+                check: (code) =>
+                    code.includes('user.get("gender"') ||
+                    code.includes("user.get('gender'")
+            },
+
+            {
+                number: 4,
+                snippet: `def find_max(nums):
+    max = 0
+    for n in nums:
+        if n > max:
+            max = n
+    return max
+
+print(find_max([-5, -10, -3]))`,
+                hints: [
+                    "Hint: Starting max at 0 breaks for negative numbers.",
+                    "Hint: Use the first element of nums as initial max.",
+                    "Hint: Avoid shadowing built-in names like max."
+                ],
+                answer:
+`def find_max(nums):
+    max_value = nums[0]
+    for n in nums:
+        if n > max_value:
+            max_value = n
+    return max_value
+
+print(find_max([-5, -10, -3]))`,
+                check: (code) =>
+                    code.includes("def find_max(nums):") &&
+                    code.includes("max_value = nums[0]") &&
+                    code.includes("if n > max_value") &&
+                    code.includes("return max_value")
+            },
+
+            {
+                number: 5,
+                snippet: `for i in range(1, 5)
+    print(i)`,
+                hints: [
+                    "Hint: The for loop is missing a colon.",
+                    "Hint: Python requires ':' at the end of control statements.",
+                    "Hint: range(1, 5) prints 1 to 4."
+                ],
+                answer:
+`for i in range(1, 5):
+    print(i)`,
+                check: (code) =>
+                    code.includes("for i in range(1, 5):") &&
+                    code.includes("print(i)")
+            }
+        ]
+    };
+
+    // Pick correct level set based on difficulty
+    const levels = levelsByDifficulty[difficulty] || levelsByDifficulty.easy;
 
     // ==========================================================
     //                   GAME STATE
     // ==========================================================
-    let timer = 60;
+    let timer         = 60;
     let timerInterval = null;
-    let totalScore = Number(localStorage.getItem("codequestScore")) || 0;
-    let hintStep = 0;
-    let gameStarted = false;
+    let hintStep      = 0;
+    let gameStarted   = false;
+    let levelCompleted = false;
 
-    let levelCompleted = false; // 🔥 Prevent repeated scoring
+    // Score stored per difficulty
+    const scoreKey = `codequestScore_${difficulty}`;
+    let totalScore = Number(localStorage.getItem(scoreKey)) || 0;
 
     function getHintCost() {
         return 10 * (hintStep + 1);
@@ -249,13 +369,12 @@ print(get_user_age(users, "Alice"))`,
         const level = levels[levelNum - 1];
         if (!level) return;
 
-        levelCompleted = false; // 🔥 Reset scoring lock
-
+        levelCompleted = false;
         gameStarted = true;
         hintStep = 0;
         timer = 60;
 
-        levelDisplay.textContent = `Level ${level.number}`;
+        levelDisplay.textContent = `Level ${level.number} (${difficulty})`;
         timerDisplay.textContent = `Time: ${timer}s`;
         scoreDisplay.textContent = `Score: ${totalScore}`;
         gameMessage.textContent = `🚀 Level ${level.number} Started!`;
@@ -284,18 +403,22 @@ print(get_user_age(users, "Alice"))`,
     //                        CHECK ANSWER
     // ==========================================================
     function checkAnswer() {
+        const level = levels[currentLevel - 1];
+        if (!level) return;
+
         const code = codeSnippetEl.textContent;
 
-        if (!levels[currentLevel - 1].check(code)) {
+        if (!level.check(code)) {
             gameMessage.textContent = "❌ Incorrect. Try again!";
             return;
         }
 
-        // 🔥 Prevent multiple scoring on same level
+        // Prevent multiple scoring on same level
         if (!levelCompleted) {
             totalScore += 50;
-            localStorage.setItem("codequestScore", totalScore);
+            localStorage.setItem(scoreKey, totalScore);
             levelCompleted = true;
+            saveGameProgress(currentLevel, totalScore, difficulty);
         }
 
         scoreDisplay.textContent = `Score: ${totalScore}`;
@@ -308,7 +431,7 @@ print(get_user_age(users, "Alice"))`,
 
         levelAnim.textContent = "🎉 LEVEL COMPLETE!";
         levelAnim.classList.remove("hidden");
-        void levelAnim.offsetWidth;
+        void levelAnim.offsetWidth; // force reflow for animation
         levelAnim.classList.add("level-complete");
 
         setTimeout(() => {
@@ -327,14 +450,18 @@ print(get_user_age(users, "Alice"))`,
             return;
         }
 
-        const hints = levels[currentLevel - 1].hints;
+        const level = levels[currentLevel - 1];
+        if (!level) return;
+
+        const hints = level.hints;
         if (hintStep >= hints.length) {
             gameMessage.textContent = "⚠️ No more hints!";
             return;
         }
 
+        // Deduct score for hint
         totalScore -= getHintCost();
-        localStorage.setItem("codequestScore", totalScore);
+        localStorage.setItem(scoreKey, totalScore);
         scoreDisplay.textContent = `Score: ${totalScore}`;
 
         hintTextEl.textContent = hints[hintStep];
@@ -347,66 +474,66 @@ print(get_user_age(users, "Alice"))`,
     // ==========================================================
     //                      BUTTON HANDLERS
     // ==========================================================
-    if (startBtn) startBtn.addEventListener("click", () => loadLevel(currentLevel));
-    if (resetBtn) resetBtn.addEventListener("click", () => location.reload());
+    if (startBtn)  startBtn.addEventListener("click", () => loadLevel(currentLevel));
+    if (resetBtn)  resetBtn.addEventListener("click", () => location.reload());
     if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
-    if (hintBtn) hintBtn.addEventListener("click", showHint);
+    if (hintBtn)   hintBtn.addEventListener("click", showHint);
 
     // ==========================================================
-    //               SHOW ANSWER — BEST UX VERSION
+    //               SHOW ANSWER — UX MODE
     // ==========================================================
-    if (showAnswerBtn) {
+    if (showAnswerBtn && popup) {
         showAnswerBtn.addEventListener("click", () => popup.classList.remove("hidden"));
     }
 
-    if (cancelBtn) {
+    if (cancelBtn && popup) {
         cancelBtn.addEventListener("click", () => popup.classList.add("hidden"));
     }
 
-    if (confirmBtn) {
+    if (confirmBtn && popup) {
         confirmBtn.addEventListener("click", () => {
-
             const levelData = levels[currentLevel - 1];
             if (!levelData) return;
 
+            // Show correct answer
             codeSnippetEl.textContent = levelData.answer;
             codeSnippetEl.style.pointerEvents = "none";
             codeSnippetEl.contentEditable = "false";
 
-            // Showing answer = reset score for fairness
+            // Reset score for this difficulty when they give up
             totalScore = 0;
-            localStorage.setItem("codequestScore", totalScore);
+            localStorage.setItem(scoreKey, totalScore);
             scoreDisplay.textContent = `Score: 0`;
 
+            // Close popup, then show Done button
             popup.classList.add("hidden");
 
-            // show done button after small delay
             setTimeout(() => {
-                doneBtn.classList.remove("hidden");
+                if (doneBtn) doneBtn.classList.remove("hidden");
             }, 120);
         });
     }
 
     if (doneBtn) {
         doneBtn.addEventListener("click", () => {
+            // Back to first level of current difficulty
             window.location.href = "level1.html";
         });
     }
-
 });
 
 // ==========================================================
 //               NEXT LEVEL NAVIGATION
 // ==========================================================
-
 function goToNextLevel() {
     const next = Number(window.currentLevel) + 1;
 
-    // 🔥 After Level 5 → FINAL SCORE PAGE
+    // After Level 5 → Final Score page
     if (next > 5) {
-        window.location.href = "../pages/final_score.html";
+        window.location.href = "../final_score.html";
         return;
     }
+
     window.location.href = `level${next}.html`;
 }
 
@@ -419,12 +546,13 @@ document.addEventListener("DOMContentLoaded", () => {
 //               PARTICLES + STARS
 // ==========================================================
 const pixelContainer = document.querySelector(".pixel-particles");
+
 if (pixelContainer) {
     function spawnPixel() {
         const p = document.createElement("div");
         p.classList.add("pixel");
         p.style.left = Math.random() * 100 + "vw";
-        p.style.top = Math.random() * 100 + "vh";
+        p.style.top  = Math.random() * 100 + "vh";
         p.style.animationDelay = Math.random() * 5 + "s";
         pixelContainer.appendChild(p);
         setTimeout(() => p.remove(), 7000);
@@ -443,7 +571,7 @@ if (starContainer) {
         const s = document.createElement("div");
         s.classList.add("shooting-star");
         s.style.left = Math.random() * 100 + "vw";
-        s.style.top = Math.random() * 50 + "vh";
+        s.style.top  = Math.random() * 50 + "vh";
         starContainer.appendChild(s);
         setTimeout(() => s.remove(), 1400);
     }
@@ -457,7 +585,7 @@ if (starContainer) {
         star.classList.add("star");
         if (Math.random() < 0.15) star.classList.add("plus");
         star.style.left = Math.random() * 100 + "vw";
-        star.style.top = Math.random() * 100 + "vh";
+        star.style.top  = Math.random() * 100 + "vh";
         star.style.animationDelay = Math.random() * 3 + "s";
         starContainer.appendChild(star);
     }
