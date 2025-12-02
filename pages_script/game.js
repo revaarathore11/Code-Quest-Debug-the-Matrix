@@ -398,11 +398,13 @@ print(get_user_age(users, "Alice"))`,
 // ==========================================================
 //               NEXT LEVEL NAVIGATION
 // ==========================================================
+
 function goToNextLevel() {
     const next = Number(window.currentLevel) + 1;
+
+    // 🔥 After Level 5 → FINAL SCORE PAGE
     if (next > 5) {
-        alert("🎉 You completed all levels!");
-        window.location.href = "../home_page.html";
+        window.location.href = "../pages/final_score.html";
         return;
     }
     window.location.href = `level${next}.html`;
