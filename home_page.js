@@ -12,9 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const levelSelect = document.getElementById("levelSelect");
     const difficultySelect = document.getElementById("difficultySelect");
 
-    /* ----------------------------------------------------
-       LOAD HIGH SCORE
-    ----------------------------------------------------- */
+    /*  LOAD HIGH SCORE */
+
     const highScore = Number(localStorage.getItem("codequestHighScore")) || 0;
     const highScoreEl = document.getElementById("highScore");
     if (highScoreEl) highScoreEl.textContent = highScore;
