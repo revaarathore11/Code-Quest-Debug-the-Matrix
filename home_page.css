@@ -291,9 +291,8 @@ footer:hover {
 
     animation:
         knightWalkAcross 15s linear infinite,
-        knightSpriteWalk 0.8s steps(4) infinite;
+        knightSpriteWalk 1.2s steps(4) infinite;
 }
-
 @keyframes knightSpriteWalk {
     from { background-position: 0 0; }
     to   { background-position: -256px 0; }
@@ -310,7 +309,7 @@ footer:hover {
 .storyline {
     max-width: 700px;
     margin: 0 auto 30px auto;
-    font-size: 10px;
+    font-size: 13px;
     line-height: 1.4;
     letter-spacing: 0.4px;
     text-shadow: 1px 1px #003f2c;
