@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     startBtn?.addEventListener("click", () => {
         transition.classList.add("active");
         setTimeout(() => {
-            window.location.href = "pages/game.html";
+            window.location.href = "levels/level1.html";
         }, 1200);
     });
 

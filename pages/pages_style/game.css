@@ -656,157 +656,118 @@ body {
 }
 
 /* Popup Overlay */
+/* ===== FINAL SHOW ANSWER POPUP (Stable Version) ===== */
+
 .popup-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.75);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 2000;
-    animation: fadeIn 0.3s ease;
+    z-index: 3000;
 }
 
-.popup-overlay.hidden {
-    display: none;
+#showAnswerPopup.hidden {
+    display: none !important;
 }
 
-/* Popup Box */
-.popup-box {
-    background: #1d1d1d;
+/* Popup box */
+#showAnswerPopup .popup-box {
+    background: rgba(0, 0, 0, 0.9);
     border: 2px solid #00eaff;
-    box-shadow: 0 0 15px #00eaff;
-    padding: 20px 25px;
-    border-radius: 10px;
+    box-shadow: 0 0 18px #00eaff;
+    padding: 24px 30px;
+    border-radius: 14px;
     width: 320px;
     text-align: center;
-    animation: popIn 0.25s ease;
 }
 
-.popup-box h2 {
-    color: #00eaff;
-    margin-bottom: 10px;
-}
-
-.popup-box p {
-    color: #ddd;
-    margin-bottom: 20px;
-}
-
-.popup-buttons {
-    display: flex;
-    justify-content: space-between;
-}
-
-.confirm-btn, .cancel-btn {
+/* Buttons inside popup */
+#showAnswerPopup .confirm-btn,
+#showAnswerPopup .cancel-btn {
     padding: 8px 15px;
     border: none;
-    cursor: pointer;
     font-weight: bold;
-    border-radius: 6px;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
-.confirm-btn {
-    background: #ff4444;
+#showAnswerPopup .confirm-btn {
+    background: #ff4747;
     color: white;
 }
 
-.cancel-btn {
+#showAnswerPopup .cancel-btn {
     background: #555;
     color: white;
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes popIn {
-    from { transform: scale(0.7); }
-    to { transform: scale(1); }
-}
-.done-btn {
-    margin-top: 15px;
-    padding: 10px 18px;
-    background: #00eaff;
-    border: none;
-    color: #000;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.done-btn.hidden {
-    display: none;
-}
-/* ===== Improved Show Answer Popup — Bottom Floating Card ===== */
-
-.popup-overlay {
+/* Done button — bottom right outside popup */
+#doneShowAnswer {
     position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 40px; /* lifts it up a bit */
-    top: auto;
-    width: 100%;
-    height: auto;
-    background: none !important; /* remove dark overlay */
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    pointer-events: none; /* allow clicks behind */
-    z-index: 9999;
-}
-
-.popup-box {
-    pointer-events: all; /* re-enable buttons inside */
-    background: rgba(0, 0, 0, 0.85);
-    border: 2px solid #00eaff;
-    border-radius: 16px;
-    padding: 20px 28px;
-    text-align: center;
-    width: 320px;
-    color: #fff;
-    box-shadow: 0 0 20px #00eaff60;
-    backdrop-filter: blur(6px);
-    animation: popupFloat 0.35s ease-out;
-}
-
-/* Smooth floating entry animation */
-@keyframes popupFloat {
-    0% {
-        transform: translateY(25px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0px);
-        opacity: 1;
-    }
-}
-
-/* DONE button styling */
-.done-btn {
-    background: #45f3ff;
+    bottom: 26px;
+    right: 26px;
+    background: #00eaff;
     color: #000;
-    padding: 8px 16px;
-    margin-top: 14px;
-    font-size: 16px;
-    font-weight: bold;
+    padding: 12px 20px;
     border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
     cursor: pointer;
-    transition: 0.2s ease;
-    border: none;
+    z-index: 5000;
+    box-shadow: 0 0 12px #00eaff;
 }
 
-.done-btn:hover {
-    background: #2ad9ea;
-    transform: scale(1.05);
-}
-
-/* Hide Confirm/Cancel after clicking Show Answer */
-.confirm-btn.hidden,
-.cancel-btn.hidden {
+#doneShowAnswer.hidden {
     display: none !important;
 }
+#doneShowAnswer {
+    z-index: 99999 !important;
+}
+.popup-overlay {
+    z-index: 99998 !important;
+}
+.popup-overlay {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+/* ===== FIX: Popup overlay correct selector ===== */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 99998 !important;
+}
+
+/* ===== FIX: Done button always visible ===== */
+#doneShowAnswer {
+    position: fixed;
+    bottom: 26px;
+    right: 26px;
+    z-index: 99999 !important;
+}
+
+/* FIX Show Answer button visibility */
+#showAnswerBtn,
+.show-answer-btn {
+    position: relative !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    z-index: 5000 !important;
+}
+
+
+
