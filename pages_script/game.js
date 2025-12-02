@@ -47,6 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const difficulty = localStorage.getItem("codequestDifficulty") || "easy";
     console.log("Difficulty:", difficulty);
 
+    // 🔒 Flag: true after user has clicked "Yes, show answer"
+    let answerShown = false;
+
     // ==========================================================
     //                  LEVELS BY DIFFICULTY
     // ==========================================================
@@ -268,7 +271,7 @@ print(multiply(5, 3))`,
                     code.includes("def multiply(a, b):") &&
                     code.includes("return a * b") &&
                     code.includes("multiply(") &&
-                    code.includes(",") // ensures 2 args are passed
+                    code.includes(",")
             },
 
             {
@@ -509,6 +512,7 @@ print(safe_divide(10, 0))`,
         gameStarted    = true;
         hintStep       = 0;
         timer          = 60;
+        answerShown    = false; // reset lock when new level starts
 
         levelDisplay.textContent = `Level ${level.number} (${difficulty})`;
         timerDisplay.textContent = `Time: ${timer}s`;
@@ -521,6 +525,12 @@ print(safe_divide(10, 0))`,
 
         hintTextEl.classList.add("hidden");
         nextLevelBtn.classList.add("hidden");
+
+        // Ensure buttons are enabled at level start
+        [startBtn, resetBtn, submitBtn, hintBtn, nextLevelBtn, showAnswerBtn].forEach(btn => {
+            if (btn) btn.disabled = false;
+        });
+        if (doneBtn) doneBtn.classList.add("hidden");
 
         updateHintCostUI();
 
@@ -539,6 +549,12 @@ print(safe_divide(10, 0))`,
     //                        CHECK ANSWER
     // ==========================================================
     function checkAnswer() {
+        // 🔒 Prevent answering after showing the answer
+        if (answerShown) {
+            gameMessage.textContent = "⚠️ Submit disabled after showing the answer.";
+            return;
+        }
+
         const level = levels[currentLevel - 1];
         if (!level) return;
 
@@ -586,6 +602,12 @@ print(safe_divide(10, 0))`,
             return;
         }
 
+        // Also block hints after showing the answer (defensive)
+        if (answerShown) {
+            gameMessage.textContent = "⚠️ Hints disabled after showing the answer.";
+            return;
+        }
+
         const level = levels[currentLevel - 1];
         if (!level) return;
 
@@ -616,7 +638,7 @@ print(safe_divide(10, 0))`,
     if (hintBtn)   hintBtn.addEventListener("click", showHint);
 
     // ==========================================================
-    //               SHOW ANSWER — UX MODE
+    //               SHOW ANSWER — UX MODE + LOCK
     // ==========================================================
     if (showAnswerBtn && popup) {
         showAnswerBtn.addEventListener("click", () => popup.classList.remove("hidden"));
@@ -630,6 +652,14 @@ print(safe_divide(10, 0))`,
         confirmBtn.addEventListener("click", () => {
             const levelData = levels[currentLevel - 1];
             if (!levelData) return;
+
+            // 🔒 Lock further game interactions
+            answerShown = true;
+
+            // Disable all interactive buttons except Done
+            [startBtn, resetBtn, submitBtn, hintBtn, nextLevelBtn, showAnswerBtn].forEach(btn => {
+                if (btn) btn.disabled = true;
+            });
 
             // Show correct answer
             codeSnippetEl.textContent = levelData.answer;
@@ -652,7 +682,7 @@ print(safe_divide(10, 0))`,
 
     if (doneBtn) {
         doneBtn.addEventListener("click", () => {
-            // Back to first level of current difficulty
+            // (We don't really need to re-enable buttons since we're leaving)
             window.location.href = "level1.html";
         });
     }
