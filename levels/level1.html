@@ -9,30 +9,36 @@
 </head>
 <body>
 
+<!-- Background FX -->
 <div class="samurai-walker"></div>
 <div class="stars" id="stars"></div>
 <div class="pixel-particles"></div>
 
 <div class="game-container">
 
+    <!-- Level Complete Animation -->
     <div id="levelCompleteAnimation"></div>
 
+    <!-- Header -->
     <header class="game-header">
         <span id="levelDisplay">Level 1</span>
         <span id="timerDisplay">Time: 60s</span>
         <span id="scoreDisplay">Score: 0</span>
     </header>
 
-    <!-- Level intro overlay -->
+    <!-- Level Intro Overlay -->
     <div id="levelOverlay" class="overlay hidden">
         <h1>Level 1</h1>
         <p>Find all the bugs in the code.</p>
     </div>
 
+    <!-- Game Message -->
     <section id="gameMessage" class="game-message"></section>
 
+    <!-- Main Game Area -->
     <main id="gameArea" class="game-area"></main>
 
+    <!-- Code Snippet Box -->
     <section class="challenge-box">
         <pre id="codeSnippet" contenteditable="true"></pre>
     </section>
@@ -49,19 +55,21 @@
         <button id="submitAnswerBtn">Submit</button>
     </section>
 
+    <!-- Next Level -->
     <button id="nextLevelBtn" class="hidden">Next Level →</button>
 
     <!-- Main Controls -->
     <section class="game-controls">
         <button id="startGameBtn">Start Game</button>
         <button id="resetGameBtn">Reset Game</button>
+        <button id="pauseGameBtn">⏸ Pause</button>
         <button id="showAnswerBtn" class="show-answer-btn">Show Answer</button>
     </section>
 
 </div>
 
 <!-- ==========================================================
-                     SHOW ANSWER POPUP (FINAL FIXED)
+                     SHOW ANSWER POPUP
 ========================================================== -->
 <div id="showAnswerPopup" class="popup-overlay hidden">
     <div class="popup-box">
@@ -72,13 +80,25 @@
             <button id="confirmShowAnswer" class="confirm-btn">Yes, show answer</button>
             <button id="cancelShowAnswer" class="cancel-btn">Cancel</button>
         </div>
-
-        
-
     </div>
 </div>
- <!-- DONE button NOW inside popup (this is the FIX) -->
-        <button id="doneShowAnswer" class="done-btn hidden">Done</button>
+
+<!-- DONE button stays OUTSIDE popup -->
+<button id="doneShowAnswer" class="done-btn hidden">Done</button>
+
+
+<!-- ==========================================================
+                     PAUSE POPUP
+========================================================== -->
+
+<div id="pauseOverlay" class="pause-overlay hidden"></div>
+<div id="pausePopup" class="pause-popup hidden">
+    <div class="pause-box">
+        <h2>⏸ Game Paused</h2>
+        <button id="resumeGameBtn" class="menu-btn">▶ Resume</button>
+    </div>
+</div>
+
 <script>
     window.currentLevel = 1;
 </script>

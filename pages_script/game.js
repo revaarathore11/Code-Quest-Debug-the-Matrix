@@ -1,6 +1,6 @@
 // ==========================================================
 //                GAME.JS — FINAL MULTI-PAGE VERSION
-//      Difficulty-aware: easy / medium / hard
+//      Difficulty-aware: easy / medium / hard + PAUSE MODE
 // ==========================================================
 
 console.log("game.js loaded");
@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const resetBtn      = document.getElementById("resetGameBtn");
     const submitBtn     = document.getElementById("submitAnswerBtn");
     const hintBtn       = document.getElementById("hintBtn");
+    const pauseBtn      = document.getElementById("pauseGameBtn");
 
     const levelDisplay  = document.getElementById("levelDisplay");
     const scoreDisplay  = document.getElementById("scoreDisplay");
@@ -33,28 +34,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const hintCostEl    = document.getElementById("hintCost");
     const levelAnim     = document.getElementById("levelCompleteAnimation");
 
-    // ===== SHOW ANSWER POPUP =====
+    // SHOW ANSWER POPUP
     const showAnswerBtn = document.getElementById("showAnswerBtn");
     const popup         = document.getElementById("showAnswerPopup");
     const confirmBtn    = document.getElementById("confirmShowAnswer");
     const cancelBtn     = document.getElementById("cancelShowAnswer");
     const doneBtn       = document.getElementById("doneShowAnswer");
 
-    // Current page LEVEL (comes from each HTML: window.currentLevel = 1..5)
+    // PAUSE POPUP
+    const pausePopup    = document.getElementById("pausePopup");
+    const resumeBtn     = document.getElementById("resumeGameBtn");
+
+    // Current level from HTML
     let currentLevel = Number(window.currentLevel) || 1;
 
-    // Current difficulty (set on home page)
+    // Difficulty
     const difficulty = localStorage.getItem("codequestDifficulty") || "easy";
     console.log("Difficulty:", difficulty);
 
-    // 🔒 Flag: true after user has clicked "Yes, show answer"
+    // Lock after showing answer
     let answerShown = false;
+
+    // Pause state
+    let isPaused = false;
 
     // ==========================================================
     //                  LEVELS BY DIFFICULTY
     // ==========================================================
-    const levelsByDifficulty = {
-        // ---------------------- EASY ----------------------
+    // (FULL DIFFICULTY DATA UNCHANGED — keeping it exactly as you sent)
+    // ---------------- EASY + MEDIUM + HARD questions here (NOT repeating in message)
+    
+
+    const levelsByDifficulty = { 
         easy: [
             {
                 number: 1,
@@ -475,9 +486,8 @@ print(safe_divide(10, 0))`,
                     !code.includes("except:")
             }
         ]
-    };
+     };
 
-    // Pick correct level set based on difficulty
     const levels = levelsByDifficulty[difficulty] || levelsByDifficulty.easy;
 
     // ==========================================================
@@ -489,16 +499,30 @@ print(safe_divide(10, 0))`,
     let gameStarted    = false;
     let levelCompleted = false;
 
-    // Score stored per difficulty
-    const scoreKey  = `codequestScore_${difficulty}`;
-    let totalScore  = Number(localStorage.getItem(scoreKey)) || 0;
+    const scoreKey = `codequestScore_${difficulty}`;
+    let totalScore = Number(localStorage.getItem(scoreKey)) || 0;
 
-    function getHintCost() {
-        return 10 * (hintStep + 1);
-    }
+    function getHintCost() { return 10 * (hintStep + 1); }
 
     function updateHintCostUI() {
         hintCostEl.textContent = hintStep < 1 ? "" : `Cost: ${getHintCost()}`;
+    }
+
+    // ==========================================================
+    //                   TIMER CONTROL (pause-safe)
+    // ==========================================================
+    function startTimer() {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (!isPaused) {
+                timer--;
+                timerDisplay.textContent = `Time: ${timer}s`;
+                if (timer <= 0) {
+                    clearInterval(timerInterval);
+                    gameMessage.textContent = "⏰ Time's up!";
+                }
+            }
+        }, 1000);
     }
 
     // ==========================================================
@@ -512,44 +536,94 @@ print(safe_divide(10, 0))`,
         gameStarted    = true;
         hintStep       = 0;
         timer          = 60;
-        answerShown    = false; // reset lock when new level starts
+        answerShown    = false;
+        isPaused       = false;
 
         levelDisplay.textContent = `Level ${level.number} (${difficulty})`;
         timerDisplay.textContent = `Time: ${timer}s`;
         scoreDisplay.textContent = `Score: ${totalScore}`;
         gameMessage.textContent  = `🚀 Level ${level.number} Started!`;
 
-        codeSnippetEl.textContent      = level.snippet;
-        codeSnippetEl.contentEditable  = "true";
+        codeSnippetEl.textContent = level.snippet;
+        codeSnippetEl.contentEditable = "true";
         codeSnippetEl.style.pointerEvents = "auto";
 
         hintTextEl.classList.add("hidden");
         nextLevelBtn.classList.add("hidden");
 
-        // Ensure buttons are enabled at level start
-        [startBtn, resetBtn, submitBtn, hintBtn, nextLevelBtn, showAnswerBtn].forEach(btn => {
-            if (btn) btn.disabled = false;
-        });
-        if (doneBtn) doneBtn.classList.add("hidden");
+        // Re-enable buttons
+        [
+            startBtn, resetBtn, submitBtn, hintBtn,
+            nextLevelBtn, showAnswerBtn, pauseBtn
+        ].forEach(btn => btn && (btn.disabled = false));
+
+        doneBtn.classList.add("hidden");
 
         updateHintCostUI();
-
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            timer--;
-            timerDisplay.textContent = `Time: ${timer}s`;
-            if (timer <= 0) {
-                clearInterval(timerInterval);
-                gameMessage.textContent = "⏰ Time's up!";
-            }
-        }, 1000);
+        startTimer();
     }
+
+   // ===== PAUSE & RESUME =====
+const pauseOverlay = document.getElementById("pauseOverlay");
+
+// PAUSE BUTTON CLICK
+if (pauseBtn && pausePopup) {
+    pauseBtn.addEventListener("click", () => {
+        if (!gameStarted) return;
+
+        isPaused = true;
+
+        // Freeze timer
+        clearInterval(timerInterval);
+
+        // Show popup & overlay
+        pausePopup.classList.remove("hidden");
+        pauseOverlay.classList.add("active");
+
+        // Disable buttons
+        [
+            startBtn, resetBtn, submitBtn, hintBtn,
+            nextLevelBtn, showAnswerBtn
+        ].forEach(btn => btn && (btn.disabled = true));
+
+        // Disable code editing
+        codeSnippetEl.contentEditable = "false";
+        codeSnippetEl.style.pointerEvents = "none";
+    });
+}
+
+// RESUME BUTTON CLICK
+if (resumeBtn && pausePopup) {
+    resumeBtn.addEventListener("click", () => {
+        isPaused = false;
+
+        // Hide pause UI
+        pausePopup.classList.add("hidden");
+        pauseOverlay.classList.remove("active");
+
+        // Re-enable buttons (except submit when answerShown)
+        [
+            startBtn, resetBtn, hintBtn,
+            showAnswerBtn, pauseBtn
+        ].forEach(btn => btn && (btn.disabled = false));
+
+        if (!answerShown) submitBtn.disabled = false;
+
+        // Re-enable code editing (if answer not shown)
+        if (!answerShown) {
+            codeSnippetEl.contentEditable = "true";
+            codeSnippetEl.style.pointerEvents = "auto";
+        }
+
+        // Resume timer
+        startTimer();
+    });
+}
 
     // ==========================================================
     //                        CHECK ANSWER
     // ==========================================================
     function checkAnswer() {
-        // 🔒 Prevent answering after showing the answer
         if (answerShown) {
             gameMessage.textContent = "⚠️ Submit disabled after showing the answer.";
             return;
@@ -565,7 +639,6 @@ print(safe_divide(10, 0))`,
             return;
         }
 
-        // Prevent multiple scoring on same level
         if (!levelCompleted) {
             totalScore += 50;
             localStorage.setItem(scoreKey, totalScore);
@@ -574,21 +647,18 @@ print(safe_divide(10, 0))`,
         }
 
         scoreDisplay.textContent = `Score: ${totalScore}`;
-        gameMessage.textContent  = "✅ Correct!";
-
+        gameMessage.textContent = "✅ Correct!";
         clearInterval(timerInterval);
 
-        codeSnippetEl.contentEditable   = "false";
+        codeSnippetEl.contentEditable = "false";
         codeSnippetEl.style.pointerEvents = "none";
 
         levelAnim.textContent = "🎉 LEVEL COMPLETE!";
         levelAnim.classList.remove("hidden");
-        void levelAnim.offsetWidth; // force reflow for animation
+        void levelAnim.offsetWidth;
         levelAnim.classList.add("level-complete");
 
-        setTimeout(() => {
-            levelAnim.classList.add("hidden");
-        }, 1500);
+        setTimeout(() => levelAnim.classList.add("hidden"), 1500);
 
         nextLevelBtn.classList.remove("hidden");
     }
@@ -602,22 +672,19 @@ print(safe_divide(10, 0))`,
             return;
         }
 
-        // Also block hints after showing the answer (defensive)
         if (answerShown) {
             gameMessage.textContent = "⚠️ Hints disabled after showing the answer.";
             return;
         }
 
         const level = levels[currentLevel - 1];
-        if (!level) return;
-
         const hints = level.hints;
+
         if (hintStep >= hints.length) {
             gameMessage.textContent = "⚠️ No more hints!";
             return;
         }
 
-        // Deduct score for hint
         totalScore -= getHintCost();
         localStorage.setItem(scoreKey, totalScore);
         scoreDisplay.textContent = `Score: ${totalScore}`;
@@ -630,71 +697,63 @@ print(safe_divide(10, 0))`,
     }
 
     // ==========================================================
-    //                      BUTTON HANDLERS
+    //                 SHOW ANSWER — LOCK SYSTEM
     // ==========================================================
-    if (startBtn)  startBtn.addEventListener("click", () => loadLevel(currentLevel));
-    if (resetBtn)  resetBtn.addEventListener("click", () => location.reload());
-    if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
-    if (hintBtn)   hintBtn.addEventListener("click", showHint);
-
-    // ==========================================================
-    //               SHOW ANSWER — UX MODE + LOCK
-    // ==========================================================
-    if (showAnswerBtn && popup) {
+    if (showAnswerBtn) {
         showAnswerBtn.addEventListener("click", () => popup.classList.remove("hidden"));
     }
 
-    if (cancelBtn && popup) {
+    if (cancelBtn) {
         cancelBtn.addEventListener("click", () => popup.classList.add("hidden"));
     }
 
-    if (confirmBtn && popup) {
+    if (confirmBtn) {
         confirmBtn.addEventListener("click", () => {
             const levelData = levels[currentLevel - 1];
             if (!levelData) return;
 
-            // 🔒 Lock further game interactions
             answerShown = true;
 
-            // Disable all interactive buttons except Done
-            [startBtn, resetBtn, submitBtn, hintBtn, nextLevelBtn, showAnswerBtn].forEach(btn => {
-                if (btn) btn.disabled = true;
-            });
+            [
+                startBtn, resetBtn, submitBtn, hintBtn,
+                nextLevelBtn, showAnswerBtn, pauseBtn
+            ].forEach(b => b && (b.disabled = true));
 
-            // Show correct answer
             codeSnippetEl.textContent = levelData.answer;
             codeSnippetEl.style.pointerEvents = "none";
             codeSnippetEl.contentEditable = "false";
 
-            // Reset score for this difficulty when they give up
             totalScore = 0;
             localStorage.setItem(scoreKey, totalScore);
             scoreDisplay.textContent = `Score: 0`;
 
-            // Close popup, then show Done button
             popup.classList.add("hidden");
 
-            setTimeout(() => {
-                if (doneBtn) doneBtn.classList.remove("hidden");
-            }, 120);
+            setTimeout(() => doneBtn.classList.remove("hidden"), 120);
         });
     }
 
     if (doneBtn) {
         doneBtn.addEventListener("click", () => {
-            // (We don't really need to re-enable buttons since we're leaving)
             window.location.href = "level1.html";
         });
     }
+
+    // ==========================================================
+    // BUTTON HANDLERS
+    // ==========================================================
+    if (startBtn) startBtn.addEventListener("click", () => loadLevel(currentLevel));
+    if (resetBtn) resetBtn.addEventListener("click", () => location.reload());
+    if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
+    if (hintBtn) hintBtn.addEventListener("click", showHint);
 });
 
 // ==========================================================
-//               NEXT LEVEL NAVIGATION
+// NEXT LEVEL
 // ==========================================================
 function goToNextLevel() {
     const next = Number(window.currentLevel) + 1;
 
-    // After Level 5 → Final Score page
     if (next > 5) {
         window.location.href = "../final_score.html";
         return;
@@ -709,7 +768,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==========================================================
-//               PARTICLES + STARS
+// PARTICLES + STARS
 // ==========================================================
 const pixelContainer = document.querySelector(".pixel-particles");
 
@@ -718,7 +777,7 @@ if (pixelContainer) {
         const p = document.createElement("div");
         p.classList.add("pixel");
         p.style.left = Math.random() * 100 + "vw";
-        p.style.top  = Math.random() * 100 + "vh";
+        p.style.top = Math.random() * 100 + "vh";
         p.style.animationDelay = Math.random() * 5 + "s";
         pixelContainer.appendChild(p);
         setTimeout(() => p.remove(), 7000);
@@ -737,7 +796,7 @@ if (starContainer) {
         const s = document.createElement("div");
         s.classList.add("shooting-star");
         s.style.left = Math.random() * 100 + "vw";
-        s.style.top  = Math.random() * 50 + "vh";
+        s.style.top = Math.random() * 50 + "vh";
         starContainer.appendChild(s);
         setTimeout(() => s.remove(), 1400);
     }
@@ -751,7 +810,7 @@ if (starContainer) {
         star.classList.add("star");
         if (Math.random() < 0.15) star.classList.add("plus");
         star.style.left = Math.random() * 100 + "vw";
-        star.style.top  = Math.random() * 100 + "vh";
+        star.style.top = Math.random() * 100 + "vh";
         star.style.animationDelay = Math.random() * 3 + "s";
         starContainer.appendChild(star);
     }
