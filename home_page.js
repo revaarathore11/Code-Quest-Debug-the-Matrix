@@ -113,6 +113,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 }); // END DOMContentLoaded
+
+
+const knight = document.querySelector(".pixel-character");
+
+function idleSwordSwing() {
+    knight.style.animation = "knightIdleSword 0.5s steps(2) 1";
+
+    setTimeout(() => {
+        knight.style.animation =
+            "knightWalkAcross 15s linear infinite, knightSpriteWalk 0.8s steps(4) infinite";
+    }, 600);
+}
+
+// Randomly swing sword every 3–6 seconds
+setInterval(() => {
+    if (Math.random() < 0.4) idleSwordSwing();
+}, 3000);
 const knight = document.querySelector(".knight-wrapper");
 const dustContainer = document.getElementById("dust-container");
 
@@ -129,18 +146,3 @@ setInterval(() => {
 
     setTimeout(() => d.remove(), 500);
 }, 180);
-
-
-function idleSwordSwing() {
-    knight.style.animation = "knightIdleSword 0.5s steps(2) 1";
-
-    setTimeout(() => {
-        knight.style.animation =
-            "knightWalkAcross 15s linear infinite, knightSpriteWalk 0.8s steps(4) infinite";
-    }, 600);
-}
-
-// Randomly swing sword every 3–6 seconds
-setInterval(() => {
-    if (Math.random() < 0.4) idleSwordSwing();
-}, 3000);
