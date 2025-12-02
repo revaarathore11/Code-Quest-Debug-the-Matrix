@@ -113,19 +113,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 }); // END DOMContentLoaded
+const knight = document.querySelector(".knight-wrapper");
 const dustContainer = document.getElementById("dust-container");
+
 setInterval(() => {
+    const rect = knight.getBoundingClientRect();
+
     const d = document.createElement("div");
     d.classList.add("dust");
 
-    // spawn near character feet
-    d.style.left = (parseInt(getComputedStyle(document.querySelector(".pixel-character")).left) + 25) + "px";
+    d.style.left = rect.left + 30 + "px";
+    d.style.top = rect.bottom - 8 + "px";
 
     dustContainer.appendChild(d);
 
-    setTimeout(() => d.remove(), 600);
-}, 180); // rate of dust puffs
-const knight = document.querySelector(".pixel-character");
+    setTimeout(() => d.remove(), 500);
+}, 180);
+
 
 function idleSwordSwing() {
     knight.style.animation = "knightIdleSword 0.5s steps(2) 1";
