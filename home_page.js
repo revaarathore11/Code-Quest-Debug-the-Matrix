@@ -125,3 +125,18 @@ setInterval(() => {
 
     setTimeout(() => d.remove(), 600);
 }, 180); // rate of dust puffs
+const knight = document.querySelector(".pixel-character");
+
+function idleSwordSwing() {
+    knight.style.animation = "knightIdleSword 0.5s steps(2) 1";
+
+    setTimeout(() => {
+        knight.style.animation =
+            "knightWalkAcross 15s linear infinite, knightSpriteWalk 0.8s steps(4) infinite";
+    }, 600);
+}
+
+// Randomly swing sword every 3–6 seconds
+setInterval(() => {
+    if (Math.random() < 0.4) idleSwordSwing();
+}, 3000);
