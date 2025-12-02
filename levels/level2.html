@@ -6,7 +6,6 @@
     <title>Level 2 — CodeQuest</title>
 
     <link rel="stylesheet" href="../pages/pages_style/game.css">
-
 </head>
 <body>
 
@@ -24,9 +23,10 @@
         <span id="scoreDisplay">Score: 0</span>
     </header>
 
+    <!-- Level intro overlay -->
     <div id="levelOverlay" class="overlay hidden">
         <h1>Level 2</h1>
-        <p>Debug the code and eliminate threats.</p>
+        <p>Find all the bugs in the code.</p>
     </div>
 
     <section id="gameMessage" class="game-message"></section>
@@ -37,18 +37,21 @@
         <pre id="codeSnippet" contenteditable="true"></pre>
     </section>
 
+    <!-- Hint System -->
     <section class="hint-section">
         <button id="hintBtn">Hint</button>
         <span id="hintCost" class="hint-cost"></span>
         <span id="hintText" class="hint-text hidden"></span>
     </section>
 
+    <!-- Submit -->
     <section class="challenge-actions">
         <button id="submitAnswerBtn">Submit</button>
     </section>
 
     <button id="nextLevelBtn" class="hidden">Next Level →</button>
 
+    <!-- Main Controls -->
     <section class="game-controls">
         <button id="startGameBtn">Start Game</button>
         <button id="resetGameBtn">Reset Game</button>
@@ -57,6 +60,10 @@
 
 </div>
 
+
+<!-- ==========================================================
+                     SHOW ANSWER POPUP (FIXED)
+========================================================== -->
 <div id="showAnswerPopup" class="popup-overlay hidden">
     <div class="popup-box">
         <h2>Show Answer?</h2>
@@ -65,16 +72,19 @@
         <div class="popup-buttons">
             <button id="confirmShowAnswer" class="confirm-btn">Yes, show answer</button>
             <button id="cancelShowAnswer" class="cancel-btn">Cancel</button>
-            
         </div>
-        <button id="doneShowAnswer" class="hidden done-btn">Done</button>
+
+        
     </div>
 </div>
+
+        <!-- DONE BUTTON (INSIDE POPUP) -->
+        <button id="doneShowAnswer" class="done-btn hidden">Done</button>
+
 
 <script>
     window.currentLevel = 2;
 </script>
-
 
 <script src="../pages_script/game.js"></script>
 

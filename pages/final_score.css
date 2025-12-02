@@ -1,0 +1,101 @@
+/* ========== FINAL SCORE PAGE ========== */
+
+body {
+    margin: 0;
+    padding: 0;
+    background: radial-gradient(circle at center, #0a0a0d 0%, #020202 100%);
+    font-family: "Press Start 2P", monospace;
+    color: #e0ffe0;
+}
+
+.final-score-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.score-card {
+    background: rgba(0, 20, 0, 0.55);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0, 255, 150, 0.35);
+    border: 1px solid rgba(0, 255, 150, 0.3);
+    width: 450px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.8s ease-out;
+}
+
+.final-title {
+    font-size: 28px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px #00ffae;
+}
+
+/* Score number */
+.score-number {
+    font-size: 60px;
+    font-weight: bold;
+    color: #7affb2;
+    margin: 15px 0;
+    text-shadow: 0 0 10px #00ff91;
+    animation: popIn 0.6s ease-out;
+}
+
+/* Stars / medal section */
+.stars-display {
+    font-size: 40px;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-out;
+}
+
+/* Buttons */
+.btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn {
+    padding: 12px 20px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.2s ease-in-out;
+}
+
+.green {
+    background: #28a745;
+    color: white;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.55);
+}
+
+.green:hover {
+    transform: scale(1.05);
+    background-color: #32c757;
+}
+
+.blue {
+    background: #007bff;
+    color: white;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.55);
+}
+
+.blue:hover {
+    transform: scale(1.05);
+    background-color: #2894ff;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}

@@ -273,39 +273,84 @@ footer:hover {
     }
 }
 /* Knight Pixel Character */
-.pixel-character {
-    width: 64px;               
-    height: 64px;              
-    background: url("./assets/sprites/blue_knight.png") 0 0 no-repeat;
-    background-size: 256px 64px; /* 4 frames = 256px */
-    image-rendering: pixelated;
+#dust-container {
     position: fixed;
-    bottom: 25px;
+    bottom: 20px;
     left: 0;
-    z-index: 15;
-
-    animation:
-        knightWalkAcross 10s linear infinite,
-        knightSpriteWalk 0.8s steps(4) infinite;
+    width: 100%;
+    height: 80px;
+    pointer-events: none;
+    z-index: 10;
 }
 
+#dust-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.dust {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%;
+    animation: dustFade 0.5s ease-out forwards;
+}
+
+@keyframes dustFade {
+    from { transform: scale(1); opacity: 0.9; }
+    to   { transform: scale(0.2) translateY(-12px); opacity: 0; }
+}
+/* Knight Wrapper = movement + scaling */
+.knight-wrapper {
+    position: fixed;
+    bottom: 40px;
+    left: 0;
+    width: 64px;
+    height: 64px;
+    z-index: 20;
+    
+    /* MAKE THE KNIGHT BIGGER */
+    transform: scale(2.1);      /* change size here */
+    transform-origin: bottom left;
+
+    animation: knightWalkAcross 14s linear infinite;
+}
+
+/* Knight Sprite = frame animation only */
+.knight-sprite {
+    width: 64px;
+    height: 64px;
+
+    background: url("./assets/sprites/blue_knight.png") no-repeat;
+    background-size: 256px 64px;  /* 4 frames × 64px */
+    image-rendering: pixelated;
+
+    animation: knightSpriteWalk 0.8s steps(4) infinite;
+}
+
+/* Walking frame animation */
 @keyframes knightSpriteWalk {
-    from { background-position: 0 0; }
+    from { background-position:   0px 0; }
     to   { background-position: -256px 0; }
 }
 
+/* Walk across screen + flip */
 @keyframes knightWalkAcross {
-    0%   { left: 0; transform: scaleX(1); }
-    45%  { left: calc(100% - 80px); transform: scaleX(1); }
-    50%  { transform: scaleX(-1); }
-    95%  { left: 0; transform: scaleX(-1); }
-    100% { transform: scaleX(1); }
+    0%   { left: -80px; transform: scale(2.1) scaleX(1); }
+    45%  { left: calc(100% - 140px); transform: scale(2.1) scaleX(1); }
+    50%  { transform: scale(2.1) scaleX(-1); }
+    95%  { left: -80px; transform: scale(2.1) scaleX(-1); }
+    100% { transform: scale(2.1) scaleX(1); }
 }
 /* For better readability of the written content */
 .storyline {
     max-width: 700px;
     margin: 0 auto 30px auto;
-    font-size: 10px;
+    font-size: 13px;
     line-height: 1.4;
     letter-spacing: 0.4px;
     text-shadow: 1px 1px #003f2c;

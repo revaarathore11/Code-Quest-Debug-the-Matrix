@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     startBtn?.addEventListener("click", () => {
         transition.classList.add("active");
         setTimeout(() => {
-            window.location.href = "pages/game.html";
+            window.location.href = "levels/level1.html";
         }, 1200);
     });
 
@@ -113,3 +113,30 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 }); // END DOMContentLoaded
+const dustContainer = document.getElementById("dust-container");
+setInterval(() => {
+    const d = document.createElement("div");
+    d.classList.add("dust");
+
+    // spawn near character feet
+    d.style.left = (parseInt(getComputedStyle(document.querySelector(".pixel-character")).left) + 25) + "px";
+
+    dustContainer.appendChild(d);
+
+    setTimeout(() => d.remove(), 600);
+}, 180); // rate of dust puffs
+const knight = document.querySelector(".pixel-character");
+
+function idleSwordSwing() {
+    knight.style.animation = "knightIdleSword 0.5s steps(2) 1";
+
+    setTimeout(() => {
+        knight.style.animation =
+            "knightWalkAcross 15s linear infinite, knightSpriteWalk 0.8s steps(4) infinite";
+    }, 600);
+}
+
+// Randomly swing sword every 3–6 seconds
+setInterval(() => {
+    if (Math.random() < 0.4) idleSwordSwing();
+}, 3000);

@@ -23,6 +23,7 @@
         <span id="scoreDisplay">Score: 0</span>
     </header>
 
+    <!-- Level intro overlay -->
     <div id="levelOverlay" class="overlay hidden">
         <h1>Level 1</h1>
         <p>Find all the bugs in the code.</p>
@@ -36,18 +37,21 @@
         <pre id="codeSnippet" contenteditable="true"></pre>
     </section>
 
+    <!-- Hint System -->
     <section class="hint-section">
         <button id="hintBtn">Hint</button>
         <span id="hintCost" class="hint-cost"></span>
         <span id="hintText" class="hint-text hidden"></span>
     </section>
 
+    <!-- Submit -->
     <section class="challenge-actions">
         <button id="submitAnswerBtn">Submit</button>
     </section>
 
     <button id="nextLevelBtn" class="hidden">Next Level →</button>
 
+    <!-- Main Controls -->
     <section class="game-controls">
         <button id="startGameBtn">Start Game</button>
         <button id="resetGameBtn">Reset Game</button>
@@ -57,7 +61,7 @@
 </div>
 
 <!-- ==========================================================
-                     SHOW ANSWER POPUP (NEW)
+                     SHOW ANSWER POPUP (FINAL FIXED)
 ========================================================== -->
 <div id="showAnswerPopup" class="popup-overlay hidden">
     <div class="popup-box">
@@ -67,12 +71,14 @@
         <div class="popup-buttons">
             <button id="confirmShowAnswer" class="confirm-btn">Yes, show answer</button>
             <button id="cancelShowAnswer" class="cancel-btn">Cancel</button>
-            
         </div>
-        <button id="doneShowAnswer" class="hidden done-btn">Done</button>
+
+        
+
     </div>
 </div>
-
+ <!-- DONE button NOW inside popup (this is the FIX) -->
+        <button id="doneShowAnswer" class="done-btn hidden">Done</button>
 <script>
     window.currentLevel = 1;
 </script>
