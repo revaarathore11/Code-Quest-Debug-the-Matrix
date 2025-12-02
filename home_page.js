@@ -130,7 +130,7 @@ function idleSwordSwing() {
 setInterval(() => {
     if (Math.random() < 0.4) idleSwordSwing();
 }, 3000);
-const knight = document.querySelector(".knight-wrapper");
+const knight1 = document.querySelector(".knight-wrapper");
 const dustContainer = document.getElementById("dust-container");
 
 setInterval(() => {
