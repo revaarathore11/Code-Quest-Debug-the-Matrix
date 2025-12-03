@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const levelSelect = document.getElementById("levelSelect");
     const difficultySelect = document.getElementById("difficultySelect");
+    const settingsSelect = document.getElementById("settingsSelect");
 
     /*  LOAD HIGH SCORE */
 
@@ -56,6 +57,44 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(() => {
                 window.location.href = `levels/level${savedData.level}.html`;
             }, 1200);
+        });
+    }
+
+    /* ----------------------------------------------------
+       SETTINGS MENU — ABOUT POPUP
+    ----------------------------------------------------- */
+    const aboutPopup = document.getElementById("aboutPopup");
+    const closeAboutBtn = document.getElementById("closeAboutBtn");
+
+    if (settingsSelect) {
+        settingsSelect.addEventListener("change", (e) => {
+            const selectedValue = e.target.value;
+
+            if (selectedValue === "about") {
+                // Show about popup
+                if (aboutPopup) {
+                    aboutPopup.classList.remove("hidden");
+                }
+            }
+
+            // Reset select to default after action
+            settingsSelect.value = "volume";
+        });
+    }
+
+    // Close about popup when close button is clicked
+    if (closeAboutBtn && aboutPopup) {
+        closeAboutBtn.addEventListener("click", () => {
+            aboutPopup.classList.add("hidden");
+        });
+    }
+
+    // Close about popup when clicking outside (on the overlay)
+    if (aboutPopup) {
+        aboutPopup.addEventListener("click", (e) => {
+            if (e.target === aboutPopup) {
+                aboutPopup.classList.add("hidden");
+            }
         });
     }
 
