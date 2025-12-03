@@ -51,6 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const timeUpPopup   = document.getElementById("timeUpPopup");
     const timeUpResetBtn = document.getElementById("timeUpResetBtn");
 
+    // ===== LEVEL SUMMARY POPUP =====
+    const summaryPopup     = document.getElementById("summaryPopup");
+    const summaryContent   = document.getElementById("summaryContent");
+    const closeSummaryBtn  = document.getElementById("closeSummaryBtn");
+
     // Current page LEVEL (comes from each HTML: window.currentLevel = 1..5)
     let currentLevel = Number(window.currentLevel) || 1;
 
@@ -90,7 +95,16 @@ print(len(items))`,
                     code.includes("len(items)") &&
                     !code.includes("lenght") &&
                     !code.includes("length") &&
-                    !code.includes("items.length")
+                    !code.includes("items.length"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>0-Indexing:</strong> Lists start at index 0, not 1. So items[0] = "pen", items[1] = "book", items[2] = "bag".</li>
+                        <li><strong>IndexError:</strong> Accessing an index that doesn't exist (items[3]) causes an error.</li>
+                        <li><strong>len() Function:</strong> Python uses len() to get the length of a list, NOT .length (which is JavaScript).</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Different languages have different methods. Python = len(), JavaScript = .length
+                `
             },
 
             {
@@ -120,7 +134,17 @@ print(total)`,
                 check: (code) =>
                     code.includes("for i in range(len(numbers)):") &&
                     (code.includes("total += numbers[i]") || code.includes("total = total + numbers[i]")) &&
-                    code.includes("print(total)")
+                    code.includes("print(total)"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Indentation:</strong> Python uses indentation (usually 4 spaces) to define code blocks inside loops and functions.</li>
+                        <li><strong>Variable Names:</strong> Variable names are case-sensitive and must be spelled correctly. "number" ≠ "numbers", "totl" ≠ "total".</li>
+                        <li><strong>Loops:</strong> for loops iterate through sequences. Use range(len(list)) to loop by index.</li>
+                        <li><strong>Accumulation:</strong> Use += to add values during each iteration of the loop.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Indentation is critical in Python. Missing it breaks your code!
+                `
             },
 
             {
@@ -157,7 +181,17 @@ print(sumList(numbers))`,
                     code.includes("total += nums[i]") &&
                     !code.includes("nums = nums + 1") &&
                     code.includes("return total") &&
-                    code.includes("print(sumList(numbers))")
+                    code.includes("print(sumList(numbers))"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Function Syntax:</strong> Functions require a colon after the definition: def name(params):</li>
+                        <li><strong>Case Sensitivity:</strong> Python is case-sensitive. sumList() ≠ sumlist(). Function names must match exactly.</li>
+                        <li><strong>Variable Scope:</strong> Don't modify the input parameter (nums) inside the function—use a separate variable (total) for calculations.</li>
+                        <li><strong>Return Values:</strong> Return the correct variable name. "return total" not "return totalSum".</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Functions are reusable blocks of code. Keep them clean and don't modify input parameters unnecessarily.
+                `
             },
 
             {
@@ -202,7 +236,17 @@ print(collect_unique_words(sentence))`,
                 check: (code) =>
                     code.includes("unique.append(cleaned)") &&
                     code.includes("return len(unique)") &&
-                    !code.includes("unique = cleaned")
+                    !code.includes("unique = cleaned"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>List Methods:</strong> Use .append() to add items to a list. Don't replace the list with a single value!</li>
+                        <li><strong>String Methods:</strong> .lower() converts to lowercase, .strip() removes unwanted characters.</li>
+                        <li><strong>List Operations:</strong> "in" operator checks if an item exists in a list without duplicates.</li>
+                        <li><strong>Unique Values:</strong> When building a collection of unique items, always append, never assign directly.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Keep your data types consistent. If unique is a list, it must stay a list!
+                `
             },
 
             {
@@ -238,7 +282,17 @@ users = [
 print(get_user_age(users, "Alice"))`,
                 check: (code) =>
                     code.includes('get_user_age(users, "Alice")') ||
-                    code.includes("get_user_age(users, 'Alice')")
+                    code.includes("get_user_age(users, 'Alice')"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Argument Order:</strong> Function parameters must be passed in the correct order. The signature defines the order: get_user_age(users, name).</li>
+                        <li><strong>Dictionaries:</strong> Dictionaries use {"key": value} syntax. Access values with dict["key"].</li>
+                        <li><strong>Searching Data:</strong> Loop through data structures to find and return specific values.</li>
+                        <li><strong>Function Calls:</strong> Always match the parameter order when calling functions.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Arguments must be in the correct order. Always check the function definition before calling it!
+                `
             }
         ],
 
@@ -263,7 +317,16 @@ for n in numbers:
                 check: (code) =>
                     code.includes("for n in numbers") &&
                     code.includes("n % 2 == 0") &&
-                    code.includes('print("Even"')
+                    code.includes('print("Even"'),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Assignment vs Comparison:</strong> '=' assigns a value, '==' compares two values. In if statements, always use ==.</li>
+                        <li><strong>Modulo Operator (%):</strong> n % 2 gives the remainder when n is divided by 2. If remainder is 0, n is even.</li>
+                        <li><strong>If Statements:</strong> Conditions in if statements must use comparison operators (==, !=, <, >, <=, >=).</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> One = assigns, two == compares. This is one of the most common bugs!
+                `
             },
 
             {
@@ -286,7 +349,16 @@ print(multiply(5, 3))`,
                     code.includes("def multiply(a, b):") &&
                     code.includes("return a * b") &&
                     code.includes("multiply(") &&
-                    code.includes(",")
+                    code.includes(","),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Indentation:</strong> Function bodies must be indented. Python uses indentation to define scope.</li>
+                        <li><strong>Function Arity:</strong> A function with 2 parameters requires 2 arguments when called. multiply(5) is incomplete—use multiply(5, 3).</li>
+                        <li><strong>Arguments Match Parameters:</strong> The number of arguments passed must equal the number of parameters defined.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> If a function expects 2 arguments, always provide 2!
+                `
             },
 
             {
@@ -303,7 +375,17 @@ print(user["gender"])`,
 print(user.get("gender", "Not specified"))`,
                 check: (code) =>
                     code.includes('user.get("gender"') ||
-                    code.includes("user.get('gender'")
+                    code.includes("user.get('gender'"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>KeyError:</strong> Accessing a non-existent key with dict["key"] raises a KeyError.</li>
+                        <li><strong>Dictionary.get():</strong> Use dict.get(key, default) to safely access keys. If the key doesn't exist, return the default value.</li>
+                        <li><strong>Defensive Programming:</strong> Always use .get() when you're unsure if a key exists.</li>
+                        <li><strong>Default Values:</strong> Provide sensible defaults like "Not specified" or None.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> .get() is safer than direct indexing for uncertain keys!
+                `
             },
 
             {
@@ -334,7 +416,17 @@ print(find_max([-5, -10, -3]))`,
                     code.includes("def find_max(nums):") &&
                     code.includes("max_value = nums[0]") &&
                     code.includes("if n > max_value") &&
-                    code.includes("return max_value")
+                    code.includes("return max_value"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Initial Values Matter:</strong> Starting max at 0 fails for all-negative numbers. Use nums[0] instead.</li>
+                        <li><strong>Name Shadowing:</strong> Don't use built-in names (max, min, sum, list) as variable names—use max_value instead.</li>
+                        <li><strong>Algorithm Correctness:</strong> Test edge cases like negative numbers, empty lists, and single-element lists.</li>
+                        <li><strong>Variable Naming:</strong> Use descriptive names (max_value) instead of shadowing built-ins.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Choose initial values carefully. Test with edge cases!
+                `
             },
 
             {
@@ -351,7 +443,17 @@ print(find_max([-5, -10, -3]))`,
     print(i)`,
                 check: (code) =>
                     code.includes("for i in range(1, 5):") &&
-                    code.includes("print(i)")
+                    code.includes("print(i)"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Control Statement Syntax:</strong> All control structures (for, while, if, def) require a colon (:) at the end.</li>
+                        <li><strong>range(start, end):</strong> range(1, 5) generates 1, 2, 3, 4 (not including 5).</li>
+                        <li><strong>Colon Rule:</strong> If you forget the colon, Python will raise a SyntaxError.</li>
+                        <li><strong>Indentation:</strong> The loop body must be indented after the colon.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Colons are mandatory! This is unique to Python syntax.
+                `
             }
         ],
 
@@ -384,7 +486,17 @@ print(add_item("banana"))`,
                     code.includes("def add_item(item, items=None):") &&
                     code.includes("if items is None:") &&
                     code.includes("items = []") &&
-                    code.includes("items.append(item)")
+                    code.includes("items.append(item)"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Mutable Default Arguments:</strong> Lists are mutable and persist across function calls. Using [] as a default is a common trap!</li>
+                        <li><strong>Function Default Values:</strong> Defaults are evaluated once when the function is defined, not each time it's called.</li>
+                        <li><strong>Safe Pattern:</strong> Use None as default for mutable types, then create a new object inside the function.</li>
+                        <li><strong>Debugging Tip:</strong> If results unexpectedly accumulate across calls, check mutable defaults.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Never use mutable objects ([], {}, set()) as default arguments!
+                `
             },
 
             {
@@ -414,7 +526,17 @@ print(factorial(0))`,
                     code.includes("def factorial(n):") &&
                     code.includes("if n == 0:") &&
                     code.includes("return 1") &&
-                    code.includes("return n * factorial(n - 1)")
+                    code.includes("return n * factorial(n - 1)"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Base Case:</strong> Recursive functions need a base case that stops recursion. This is where the function returns without recursing.</li>
+                        <li><strong>Mathematical Definition:</strong> 0! = 1 by definition in mathematics. This base case is essential.</li>
+                        <li><strong>Recursion:</strong> A function calling itself must have a base case, or it will recurse infinitely.</li>
+                        <li><strong>Logic Check:</strong> Test edge cases (0, 1) to verify base cases are correct.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Base case wrong = all results wrong. Always verify base cases in recursive functions!
+                `
             },
 
             {
@@ -438,7 +560,17 @@ file.close`,
                 check: (code) =>
                     code.includes('with open("data.txt", "r") as file:') &&
                     code.includes("for line in") &&
-                    code.includes("print(line.strip())")
+                    code.includes("print(line.strip())"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Context Managers:</strong> 'with' statements ensure resources are properly closed, even if an error occurs.</li>
+                        <li><strong>file.close vs file.close():</strong> Without parentheses, you're referencing the method but not calling it.</li>
+                        <li><strong>Resource Management:</strong> Use 'with' for files, database connections, locks, etc.</li>
+                        <li><strong>Best Practice:</strong> Context managers are safer and more Pythonic than manual close().</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Always use 'with' for file operations. It's the modern, safe way!
+                `
             },
 
             {
@@ -458,7 +590,17 @@ squares = [n * n for n in nums]
 print(squares)`,
                 check: (code) =>
                     code.includes("squares = [n * n for n in nums]") &&
-                    code.includes("print(squares)")
+                    code.includes("print(squares)"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>List Comprehensions:</strong> Compact syntax for creating new lists by transforming existing ones.</li>
+                        <li><strong>Variable Consistency:</strong> The expression and loop variable must match. If you use 'n' in the expression, iterate over 'n'.</li>
+                        <li><strong>Syntax:</strong> [expression for variable in iterable] creates a new list.</li>
+                        <li><strong>Performance:</strong> List comprehensions are faster and more readable than loops.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Keep variables consistent in comprehensions. [n*n for n in nums], not [n*n for i in nums]!
+                `
             },
 
             {
@@ -487,7 +629,17 @@ print(safe_divide(10, 0))`,
                 check: (code) =>
                     code.includes("def safe_divide(a, b):") &&
                     (code.includes("except ZeroDivisionError") || code.includes("except ZeroDivisionError:")) &&
-                    !code.includes("except:")
+                    !code.includes("except:"),
+                summary: `
+                    <strong>📚 Key Concepts Learned:</strong>
+                    <ul>
+                        <li><strong>Specific Exception Handling:</strong> Always catch specific exceptions, not bare 'except'. This prevents masking unexpected errors.</li>
+                        <li><strong>ZeroDivisionError:</strong> Raised when dividing by zero. Catch it explicitly for better debugging.</li>
+                        <li><strong>Bare except Dangers:</strong> A bare 'except' catches everything, including KeyboardInterrupt and SystemExit, which can hide bugs.</li>
+                        <li><strong>Best Practice:</strong> Catch only exceptions you expect and can handle.</li>
+                    </ul>
+                    <strong>💡 Remember:</strong> Be specific with exceptions. Never use bare 'except'. It hides bugs!
+                `
             }
         ]
     };
@@ -552,6 +704,7 @@ print(safe_divide(10, 0))`,
 
         if (gameContainer) gameContainer.classList.remove("paused-blur", "time-up-blur");
         if (pausePopup) pausePopup.classList.add("hidden");
+        if (summaryPopup) summaryPopup.classList.add("hidden");
         if (doneBtn) doneBtn.classList.add("hidden");
 
         setControlsDisabled(false);
@@ -672,6 +825,12 @@ print(safe_divide(10, 0))`,
 
         setTimeout(() => {
             levelAnim.classList.add("hidden");
+            
+            // Show summary popup after animation
+            if (summaryPopup && summaryContent && level.summary) {
+                summaryContent.innerHTML = level.summary;
+                summaryPopup.classList.remove("hidden");
+            }
         }, 1500);
 
         nextLevelBtn.classList.remove("hidden");
@@ -774,6 +933,13 @@ print(safe_divide(10, 0))`,
     if (timeUpResetBtn) {
         timeUpResetBtn.addEventListener("click", () => {
             window.location.href = "level1.html";
+        });
+    }
+
+    // ===== CLOSE SUMMARY BUTTON =====
+    if (closeSummaryBtn) {
+        closeSummaryBtn.addEventListener("click", () => {
+            if (summaryPopup) summaryPopup.classList.add("hidden");
         });
     }
 

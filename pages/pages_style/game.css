@@ -760,8 +760,46 @@ body {
 
 #showAnswerPopup.hidden,
 #pausePopup.hidden,
-#timeUpPopup.hidden {
+#timeUpPopup.hidden,
+#summaryPopup.hidden {
     display: none !important;
+}
+
+/* ===== Summary Popup Styling ===== */
+.summary-box {
+    max-height: 70vh;
+    overflow-y: auto;
+    width: 380px;
+}
+
+.summary-content {
+    text-align: left;
+    line-height: 1.6;
+    font-size: 14px;
+    color: #e0e0e0;
+    margin: 16px 0;
+}
+
+.summary-content strong {
+    color: #00eaff;
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 8px;
+}
+
+.summary-content ul {
+    margin-left: 20px;
+    margin-bottom: 12px;
+}
+
+.summary-content li {
+    margin-bottom: 6px;
+}
+
+.summary-content li strong {
+    color: #00ff88;
+    display: inline;
+    margin: 0;
 }
 
 /* ===== FIX: Done button always visible ===== */
