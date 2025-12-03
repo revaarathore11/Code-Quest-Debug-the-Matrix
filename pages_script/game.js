@@ -79,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         easy: [
             {
                 number: 1,
+                question: "Fix the code: Arrays are 0-indexed. Change items[3] to the correct index and use the correct function to get the list length.",
                 snippet: `items = ["pen", "book", "bag"]
 print(items[3])
 print(items.length)`,
@@ -110,6 +111,7 @@ print(len(items))`,
 
             {
                 number: 2,
+                question: "Fix the code: Add proper indentation to the loop, fix the variable name typo, and ensure the print statement uses the correct variable name.",
                 snippet: `numbers = [1, 2, 3, 4]
 total = 0
 
@@ -150,6 +152,7 @@ print(total)`,
 
             {
                 number: 3,
+                question: "Fix the code: Complete the function definition with proper syntax, fix variable name typos, remove inappropriate modifications, and use the correct return variable.",
                 snippet: `def sumList(nums)
 total = 0
 for i in range(len(num)):
@@ -197,6 +200,7 @@ print(sumList(numbers))`,
 
             {
                 number: 4,
+                question: "Fix the code: Replace the incorrect assignment with the correct list method to add words to the collection. Use .append() instead of replacing the list.",
                 snippet: `def collect_unique_words(text):
     words = text.split()
     unique = []
@@ -252,6 +256,7 @@ print(collect_unique_words(sentence))`,
 
             {
                 number: 5,
+                question: "Fix the code: The function arguments are in the wrong order. Look at the function definition and call it with the correct parameter order.",
                 snippet: `def get_user_age(users, name):
     for user in users:
         if user["name"] == name:
@@ -301,6 +306,7 @@ print(get_user_age(users, "Alice"))`,
         medium: [
             {
                 number: 1,
+                question: "Fix the code: In the if statement condition, use the comparison operator '==' instead of the assignment operator '=' to check if numbers are even.",
                 snippet: `numbers = [2, 4, 6, 8]
 for n in numbers:
     if n % 2 = 0:
@@ -332,6 +338,7 @@ for n in numbers:
 
             {
                 number: 2,
+                question: "Fix the code: Add proper indentation to the function body and provide both required arguments when calling the function.",
                 snippet: `def multiply(a, b):
 return a * b
 
@@ -364,6 +371,7 @@ print(multiply(5, 3))`,
 
             {
                 number: 3,
+                question: "Fix the code: The 'gender' key doesn't exist in the dictionary. Use the safe .get() method instead of direct indexing to avoid a KeyError.",
                 snippet: `user = {"name": "Ava", "age": 20}
 print(user["gender"])`,
                 hints: [
@@ -391,6 +399,7 @@ print(user.get("gender", "Not specified"))`,
 
             {
                 number: 4,
+                question: "Fix the code: Initialize max with the first element of the list to handle negative numbers correctly, and rename the variable to avoid shadowing built-in functions.",
                 snippet: `def find_max(nums):
     max = 0
     for n in nums:
@@ -432,6 +441,7 @@ print(find_max([-5, -10, -3]))`,
 
             {
                 number: 5,
+                question: "Fix the code: Add the required colon at the end of the for loop statement. Python requires a colon before any indented block.",
                 snippet: `for i in range(1, 5)
     print(i)`,
                 hints: [
@@ -462,6 +472,7 @@ print(find_max([-5, -10, -3]))`,
         hard: [
             {
                 number: 1,
+                question: "Fix the code: Replace the mutable default argument [] with None to avoid data persisting across function calls. Create a new list inside the function instead.",
                 snippet: `def add_item(item, items=[]):
     items.append(item)
     return items
@@ -502,6 +513,7 @@ print(add_item("banana"))`,
 
             {
                 number: 2,
+                question: "Fix the code: The base case for recursion is wrong. In mathematics, 0! equals 1, not 0. Fix the return statement for the base case.",
                 snippet: `def factorial(n):
     if n == 0:
         return 0
@@ -542,6 +554,7 @@ print(factorial(0))`,
 
             {
                 number: 3,
+                question: "Fix the code: The file.close() method is missing parentheses and won't execute. Use a 'with' statement (context manager) for proper file handling instead.",
                 snippet: `file = open("data.txt", "r")
 lines = file.readlines()
 for line in lines:
@@ -576,6 +589,7 @@ file.close`,
 
             {
                 number: 4,
+                question: "Fix the code: The variable name in the list comprehension doesn't match the expression. Use 'n' in the loop variable to match the 'n * n' expression.",
                 snippet: `nums = [1, 2, 3, 4]
 squares = [n * n for i in nums]
 print(squares)`,
@@ -606,6 +620,7 @@ print(squares)`,
 
             {
                 number: 5,
+                question: "Fix the code: Replace the bare 'except:' clause with a specific exception type (ZeroDivisionError). Bare except clauses hide bugs and catch all exceptions.",
                 snippet: `def safe_divide(a, b):
     try:
         return a / b
@@ -695,6 +710,13 @@ print(safe_divide(10, 0))`,
         timerDisplay.textContent = `Time: ${timer}s`;
         scoreDisplay.textContent = `Score: ${totalScore}`;
         gameMessage.textContent  = `🚀 Level ${level.number} Started!`;
+
+        // Display question
+        const questionDisplay = document.getElementById("questionDisplay");
+        if (questionDisplay && level.question) {
+            questionDisplay.textContent = level.question;
+            questionDisplay.classList.remove("hidden");
+        }
 
         codeSnippetEl.textContent      = level.snippet;
         codeSnippetEl.contentEditable  = "true";
