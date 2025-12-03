@@ -812,5 +812,44 @@ body {
     display: block;
 }
 
+.time-up-overlay::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+    pointer-events: none;
+}
+/* Full-screen blur when time is up */
+.time-up-blur {
+    filter: blur(5px);
+    pointer-events: none;
+}
 
+/* Popup overlay */
+#timeUpPopup.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+}
 
+.popup-box {
+    background: #111;
+    padding: 25px 30px;
+    border-radius: 12px;
+    text-align: center;
+    border: 2px solid #0f0;
+    box-shadow: 0 0 20px #0f0;
+}

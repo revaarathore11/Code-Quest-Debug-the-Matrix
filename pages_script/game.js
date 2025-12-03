@@ -1,6 +1,6 @@
 // ==========================================================
 //                GAME.JS — FINAL MULTI-PAGE VERSION
-//      Difficulty-aware: easy / medium / hard + PAUSE MODE
+//      Difficulty-aware: easy / medium / hard
 // ==========================================================
 
 console.log("game.js loaded");
@@ -34,38 +34,42 @@ document.addEventListener("DOMContentLoaded", () => {
     const hintCostEl    = document.getElementById("hintCost");
     const levelAnim     = document.getElementById("levelCompleteAnimation");
 
-    // SHOW ANSWER POPUP
+    const gameContainer = document.querySelector(".game-container");
+
+    // ===== SHOW ANSWER POPUP =====
     const showAnswerBtn = document.getElementById("showAnswerBtn");
     const popup         = document.getElementById("showAnswerPopup");
     const confirmBtn    = document.getElementById("confirmShowAnswer");
     const cancelBtn     = document.getElementById("cancelShowAnswer");
     const doneBtn       = document.getElementById("doneShowAnswer");
 
-    // PAUSE POPUP
-    const pausePopup    = document.getElementById("pausePopup");
+    // ===== PAUSE POPUP =====
+    const pauseOverlay  = document.getElementById("pauseOverlay");
     const resumeBtn     = document.getElementById("resumeGameBtn");
 
-    // Current level from HTML
+    // ===== TIME UP POPUP =====
+    const timeUpPopup     = document.getElementById("timeUpPopup");
+    const timeUpResetBtn  = document.getElementById("timeUpResetBtn");
+
+    // Current page LEVEL (comes from each HTML: window.currentLevel = 1..5)
     let currentLevel = Number(window.currentLevel) || 1;
 
-    // Difficulty
+    // Current difficulty (set on home page)
     const difficulty = localStorage.getItem("codequestDifficulty") || "easy";
     console.log("Difficulty:", difficulty);
 
-    // Lock after showing answer
+    // 🔒 Flag: true after user has clicked "Yes, show answer"
     let answerShown = false;
 
-    // Pause state
+    // Pause / time flags
     let isPaused = false;
+    let isTimeUp = false;
 
     // ==========================================================
     //                  LEVELS BY DIFFICULTY
     // ==========================================================
-    // (FULL DIFFICULTY DATA UNCHANGED — keeping it exactly as you sent)
-    // ---------------- EASY + MEDIUM + HARD questions here (NOT repeating in message)
-    
-
-    const levelsByDifficulty = { 
+    const levelsByDifficulty = {
+        // ---------------------- EASY ----------------------
         easy: [
             {
                 number: 1,
@@ -486,8 +490,9 @@ print(safe_divide(10, 0))`,
                     !code.includes("except:")
             }
         ]
-     };
+    };
 
+    // Pick correct level set based on difficulty
     const levels = levelsByDifficulty[difficulty] || levelsByDifficulty.easy;
 
     // ==========================================================
@@ -499,30 +504,23 @@ print(safe_divide(10, 0))`,
     let gameStarted    = false;
     let levelCompleted = false;
 
-    const scoreKey = `codequestScore_${difficulty}`;
-    let totalScore = Number(localStorage.getItem(scoreKey)) || 0;
+    // Score stored per difficulty
+    const scoreKey  = `codequestScore_${difficulty}`;
+    let totalScore  = Number(localStorage.getItem(scoreKey)) || 0;
 
-    function getHintCost() { return 10 * (hintStep + 1); }
+    function getHintCost() {
+        return 10 * (hintStep + 1);
+    }
 
     function updateHintCostUI() {
         hintCostEl.textContent = hintStep < 1 ? "" : `Cost: ${getHintCost()}`;
     }
 
-    // ==========================================================
-    //                   TIMER CONTROL (pause-safe)
-    // ==========================================================
-    function startTimer() {
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            if (!isPaused) {
-                timer--;
-                timerDisplay.textContent = `Time: ${timer}s`;
-                if (timer <= 0) {
-                    clearInterval(timerInterval);
-                    gameMessage.textContent = "⏰ Time's up!";
-                }
-            }
-        }, 1000);
+    // Helper to disable/enable all main controls
+    function setControlsDisabled(disabled) {
+        [startBtn, submitBtn, hintBtn, showAnswerBtn, nextLevelBtn, pauseBtn].forEach(btn => {
+            if (btn) btn.disabled = disabled;
+        });
     }
 
     // ==========================================================
@@ -538,92 +536,103 @@ print(safe_divide(10, 0))`,
         timer          = 60;
         answerShown    = false;
         isPaused       = false;
+        isTimeUp       = false;
 
         levelDisplay.textContent = `Level ${level.number} (${difficulty})`;
         timerDisplay.textContent = `Time: ${timer}s`;
         scoreDisplay.textContent = `Score: ${totalScore}`;
         gameMessage.textContent  = `🚀 Level ${level.number} Started!`;
 
-        codeSnippetEl.textContent = level.snippet;
-        codeSnippetEl.contentEditable = "true";
+        codeSnippetEl.textContent      = level.snippet;
+        codeSnippetEl.contentEditable  = "true";
         codeSnippetEl.style.pointerEvents = "auto";
 
         hintTextEl.classList.add("hidden");
         nextLevelBtn.classList.add("hidden");
 
-        // Re-enable buttons
-        [
-            startBtn, resetBtn, submitBtn, hintBtn,
-            nextLevelBtn, showAnswerBtn, pauseBtn
-        ].forEach(btn => btn && (btn.disabled = false));
+        if (gameContainer) gameContainer.classList.remove("paused-blur", "time-up-blur");
+        if (pauseOverlay) pauseOverlay.classList.add("hidden");
+        if (timeUpPopup) timeUpPopup.classList.add("hidden");
+        if (doneBtn) doneBtn.classList.add("hidden");
 
-        doneBtn.classList.add("hidden");
+        setControlsDisabled(false);
+        if (resetBtn) resetBtn.disabled = false;
 
         updateHintCostUI();
-        startTimer();
+
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (isPaused || isTimeUp) return;
+
+            timer--;
+            timerDisplay.textContent = `Time: ${timer}s`;
+
+            if (timer <= 0) {
+                clearInterval(timerInterval);
+                handleTimeUp();
+            }
+        }, 1000);
     }
 
-   // ===== PAUSE & RESUME =====
-const pauseOverlay = document.getElementById("pauseOverlay");
+    // ==========================================================
+    //                   TIME UP HANDLER
+    // ==========================================================
+    function handleTimeUp() {
+        isTimeUp = true;
+        gameMessage.textContent = "⏰ Time's up!";
 
-// PAUSE BUTTON CLICK
-if (pauseBtn && pausePopup) {
-    pauseBtn.addEventListener("click", () => {
-        if (!gameStarted) return;
-
-        isPaused = true;
-
-        // Freeze timer
-        clearInterval(timerInterval);
-
-        // Show popup & overlay
-        pausePopup.classList.remove("hidden");
-        pauseOverlay.classList.add("active");
-
-        // Disable buttons
-        [
-            startBtn, resetBtn, submitBtn, hintBtn,
-            nextLevelBtn, showAnswerBtn
-        ].forEach(btn => btn && (btn.disabled = true));
-
-        // Disable code editing
+        // Lock editing
         codeSnippetEl.contentEditable = "false";
         codeSnippetEl.style.pointerEvents = "none";
-    });
-}
 
-// RESUME BUTTON CLICK
-if (resumeBtn && pausePopup) {
-    resumeBtn.addEventListener("click", () => {
-        isPaused = false;
+        // Disable all controls
+        setControlsDisabled(true);
 
-        // Hide pause UI
-        pausePopup.classList.add("hidden");
-        pauseOverlay.classList.remove("active");
+        // Keep Reset enabled
+        if (resetBtn) resetBtn.disabled = false;
 
-        // Re-enable buttons (except submit when answerShown)
-        [
-            startBtn, resetBtn, hintBtn,
-            showAnswerBtn, pauseBtn
-        ].forEach(btn => btn && (btn.disabled = false));
+        // Blur game area
+        if (gameContainer) gameContainer.classList.add("time-up-blur");
 
-        if (!answerShown) submitBtn.disabled = false;
+        // Show Time Up popup
+        if (timeUpPopup) timeUpPopup.classList.remove("hidden");
+    }
 
-        // Re-enable code editing (if answer not shown)
-        if (!answerShown) {
-            codeSnippetEl.contentEditable = "true";
-            codeSnippetEl.style.pointerEvents = "auto";
-        }
+    // ==========================================================
+    //                        RESET GAME
+    // ==========================================================
+    function resetGame() {
+        // Clear timers and flags
+        clearInterval(timerInterval);
+        timer         = 60;
+        hintStep      = 0;
+        answerShown   = false;
+        isPaused      = false;
+        isTimeUp      = false;
+        levelCompleted = false;
 
-        // Resume timer
-        startTimer();
-    });
-}
+        // Remove blur / overlays
+        if (gameContainer) gameContainer.classList.remove("paused-blur", "time-up-blur");
+        if (pauseOverlay) pauseOverlay.classList.add("hidden");
+        if (timeUpPopup) timeUpPopup.classList.add("hidden");
+        if (doneBtn) doneBtn.classList.add("hidden");
+
+        // Reload the current level cleanly
+        loadLevel(currentLevel);
+    }
 
     // ==========================================================
     //                        CHECK ANSWER
     // ==========================================================
     function checkAnswer() {
+        if (isPaused || isTimeUp) {
+            gameMessage.textContent = isTimeUp
+                ? "⏰ Time's up — reset to try again."
+                : "⏸️ Game is paused — resume to continue.";
+            return;
+        }
+
+        // 🔒 Prevent answering after showing the answer
         if (answerShown) {
             gameMessage.textContent = "⚠️ Submit disabled after showing the answer.";
             return;
@@ -639,6 +648,7 @@ if (resumeBtn && pausePopup) {
             return;
         }
 
+        // Prevent multiple scoring on same level
         if (!levelCompleted) {
             totalScore += 50;
             localStorage.setItem(scoreKey, totalScore);
@@ -647,18 +657,21 @@ if (resumeBtn && pausePopup) {
         }
 
         scoreDisplay.textContent = `Score: ${totalScore}`;
-        gameMessage.textContent = "✅ Correct!";
+        gameMessage.textContent  = "✅ Correct!";
+
         clearInterval(timerInterval);
 
-        codeSnippetEl.contentEditable = "false";
+        codeSnippetEl.contentEditable   = "false";
         codeSnippetEl.style.pointerEvents = "none";
 
         levelAnim.textContent = "🎉 LEVEL COMPLETE!";
         levelAnim.classList.remove("hidden");
-        void levelAnim.offsetWidth;
+        void levelAnim.offsetWidth; // force reflow for animation
         levelAnim.classList.add("level-complete");
 
-        setTimeout(() => levelAnim.classList.add("hidden"), 1500);
+        setTimeout(() => {
+            levelAnim.classList.add("hidden");
+        }, 1500);
 
         nextLevelBtn.classList.remove("hidden");
     }
@@ -672,19 +685,28 @@ if (resumeBtn && pausePopup) {
             return;
         }
 
+        if (isPaused || isTimeUp) {
+            gameMessage.textContent = isTimeUp
+                ? "⏰ Time's up — hints disabled."
+                : "⏸️ Game is paused — resume to continue.";
+            return;
+        }
+
         if (answerShown) {
             gameMessage.textContent = "⚠️ Hints disabled after showing the answer.";
             return;
         }
 
         const level = levels[currentLevel - 1];
-        const hints = level.hints;
+        if (!level) return;
 
+        const hints = level.hints;
         if (hintStep >= hints.length) {
             gameMessage.textContent = "⚠️ No more hints!";
             return;
         }
 
+        // Deduct score for hint
         totalScore -= getHintCost();
         localStorage.setItem(scoreKey, totalScore);
         scoreDisplay.textContent = `Score: ${totalScore}`;
@@ -697,39 +719,95 @@ if (resumeBtn && pausePopup) {
     }
 
     // ==========================================================
-    //                 SHOW ANSWER — LOCK SYSTEM
+    //                        PAUSE / RESUME
     // ==========================================================
-    if (showAnswerBtn) {
-        showAnswerBtn.addEventListener("click", () => popup.classList.remove("hidden"));
+    function pauseGame() {
+        if (!gameStarted || isTimeUp) return;
+        if (isPaused) return;
+
+        isPaused = true;
+        if (gameContainer) gameContainer.classList.add("paused-blur");
+        if (pauseOverlay) pauseOverlay.classList.remove("hidden");
+
+        // Lock editing while paused
+        codeSnippetEl.style.pointerEvents = "none";
+
+        setControlsDisabled(true);
+        if (resetBtn) resetBtn.disabled = false; // still allow reset
     }
 
-    if (cancelBtn) {
+    function resumeGame() {
+        if (!isPaused || isTimeUp) return;
+        isPaused = false;
+
+        if (gameContainer) gameContainer.classList.remove("paused-blur");
+        if (pauseOverlay) pauseOverlay.classList.add("hidden");
+
+        // Re-enable editing only if answer not shown and level not complete
+        if (!answerShown && !levelCompleted) {
+            codeSnippetEl.style.pointerEvents = "auto";
+            codeSnippetEl.contentEditable = "true";
+        }
+
+        setControlsDisabled(false);
+        if (nextLevelBtn && levelCompleted) nextLevelBtn.disabled = false;
+    }
+
+    // ==========================================================
+    //                      BUTTON HANDLERS
+    // ==========================================================
+    if (startBtn)  startBtn.addEventListener("click", () => loadLevel(currentLevel));
+    if (resetBtn)  resetBtn.addEventListener("click", resetGame);
+    if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
+    if (hintBtn)   hintBtn.addEventListener("click", showHint);
+    if (pauseBtn)  pauseBtn.addEventListener("click", pauseGame);
+    if (resumeBtn) resumeBtn.addEventListener("click", resumeGame);
+
+    // ==========================================================
+    //               SHOW ANSWER — UX MODE + LOCK
+    // ==========================================================
+    if (showAnswerBtn && popup) {
+        showAnswerBtn.addEventListener("click", () => {
+            if (isTimeUp) {
+                gameMessage.textContent = "⏰ Time's up — reset to see the answer again.";
+                return;
+            }
+            popup.classList.remove("hidden");
+        });
+    }
+
+    if (cancelBtn && popup) {
         cancelBtn.addEventListener("click", () => popup.classList.add("hidden"));
     }
 
-    if (confirmBtn) {
+    if (confirmBtn && popup) {
         confirmBtn.addEventListener("click", () => {
             const levelData = levels[currentLevel - 1];
             if (!levelData) return;
 
+            // 🔒 Lock further game interactions
             answerShown = true;
 
-            [
-                startBtn, resetBtn, submitBtn, hintBtn,
-                nextLevelBtn, showAnswerBtn, pauseBtn
-            ].forEach(b => b && (b.disabled = true));
+            // Disable all interactive buttons except Reset & Done
+            setControlsDisabled(true);
+            if (resetBtn) resetBtn.disabled = false;
 
+            // Show correct answer
             codeSnippetEl.textContent = levelData.answer;
             codeSnippetEl.style.pointerEvents = "none";
             codeSnippetEl.contentEditable = "false";
 
+            // Reset score for this difficulty when they give up
             totalScore = 0;
             localStorage.setItem(scoreKey, totalScore);
             scoreDisplay.textContent = `Score: 0`;
 
+            // Close popup, then show Done button
             popup.classList.add("hidden");
 
-            setTimeout(() => doneBtn.classList.remove("hidden"), 120);
+            setTimeout(() => {
+                if (doneBtn) doneBtn.classList.remove("hidden");
+            }, 120);
         });
     }
 
@@ -739,21 +817,21 @@ if (resumeBtn && pausePopup) {
         });
     }
 
-    // ==========================================================
-    // BUTTON HANDLERS
-    // ==========================================================
-    if (startBtn) startBtn.addEventListener("click", () => loadLevel(currentLevel));
-    if (resetBtn) resetBtn.addEventListener("click", () => location.reload());
-    if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
-    if (hintBtn) hintBtn.addEventListener("click", showHint);
+    // ======================================================
+    //             TIME UP POPUP RESET HANDLER
+    // ======================================================
+    if (timeUpResetBtn) {
+        timeUpResetBtn.addEventListener("click", resetGame);
+    }
 });
 
 // ==========================================================
-// NEXT LEVEL
+//               NEXT LEVEL NAVIGATION
 // ==========================================================
 function goToNextLevel() {
     const next = Number(window.currentLevel) + 1;
 
+    // After Level 5 → Final Score page
     if (next > 5) {
         window.location.href = "../final_score.html";
         return;
@@ -768,7 +846,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==========================================================
-// PARTICLES + STARS
+//               PARTICLES + STARS
 // ==========================================================
 const pixelContainer = document.querySelector(".pixel-particles");
 
@@ -777,7 +855,7 @@ if (pixelContainer) {
         const p = document.createElement("div");
         p.classList.add("pixel");
         p.style.left = Math.random() * 100 + "vw";
-        p.style.top = Math.random() * 100 + "vh";
+        p.style.top  = Math.random() * 100 + "vh";
         p.style.animationDelay = Math.random() * 5 + "s";
         pixelContainer.appendChild(p);
         setTimeout(() => p.remove(), 7000);
@@ -796,7 +874,7 @@ if (starContainer) {
         const s = document.createElement("div");
         s.classList.add("shooting-star");
         s.style.left = Math.random() * 100 + "vw";
-        s.style.top = Math.random() * 50 + "vh";
+        s.style.top  = Math.random() * 50 + "vh";
         starContainer.appendChild(s);
         setTimeout(() => s.remove(), 1400);
     }
@@ -810,7 +888,7 @@ if (starContainer) {
         star.classList.add("star");
         if (Math.random() < 0.15) star.classList.add("plus");
         star.style.left = Math.random() * 100 + "vw";
-        star.style.top = Math.random() * 100 + "vh";
+        star.style.top  = Math.random() * 100 + "vh";
         star.style.animationDelay = Math.random() * 3 + "s";
         starContainer.appendChild(star);
     }
