@@ -47,10 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const pauseOverlay  = document.getElementById("pauseOverlay");
     const resumeBtn     = document.getElementById("resumeGameBtn");
 
-    // ===== TIME UP POPUP =====
-    const timeUpPopup     = document.getElementById("timeUpPopup");
-    const timeUpResetBtn  = document.getElementById("timeUpResetBtn");
-
     // Current page LEVEL (comes from each HTML: window.currentLevel = 1..5)
     let currentLevel = Number(window.currentLevel) || 1;
 
@@ -552,7 +548,6 @@ print(safe_divide(10, 0))`,
 
         if (gameContainer) gameContainer.classList.remove("paused-blur", "time-up-blur");
         if (pauseOverlay) pauseOverlay.classList.add("hidden");
-        if (timeUpPopup) timeUpPopup.classList.add("hidden");
         if (doneBtn) doneBtn.classList.add("hidden");
 
         setControlsDisabled(false);
@@ -593,9 +588,6 @@ print(safe_divide(10, 0))`,
 
         // Blur game area
         if (gameContainer) gameContainer.classList.add("time-up-blur");
-
-        // Show Time Up popup
-        if (timeUpPopup) timeUpPopup.classList.remove("hidden");
     }
 
     // ==========================================================
@@ -614,7 +606,6 @@ print(safe_divide(10, 0))`,
         // Remove blur / overlays
         if (gameContainer) gameContainer.classList.remove("paused-blur", "time-up-blur");
         if (pauseOverlay) pauseOverlay.classList.add("hidden");
-        if (timeUpPopup) timeUpPopup.classList.add("hidden");
         if (doneBtn) doneBtn.classList.add("hidden");
 
         // Reload the current level cleanly
