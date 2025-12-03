@@ -747,7 +747,21 @@ body {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    z-index: 99998 !important;
+    z-index: 3000 !important;
+}
+
+#showAnswerPopup {
+    z-index: 3000 !important;
+}
+
+#pausePopup {
+    z-index: 3001 !important;
+}
+
+#showAnswerPopup.hidden,
+#pausePopup.hidden,
+#timeUpPopup.hidden {
+    display: none !important;
 }
 
 /* ===== FIX: Done button always visible ===== */
@@ -755,18 +769,7 @@ body {
     position: fixed;
     bottom: 26px;
     right: 26px;
-    z-index: 99999 !important;
-}
-
-/* FIX Show Answer button visibility */
-#showAnswerBtn,
-.show-answer-btn {
-    position: relative !important;
-    display: inline-block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-
-    z-index: 5000 !important;
+    z-index: 9999 !important;
 }
 
 .pause-popup {
@@ -786,14 +789,45 @@ body {
     display: none;
 }
 
-.pause-box {
-    background: #1e1e1e;
-    padding: 30px 40px;
-    border-radius: 15px;
+/* Pause popup hidden state */
+#pausePopup.hidden {
+    display: none !important;
+}
+
+/* Style pause popup like show answer popup */
+#pausePopup.popup-box {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #00eaff;
+    box-shadow: 0 0 18px #00eaff;
+    padding: 24px 30px;
+    border-radius: 14px;
+    width: 320px;
     text-align: center;
-    color: white;
-    border: 2px solid cyan;
-    box-shadow: 0 0 20px cyan;
+}
+
+#pausePopup .popup-box {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #00eaff;
+    box-shadow: 0 0 18px #00eaff;
+    padding: 24px 30px;
+    border-radius: 14px;
+    width: 320px;
+    text-align: center;
+}
+
+#pausePopup #resumeGameBtn {
+    background: #00eaff;
+    color: #000;
+    border: none;
+    font-weight: bold;
+    margin-top: 12px;
+    padding: 10px 20px;
+}
+
+#pausePopup #resumeGameBtn:hover {
+    background: #00d4e0;
+    color: #000;
+    box-shadow: 0 0 20px #00eaff;
 }
 
 .pause-overlay {

@@ -55,6 +55,7 @@
     <section class="game-controls">
         <button id="startGameBtn">Start Game</button>
         <button id="resetGameBtn">Reset Game</button>
+        <button id="pauseGameBtn">⏸ Pause</button>
         <button id="showAnswerBtn" class="show-answer-btn">Show Answer</button>
     </section>
 
@@ -81,12 +82,29 @@
  <!-- DONE BUTTON (INSIDE POPUP) -->
 <button id="doneShowAnswer" class="done-btn hidden">Done</button>
 
-<div id="pauseOverlay" class="pause-overlay hidden"></div>
-
-<div id="pausePopup" class="pause-popup hidden">
-    <div class="pause-box">
+<div id="pausePopup" class="popup-overlay hidden">
+    <div class="popup-box">
         <h2>⏸ Game Paused</h2>
-        <button id="resumeGameBtn" class="menu-btn">▶ Resume</button>
+        <p>Resume to continue playing.</p>
+
+        <div class="popup-buttons">
+            <button id="resumeGameBtn" class="confirm-btn">▶ Resume</button>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================
+                     TIME UP POPUP
+========================================================== -->
+
+<div id="timeUpPopup" class="popup-overlay hidden">
+    <div class="popup-box">
+        <h2>⏰ Time's Up!</h2>
+        <p>You ran out of time. Try again from Level 1.</p>
+
+        <div class="popup-buttons">
+            <button id="timeUpResetBtn" class="confirm-btn">Try Again</button>
+        </div>
     </div>
 </div>
 

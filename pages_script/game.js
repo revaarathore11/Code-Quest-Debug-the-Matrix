@@ -44,8 +44,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const doneBtn       = document.getElementById("doneShowAnswer");
 
     // ===== PAUSE POPUP =====
-    const pauseOverlay  = document.getElementById("pauseOverlay");
+    const pausePopup    = document.getElementById("pausePopup");
     const resumeBtn     = document.getElementById("resumeGameBtn");
+
+    // ===== TIME UP POPUP =====
+    const timeUpPopup   = document.getElementById("timeUpPopup");
+    const timeUpResetBtn = document.getElementById("timeUpResetBtn");
 
     // Current page LEVEL (comes from each HTML: window.currentLevel = 1..5)
     let currentLevel = Number(window.currentLevel) || 1;
@@ -547,7 +551,7 @@ print(safe_divide(10, 0))`,
         nextLevelBtn.classList.add("hidden");
 
         if (gameContainer) gameContainer.classList.remove("paused-blur", "time-up-blur");
-        if (pauseOverlay) pauseOverlay.classList.add("hidden");
+        if (pausePopup) pausePopup.classList.add("hidden");
         if (doneBtn) doneBtn.classList.add("hidden");
 
         setControlsDisabled(false);
@@ -574,7 +578,13 @@ print(safe_divide(10, 0))`,
     // ==========================================================
     function handleTimeUp() {
         isTimeUp = true;
-        gameMessage.textContent = "⏰ Time's up!";
+
+        // Hide other popups if open
+        if (pausePopup) pausePopup.classList.add("hidden");
+        if (popup) popup.classList.add("hidden");
+
+        // Show time-up popup
+        if (timeUpPopup) timeUpPopup.classList.remove("hidden");
 
         // Lock editing
         codeSnippetEl.contentEditable = "false";
@@ -605,7 +615,7 @@ print(safe_divide(10, 0))`,
 
         // Remove blur / overlays
         if (gameContainer) gameContainer.classList.remove("paused-blur", "time-up-blur");
-        if (pauseOverlay) pauseOverlay.classList.add("hidden");
+        if (pausePopup) pausePopup.classList.add("hidden");
         if (doneBtn) doneBtn.classList.add("hidden");
 
         // Reload the current level cleanly
@@ -718,7 +728,9 @@ print(safe_divide(10, 0))`,
 
         isPaused = true;
         if (gameContainer) gameContainer.classList.add("paused-blur");
-        if (pauseOverlay) pauseOverlay.classList.remove("hidden");
+        if (pausePopup) {
+            pausePopup.classList.remove("hidden");
+        }
 
         // Lock editing while paused
         codeSnippetEl.style.pointerEvents = "none";
@@ -732,7 +744,9 @@ print(safe_divide(10, 0))`,
         isPaused = false;
 
         if (gameContainer) gameContainer.classList.remove("paused-blur");
-        if (pauseOverlay) pauseOverlay.classList.add("hidden");
+        if (pausePopup) {
+            pausePopup.classList.add("hidden");
+        }
 
         // Re-enable editing only if answer not shown and level not complete
         if (!answerShown && !levelCompleted) {
@@ -752,7 +766,16 @@ print(safe_divide(10, 0))`,
     if (submitBtn) submitBtn.addEventListener("click", checkAnswer);
     if (hintBtn)   hintBtn.addEventListener("click", showHint);
     if (pauseBtn)  pauseBtn.addEventListener("click", pauseGame);
-    if (resumeBtn) resumeBtn.addEventListener("click", resumeGame);
+    if (resumeBtn) {
+        resumeBtn.addEventListener("click", resumeGame);
+    }
+
+    // ===== TIME UP RESET BUTTON =====
+    if (timeUpResetBtn) {
+        timeUpResetBtn.addEventListener("click", () => {
+            window.location.href = "level1.html";
+        });
+    }
 
     // ==========================================================
     //               SHOW ANSWER — UX MODE + LOCK
