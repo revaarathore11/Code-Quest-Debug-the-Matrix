@@ -35,6 +35,7 @@ function getStars(score) {
     if (score >= 200) return "⭐⭐⭐⭐";
     if (score >= 150) return "⭐⭐⭐";
     if (score >= 100) return "⭐⭐";
+    
     return "⭐";
 }
 

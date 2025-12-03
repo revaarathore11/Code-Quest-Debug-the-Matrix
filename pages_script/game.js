@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitBtn     = document.getElementById("submitAnswerBtn");
     const hintBtn       = document.getElementById("hintBtn");
     const pauseBtn      = document.getElementById("pauseGameBtn");
+    const homeBtn       = document.getElementById("homeBtn");
 
     const levelDisplay  = document.getElementById("levelDisplay");
     const scoreDisplay  = document.getElementById("scoreDisplay");
@@ -927,6 +928,23 @@ print(safe_divide(10, 0))`,
     if (pauseBtn)  pauseBtn.addEventListener("click", pauseGame);
     if (resumeBtn) {
         resumeBtn.addEventListener("click", resumeGame);
+    }
+
+    // ===== HOME BUTTON =====
+    if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+            // Save current level and game state
+            const gameProgress = {
+                level: currentLevel,
+                score: totalScore,
+                difficulty: difficulty,
+                timestamp: Date.now()
+            };
+            localStorage.setItem("codeQuestSave", JSON.stringify(gameProgress));
+            
+            // Navigate to home page
+            window.location.href = "../home_page.html";
+        });
     }
 
     // ===== TIME UP RESET BUTTON =====
