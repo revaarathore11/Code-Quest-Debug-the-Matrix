@@ -1,7 +1,3 @@
-// ==========================================================
-//                GAME.JS — FINAL MULTI-PAGE VERSION
-//      Difficulty-aware: easy / medium / hard
-// ==========================================================
 
 console.log("game.js loaded");
 
@@ -17,7 +13,7 @@ function saveGameProgress(level, score, difficulty) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // ===== DOM ELEMENTS =====
+    // ===== DOM ELEM        ENTS =====
     const startBtn      = document.getElementById("startGameBtn");
     const resetBtn      = document.getElementById("resetGameBtn");
     const submitBtn     = document.getElementById("submitAnswerBtn");
@@ -711,16 +707,16 @@ print(safe_divide(10, 0))`,
         scoreDisplay.textContent = `Score: ${totalScore}`;
         gameMessage.textContent  = `🚀 Level ${level.number} Started!`;
 
+        codeSnippetEl.textContent      = level.snippet;
+        codeSnippetEl.contentEditable  = "true";
+        codeSnippetEl.style.pointerEvents = "auto";
+
         // Display question
         const questionDisplay = document.getElementById("questionDisplay");
         if (questionDisplay && level.question) {
             questionDisplay.textContent = level.question;
             questionDisplay.classList.remove("hidden");
         }
-
-        codeSnippetEl.textContent      = level.snippet;
-        codeSnippetEl.contentEditable  = "true";
-        codeSnippetEl.style.pointerEvents = "auto";
 
         hintTextEl.classList.add("hidden");
         nextLevelBtn.classList.add("hidden");

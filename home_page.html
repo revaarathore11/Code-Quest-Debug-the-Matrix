@@ -104,6 +104,7 @@
                         <td><label for="settingsSelect">Settings</label></td>
                         <td>
                             <select id="settingsSelect" class="menu-select" aria-label="Settings menu">
+                                <option value="none">-- Select --</option>
                                 <option value="volume">Volume</option>
                                 <option value="controls">Controls</option>
                                 <option value="about">About Game</option>
@@ -116,6 +117,84 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- VOLUME POPUP -->
+    <div id="volumePopup" class="popup-overlay hidden">
+        <div class="popup-box">
+            <button id="closeVolumeBtn" class="close-btn" aria-label="Close volume popup">✕</button>
+            <h2>🔊 Volume Settings</h2>
+            <div class="volume-content">
+                <div class="volume-control">
+                    <label for="masterVolume">Master Volume:</label>
+                    <div class="volume-slider-container">
+                        <input type="range" id="masterVolume" class="volume-slider" min="0" max="100" value="70" aria-label="Master volume control">
+                        <span id="volumePercentage" class="volume-percentage">70%</span>
+                    </div>
+                </div>
+
+                <div class="volume-control">
+                    <label for="musicVolume">Music Volume:</label>
+                    <div class="volume-slider-container">
+                        <input type="range" id="musicVolume" class="volume-slider" min="0" max="100" value="60" aria-label="Music volume control">
+                        <span id="musicPercentage" class="volume-percentage">60%</span>
+                    </div>
+                </div>
+
+                <div class="volume-control">
+                    <label for="sfxVolume">Sound Effects:</label>
+                    <div class="volume-slider-container">
+                        <input type="range" id="sfxVolume" class="volume-slider" min="0" max="100" value="80" aria-label="Sound effects volume control">
+                        <span id="sfxPercentage" class="volume-percentage">80%</span>
+                    </div>
+                </div>
+
+                <div class="volume-buttons">
+                    <button id="muteAllBtn" class="volume-btn">🔇 Mute All</button>
+                    <button id="unmuteAllBtn" class="volume-btn hidden">🔊 Unmute All</button>
+                </div>
+
+                <p class="volume-note">💡 Volume settings are saved automatically</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTROLS POPUP -->
+    <div id="controlsPopup" class="popup-overlay hidden">
+        <div class="popup-box">
+            <button id="closeControlsBtn" class="close-btn" aria-label="Close controls popup">✕</button>
+            <h2>🎮 Game Controls</h2>
+            <div class="controls-content">
+                <p><strong>Keyboard Shortcuts:</strong></p>
+                <table class="controls-table">
+                    <tr>
+                        <td><kbd>Enter</kbd></td>
+                        <td>Submit your answer</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>H</kbd></td>
+                        <td>Get a hint</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>A</kbd></td>
+                        <td>Show answer</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>P</kbd></td>
+                        <td>Pause / Resume</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Space</kbd></td>
+                        <td>Start game</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>N</kbd></td>
+                        <td>Next level</td>
+                    </tr>
+                </table>
+                <p style="margin-top: 20px; font-size: 12px; color: #afffe3;">💡 Tip: Use keyboard shortcuts to speed up your gameplay!</p>
+            </div>
+        </div>
     </div>
 
     <!-- ABOUT POPUP -->

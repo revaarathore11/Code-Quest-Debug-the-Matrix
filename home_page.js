@@ -61,10 +61,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ----------------------------------------------------
-       SETTINGS MENU — ABOUT POPUP
+       SETTINGS MENU — ABOUT, CONTROLS & VOLUME
     ----------------------------------------------------- */
     const aboutPopup = document.getElementById("aboutPopup");
     const closeAboutBtn = document.getElementById("closeAboutBtn");
+    const controlsPopup = document.getElementById("controlsPopup");
+    const closeControlsBtn = document.getElementById("closeControlsBtn");
+    const volumePopup = document.getElementById("volumePopup");
+    const closeVolumeBtn = document.getElementById("closeVolumeBtn");
 
     if (settingsSelect) {
         settingsSelect.addEventListener("change", (e) => {
@@ -75,10 +79,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (aboutPopup) {
                     aboutPopup.classList.remove("hidden");
                 }
+            } else if (selectedValue === "controls") {
+                // Show controls popup
+                if (controlsPopup) {
+                    controlsPopup.classList.remove("hidden");
+                }
+            } else if (selectedValue === "volume") {
+                // Show volume popup
+                if (volumePopup) {
+                    volumePopup.classList.remove("hidden");
+                }
             }
 
             // Reset select to default after action
-            settingsSelect.value = "volume";
+            settingsSelect.value = "none";
         });
     }
 
@@ -97,6 +111,140 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    // Close controls popup when close button is clicked
+    if (closeControlsBtn && controlsPopup) {
+        closeControlsBtn.addEventListener("click", () => {
+            controlsPopup.classList.add("hidden");
+        });
+    }
+
+    // Close controls popup when clicking outside (on the overlay)
+    if (controlsPopup) {
+        controlsPopup.addEventListener("click", (e) => {
+            if (e.target === controlsPopup) {
+                controlsPopup.classList.add("hidden");
+            }
+        });
+    }
+
+    // Close volume popup when close button is clicked
+    if (closeVolumeBtn && volumePopup) {
+        closeVolumeBtn.addEventListener("click", () => {
+            volumePopup.classList.add("hidden");
+        });
+    }
+
+    // Close volume popup when clicking outside (on the overlay)
+    if (volumePopup) {
+        volumePopup.addEventListener("click", (e) => {
+            if (e.target === volumePopup) {
+                volumePopup.classList.add("hidden");
+            }
+        });
+    }
+
+    /* ============ VOLUME CONTROLS ============ */
+    const masterVolumeSlider = document.getElementById("masterVolume");
+    const musicVolumeSlider = document.getElementById("musicVolume");
+    const sfxVolumeSlider = document.getElementById("sfxVolume");
+    const volumePercentageDisplay = document.getElementById("volumePercentage");
+    const musicPercentageDisplay = document.getElementById("musicPercentage");
+    const sfxPercentageDisplay = document.getElementById("sfxPercentage");
+    const muteAllBtn = document.getElementById("muteAllBtn");
+    const unmuteAllBtn = document.getElementById("unmuteAllBtn");
+
+    // Load saved volume settings from localStorage
+    function loadVolumeSettings() {
+        const savedMaster = Number(localStorage.getItem("codeQuestMasterVolume")) || 70;
+        const savedMusic = Number(localStorage.getItem("codeQuestMusicVolume")) || 60;
+        const savedSfx = Number(localStorage.getItem("codeQuestSfxVolume")) || 80;
+
+        if (masterVolumeSlider) {
+            masterVolumeSlider.value = savedMaster;
+            volumePercentageDisplay.textContent = savedMaster + "%";
+        }
+
+        if (musicVolumeSlider) {
+            musicVolumeSlider.value = savedMusic;
+            musicPercentageDisplay.textContent = savedMusic + "%";
+        }
+
+        if (sfxVolumeSlider) {
+            sfxVolumeSlider.value = savedSfx;
+            sfxPercentageDisplay.textContent = savedSfx + "%";
+        }
+    }
+
+    // Save volume settings to localStorage
+    function saveVolumeSettings() {
+        localStorage.setItem("codeQuestMasterVolume", masterVolumeSlider.value);
+        localStorage.setItem("codeQuestMusicVolume", musicVolumeSlider.value);
+        localStorage.setItem("codeQuestSfxVolume", sfxVolumeSlider.value);
+    }
+
+    // Master volume slider change event
+    if (masterVolumeSlider) {
+        masterVolumeSlider.addEventListener("input", (e) => {
+            volumePercentageDisplay.textContent = e.target.value + "%";
+            saveVolumeSettings();
+        });
+    }
+
+    // Music volume slider change event
+    if (musicVolumeSlider) {
+        musicVolumeSlider.addEventListener("input", (e) => {
+            musicPercentageDisplay.textContent = e.target.value + "%";
+            saveVolumeSettings();
+        });
+    }
+
+    // SFX volume slider change event
+    if (sfxVolumeSlider) {
+        sfxVolumeSlider.addEventListener("input", (e) => {
+            sfxPercentageDisplay.textContent = e.target.value + "%";
+            saveVolumeSettings();
+        });
+    }
+
+    // Mute all button
+    if (muteAllBtn) {
+        muteAllBtn.addEventListener("click", () => {
+            if (masterVolumeSlider) masterVolumeSlider.value = 0;
+            if (musicVolumeSlider) musicVolumeSlider.value = 0;
+            if (sfxVolumeSlider) sfxVolumeSlider.value = 0;
+
+            volumePercentageDisplay.textContent = "0%";
+            musicPercentageDisplay.textContent = "0%";
+            sfxPercentageDisplay.textContent = "0%";
+
+            muteAllBtn.classList.add("hidden");
+            unmuteAllBtn.classList.remove("hidden");
+
+            saveVolumeSettings();
+        });
+    }
+
+    // Unmute all button
+    if (unmuteAllBtn) {
+        unmuteAllBtn.addEventListener("click", () => {
+            if (masterVolumeSlider) masterVolumeSlider.value = 70;
+            if (musicVolumeSlider) musicVolumeSlider.value = 60;
+            if (sfxVolumeSlider) sfxVolumeSlider.value = 80;
+
+            volumePercentageDisplay.textContent = "70%";
+            musicPercentageDisplay.textContent = "60%";
+            sfxPercentageDisplay.textContent = "80%";
+
+            muteAllBtn.classList.remove("hidden");
+            unmuteAllBtn.classList.add("hidden");
+
+            saveVolumeSettings();
+        });
+    }
+
+    // Load volume settings on page load
+    loadVolumeSettings();
 
     /* ----------------------------------------------------
        BACKGROUND STARFIELD
