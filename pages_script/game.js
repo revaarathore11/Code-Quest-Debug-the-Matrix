@@ -687,9 +687,9 @@ print(safe_divide(10, 0))`,
         });
     }
 
-    // ==========================================================
+    
     //                        LOAD LEVEL
-    // ==========================================================
+   
     function loadLevel(levelNum) {
         const level = levels[levelNum - 1];
         if (!level) return;
@@ -745,9 +745,9 @@ print(safe_divide(10, 0))`,
         }, 1000);
     }
 
-    // ==========================================================
+   
     //                   TIME UP HANDLER
-    // ==========================================================
+   
     function handleTimeUp() {
         isTimeUp = true;
 
@@ -794,9 +794,8 @@ print(safe_divide(10, 0))`,
         loadLevel(currentLevel);
     }
 
-    // ==========================================================
-    //                        CHECK ANSWER
-    // ==========================================================
+   
+    //                        CHECK ANSWER 
     function checkAnswer() {
         if (isPaused || isTimeUp) {
             gameMessage.textContent = isTimeUp
@@ -855,9 +854,9 @@ print(safe_divide(10, 0))`,
         nextLevelBtn.classList.remove("hidden");
     }
 
-    // ==========================================================
+    
     //                           HINTS
-    // ==========================================================
+    
     function showHint() {
         if (!gameStarted) {
             gameMessage.textContent = "❗ Start the game first!";
