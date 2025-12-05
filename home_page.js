@@ -372,17 +372,29 @@ setInterval(() => {
     dust.classList.add("dust");
 
     // Detect direction based on scaleX
-    const goingLeft = getComputedStyle(knightWrapper).transform.includes("-1");
+    const style = window.getComputedStyle(knightWrapper);
+    const matrix = new DOMMatrix(style.transform);
+    const goingLeft = matrix.a < 0;
 
     const xOffset = goingLeft ? 20 : 42;
+
+    // Randomize dust properties
+    const driftX = (Math.random() * 20 + 10) * (goingLeft ? 1 : -1); // Drift opposite to movement
+    const driftY = -(Math.random() * 15 + 5); // Upwards
+    const size = Math.random() * 4 + 2; // 2px to 6px
 
     dust.style.left = rect.left + xOffset + "px";
     dust.style.top = rect.bottom - 8 + "px";
 
+    dust.style.width = `${size}px`;
+    dust.style.height = `${size}px`;
+    dust.style.setProperty('--drift-x', `${driftX}px`);
+    dust.style.setProperty('--drift-y', `${driftY}px`);
+
     dustContainer.appendChild(dust);
 
-    setTimeout(() => dust.remove(), 460);
-}, 140);
+    setTimeout(() => dust.remove(), 600);
+}, 100); // Slightly faster dust generation
 
 /* Start default state */
 playWalking();

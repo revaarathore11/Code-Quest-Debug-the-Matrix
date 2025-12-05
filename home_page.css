@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -19,19 +20,20 @@ body {
     justify-content: center;
 
     background: radial-gradient(circle at center,
-        #0e1629 0%,
-        #0a1120 40%,
-        #050a14 70%,
-        #000000 100%
-    );
+            #0e1629 0%,
+            #0a1120 40%,
+            #050a14 70%,
+            #000000 100%);
     background-attachment: fixed;
 }
 
 /*  Stars Container  */
 .stars {
     position: fixed;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     z-index: 0;
 }
@@ -52,21 +54,28 @@ body {
     width: 8px;
     height: 8px;
     background: white;
-    clip-path: polygon(
-        40% 0%, 60% 0%,
-        60% 40%, 100% 40%,
-        100% 60%, 60% 60%,
-        60% 100%, 40% 100%,
-        40% 60%, 0% 60%,
-        0% 40%, 40% 40%
-    );
+    clip-path: polygon(40% 0%, 60% 0%,
+            60% 40%, 100% 40%,
+            100% 60%, 60% 60%,
+            60% 100%, 40% 100%,
+            40% 60%, 0% 60%,
+            0% 40%, 40% 40%);
     opacity: 0.9;
     animation: twinkle 1.4s infinite ease-in-out;
 }
 
 @keyframes twinkle {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.3; transform: scale(0.5); }
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.3;
+        transform: scale(0.5);
+    }
 }
 
 /* TITLE & TEXT */
@@ -74,7 +83,8 @@ body {
 .game-title {
     font-size: 25px;
     margin-bottom: 10px;
-    color: #33f6ff;            /* Minecraft diamond color */
+    color: #33f6ff;
+    /* Minecraft diamond color */
     text-shadow: 4px 4px #0a4750, 0 0 15px #33f6ff;
     z-index: 5;
     position: relative;
@@ -90,6 +100,7 @@ body {
     z-index: 5;
     text-align: center;
 }
+
 /* Optional typewriter (if JS uses it) */
 .typewriter {
     overflow: hidden;
@@ -100,12 +111,19 @@ body {
 }
 
 @keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
 }
 
 @keyframes blink {
-    50% { border-color: transparent; }
+    50% {
+        border-color: transparent;
+    }
 }
 
 /* Home Wrapper - Centers all content */
@@ -123,9 +141,11 @@ body {
 /* Dashboard */
 
 .outer-box {
-    width: 460px;
+    width: 100%;
+    max-width: 460px;
     background: rgba(20, 20, 20, 0.92);
-    border: 6px solid #00c244;   /* Minecraft emerald border */
+    border: 6px solid #00c244;
+    /* Minecraft emerald border */
     padding: 20px;
     box-shadow: 0 0 20px #00c244, inset 0 0 20px #00c244;
     animation: floatBox 3s ease-in-out infinite;
@@ -134,9 +154,17 @@ body {
 }
 
 @keyframes floatBox {
-    0%   { transform: translateY(0px); }
-    50%  { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
 }
 
 .menu-box {
@@ -163,7 +191,7 @@ body {
     padding: 14px;
     font-size: 14px;
     cursor: pointer;
-    background: #00c244;         
+    background: #00c244;
     color: #002910;
     border: 4px solid #002910;
     box-shadow: 4px 4px #001a0b;
@@ -173,9 +201,17 @@ body {
 }
 
 @keyframes pulse {
-    0% { box-shadow: 0 0 6px #00c244; }
-    50% { box-shadow: 0 0 20px #00c244; }
-    100% { box-shadow: 0 0 6px #00c244; }
+    0% {
+        box-shadow: 0 0 6px #00c244;
+    }
+
+    50% {
+        box-shadow: 0 0 20px #00c244;
+    }
+
+    100% {
+        box-shadow: 0 0 6px #00c244;
+    }
 }
 
 .menu-btn:hover {
@@ -214,6 +250,16 @@ body {
     border-color: #ffffff;
 }
 
+/* Accessibility: Focus styles */
+.menu-btn:focus-visible,
+.menu-select:focus-visible,
+.volume-slider:focus-visible,
+.close-btn:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+    box-shadow: 0 0 15px #33f6ff;
+}
+
 /*
    FOOTER
     */
@@ -230,13 +276,23 @@ footer:hover {
 }
 
 @keyframes walkAcross {
-    0% { left: -60px; }
-    100% { left: 110%; }
+    0% {
+        left: -60px;
+    }
+
+    100% {
+        left: 110%;
+    }
 }
 
 @keyframes spriteWalk {
-    from { background-position: 0 0; }
-    to   { background-position: -192px 0; }
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -192px 0;
+    }
 }
 
 /* 
@@ -245,8 +301,10 @@ footer:hover {
 
 #screen-transition {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: black;
     z-index: 5000;
     opacity: 0;
@@ -265,13 +323,16 @@ footer:hover {
         width: 90%;
         padding: 15px;
     }
+
     .menu-box {
         padding: 12px;
     }
+
     .game-title {
         font-size: 20px;
     }
 }
+
 /* Knight Pixel Character */
 /* Dust container FIXED (only one copy) */
 #dust-container {
@@ -285,30 +346,39 @@ footer:hover {
 }
 
 /* Dust particle */
+/* Dust particle */
 .dust {
     position: absolute;
-    width: 6px;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+    border-radius: 0;
+    /* Square pixels */
     opacity: 1;
     image-rendering: pixelated;
-    transform: translateY(0px) scale(1);
+    pointer-events: none;
 
-    animation: dustFade 0.45s ease-out forwards;
+    /* Variables for randomization */
+    --drift-x: -10px;
+    --drift-y: -10px;
+
+    animation: dustFade 0.6s ease-out forwards;
 }
 
 /* Dust fade animation */
 @keyframes dustFade {
     0% {
         opacity: 1;
-        transform: translateY(-4px) scale(1);
+        transform: translate(0, 0) scale(1);
     }
+
     100% {
         opacity: 0;
-        transform: translateY(-16px) scale(0.3);
+        transform: translate(var(--drift-x), var(--drift-y)) scale(0);
     }
 }
+
 /* Knight Wrapper = movement + scaling */
 /* Knight container handles movement + direction */
 .knight-wrapper {
@@ -320,8 +390,19 @@ footer:hover {
     z-index: 20;
 
     transform-origin: bottom left;
-    animation: knightWalkAcross 14s linear infinite;
-    --scale: 2.1; /* You can change size globally here */
+    animation: knightWalkAcross 14s linear infinite, knightBob 0.4s infinite alternate ease-in-out;
+    --scale: 2.1;
+    /* You can change size globally here */
+}
+
+@keyframes knightBob {
+    from {
+        margin-bottom: 0px;
+    }
+
+    to {
+        margin-bottom: 4px;
+    }
 }
 
 /* Knight sprite sheet frames */
@@ -330,7 +411,8 @@ footer:hover {
     height: 64px;
 
     background: url("./assets/sprites/blue_knight.png") no-repeat;
-    background-size: 256px 64px; /* 4 walking frames */
+    background-size: 256px 64px;
+    /* 4 walking frames */
     image-rendering: pixelated;
 
     animation: knightWalkFrames 0.8s steps(4) infinite;
@@ -338,24 +420,54 @@ footer:hover {
 
 /* Walking frames */
 @keyframes knightWalkFrames {
-    from { background-position: 0 0; }
-    to   { background-position: -256px 0; }
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -256px 0;
+    }
 }
 
 /* WALK ACROSS + AUTOMATIC FLIP */
 @keyframes knightWalkAcross {
-    0%   { left: -80px; transform: scale(var(--scale)) scaleX(1); }
-    47%  { left: calc(100% - 160px); transform: scale(var(--scale)) scaleX(1); }
-    50%  { transform: scale(var(--scale)) scaleX(-1); }
-    97%  { left: -80px; transform: scale(var(--scale)) scaleX(-1); }
-    100% { transform: scale(var(--scale)) scaleX(1); }
+    0% {
+        left: -80px;
+        transform: scale(var(--scale)) scaleX(1);
+    }
+
+    47% {
+        left: calc(100% - 160px);
+        transform: scale(var(--scale)) scaleX(1);
+    }
+
+    50% {
+        transform: scale(var(--scale)) scaleX(-1);
+    }
+
+    97% {
+        left: -80px;
+        transform: scale(var(--scale)) scaleX(-1);
+    }
+
+    100% {
+        transform: scale(var(--scale)) scaleX(1);
+    }
 }
 
 /* Sword swing (2 frames only) */
 @keyframes knightSwordSwing {
-    from { background-position: 0 -64px; }
-    to   { background-position: -128px -64px; } /* 2 sword frames */
+    from {
+        background-position: 0 -64px;
+    }
+
+    to {
+        background-position: -128px -64px;
+    }
+
+    /* 2 sword frames */
 }
+
 /* For better readability of the written content */
 .storyline {
     max-width: 700px;
@@ -365,13 +477,16 @@ footer:hover {
     letter-spacing: 0.4px;
     text-shadow: 1px 1px #003f2c;
 }
+
 .how-to-play-box ul li {
     margin-bottom: 10px;
     line-height: 1;
 }
+
 .how-to-play-box h2 {
     margin-bottom: 10px;
 }
+
 .game-title {
     margin-bottom: 18px;
 }
@@ -379,30 +494,33 @@ footer:hover {
 .subtitle {
     margin-bottom: 20px;
 }
+
 .shooting-star {
     position: absolute;
     width: 3px;
     height: 80px;
-    background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
     border-radius: 2px;
     transform-origin: left top;
     transform: rotate(-35deg);
     opacity: 0.95;
-    filter: drop-shadow(0 0 6px rgba(255,255,255,0.7));
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.7));
     z-index: 2;
     animation: shooting 1.2s linear forwards;
 }
 
 @keyframes shooting {
     from {
-        transform: translate(0,0) rotate(-35deg) scaleY(1);
+        transform: translate(0, 0) rotate(-35deg) scaleY(1);
         opacity: 1;
     }
+
     to {
-        transform: translate(240px,150px) rotate(-35deg) scaleY(0.2);
+        transform: translate(240px, 150px) rotate(-35deg) scaleY(0.2);
         opacity: 0;
     }
 }
+
 /* Multiline Typewriter Cursor */
 .type-cursor {
     display: inline-block;
@@ -414,15 +532,25 @@ footer:hover {
 }
 
 @keyframes cursorBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
 }
+
 .hidden {
     display: none !important;
 }
+
 #story-text {
     white-space: pre-line;
 }
+
 .type-cursor {
     position: relative;
     top: -2px;
@@ -455,7 +583,7 @@ footer:hover {
     max-height: 70vh;
     overflow-y: auto;
     box-shadow: 0 0 25px rgba(0, 234, 255, 0.4),
-                inset 0 0 15px rgba(0, 234, 255, 0.1);
+        inset 0 0 15px rgba(0, 234, 255, 0.1);
     position: relative;
 }
 
@@ -564,10 +692,10 @@ footer:hover {
     flex: 1;
     height: 6px;
     border-radius: 3px;
-    background: linear-gradient(to right, 
-        #00eaff 0%, 
-        #00ff88 50%, 
-        #00eaff 100%);
+    background: linear-gradient(to right,
+            #00eaff 0%,
+            #00ff88 50%,
+            #00eaff 100%);
     border: 2px solid rgba(0, 234, 255, 0.4);
     outline: none;
     -webkit-appearance: none;
