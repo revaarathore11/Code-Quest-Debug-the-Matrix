@@ -8,25 +8,24 @@
 
     <!-- Correct CSS file -->
     <link rel="stylesheet" href="home_page.css">
-
 </head>
 
 <body>
 
-
+    <!-- ⭐ Background Stars -->
     <div class="stars" id="stars"></div>
 
-
+    <!-- Screen Transition -->
     <div id="screen-transition"></div>
-    ̱
 
-    <div class="pixel-character"></div>
-    <div id="dust-container"></div>
+    <!-- Pixel Effects -->
     <div class="knight-wrapper">
-        <div class="knight-sprite"></div>
-    </div>
+    <div class="knight-sprite"></div>
+</div>
 
-    <div id="dust-container"></div>
+<div id="dust-container"></div>
+
+    <!-- HOME WRAPPER -->
     <div class="home-wrapper">
 
         <!-- Game Title -->
@@ -40,7 +39,6 @@
             Squash the bugs before they corrupt the world.
             Debug wisely… the stability of the digital realm depends on you!
         </p>
-
         <span id="cursor" class="type-cursor">|</span>
 
         <!-- OUTER BOX -->
@@ -51,11 +49,13 @@
 
                 <table class="menu-table" aria-label="Main game menu">
 
+                    <!-- High Score -->
                     <tr>
                         <td><strong>High Score:</strong></td>
                         <td><span id="highScore">0</span></td>
                     </tr>
 
+                    <!-- START -->
                     <tr>
                         <td colspan="2">
                             <button id="startBtn" class="menu-btn" aria-label="Start the game">
@@ -63,6 +63,8 @@
                             </button>
                         </td>
                     </tr>
+
+                    <!-- CONTINUE -->
                     <tr>
                         <td colspan="2">
                             <button id="continueBtn" class="menu-btn hidden" aria-label="Continue saved game">
@@ -70,6 +72,8 @@
                             </button>
                         </td>
                     </tr>
+
+                    <!-- DIFFICULTY -->
                     <tr>
                         <td><label for="difficultySelect">Difficulty</label></td>
                         <td>
@@ -81,6 +85,7 @@
                         </td>
                     </tr>
 
+                    <!-- LEVEL SELECT -->
                     <tr>
                         <td><label for="levelSelect">Levels</label></td>
                         <td>
@@ -94,10 +99,12 @@
                         </td>
                     </tr>
 
+                    <!-- SETTINGS -->
                     <tr>
                         <td><label for="settingsSelect">Settings</label></td>
                         <td>
                             <select id="settingsSelect" class="menu-select" aria-label="Settings menu">
+                                <option value="none">-- Select --</option>
                                 <option value="volume">Volume</option>
                                 <option value="controls">Controls</option>
                                 <option value="about">About Game</option>
@@ -111,15 +118,138 @@
         </div>
 
     </div>
-    <!-- 🕹 How to Play Box -->
+
+    <!-- VOLUME POPUP -->
+    <div id="volumePopup" class="popup-overlay hidden">
+        <div class="popup-box">
+            <button id="closeVolumeBtn" class="close-btn" aria-label="Close volume popup">✕</button>
+            <h2>🔊 Volume Settings</h2>
+            <div class="volume-content">
+                <div class="volume-control">
+                    <label for="masterVolume">Master Volume:</label>
+                    <div class="volume-slider-container">
+                        <input type="range" id="masterVolume" class="volume-slider" min="0" max="100" value="70" aria-label="Master volume control">
+                        <span id="volumePercentage" class="volume-percentage">70%</span>
+                    </div>
+                </div>
+
+                <div class="volume-control">
+                    <label for="musicVolume">Music Volume:</label>
+                    <div class="volume-slider-container">
+                        <input type="range" id="musicVolume" class="volume-slider" min="0" max="100" value="60" aria-label="Music volume control">
+                        <span id="musicPercentage" class="volume-percentage">60%</span>
+                    </div>
+                </div>
+
+                <div class="volume-control">
+                    <label for="sfxVolume">Sound Effects:</label>
+                    <div class="volume-slider-container">
+                        <input type="range" id="sfxVolume" class="volume-slider" min="0" max="100" value="80" aria-label="Sound effects volume control">
+                        <span id="sfxPercentage" class="volume-percentage">80%</span>
+                    </div>
+                </div>
+
+                <div class="volume-buttons">
+                    <button id="muteAllBtn" class="volume-btn">🔇 Mute All</button>
+                    <button id="unmuteAllBtn" class="volume-btn hidden">🔊 Unmute All</button>
+                </div>
+
+                <p class="volume-note">💡 Volume settings are saved automatically</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTROLS POPUP -->
+    <div id="controlsPopup" class="popup-overlay hidden">
+        <div class="popup-box">
+            <button id="closeControlsBtn" class="close-btn" aria-label="Close controls popup">✕</button>
+            <h2>🎮 Game Controls</h2>
+            <div class="controls-content">
+                <p><strong>Keyboard Shortcuts:</strong></p>
+                <table class="controls-table">
+                    <tr>
+                        <td><kbd>Enter</kbd></td>
+                        <td>Submit your answer</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>H</kbd></td>
+                        <td>Get a hint</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>A</kbd></td>
+                        <td>Show answer</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>P</kbd></td>
+                        <td>Pause / Resume</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Space</kbd></td>
+                        <td>Start game</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>N</kbd></td>
+                        <td>Next level</td>
+                    </tr>
+                </table>
+                <p style="margin-top: 20px; font-size: 12px; color: #afffe3;">💡 Tip: Use keyboard shortcuts to speed up your gameplay!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABOUT POPUP -->
+    <div id="aboutPopup" class="popup-overlay hidden">
+        <div class="popup-box">
+            <button id="closeAboutBtn" class="close-btn" aria-label="Close about popup">✕</button>
+            <h2>ℹ️ About Code Quest</h2>
+            <div class="about-content">
+                <p><strong>Welcome to Code Quest: Debug the Matrix!</strong></p>
+                <p>A challenging and interactive coding puzzle game designed to enhance your debugging skills and deepen your understanding of programming concepts.</p>
+                
+                <h3>📖 Game Overview</h3>
+                <ul>
+                    <li>Solve 5 levels per difficulty tier (Easy, Medium, Hard)</li>
+                    <li>Each level contains hidden bugs in code snippets</li>
+                    <li>Fix the errors and earn points for correct solutions</li>
+                    <li>Beat the 60-second timer to complete each level</li>
+                    <li>Learn key programming concepts through practical challenges</li>
+                </ul>
+
+                <h3>🎯 Game Features</h3>
+                <ul>
+                    <li><strong>Multiple Difficulties:</strong> Easy, Medium, and Hard modes</li>
+                    <li><strong>Hint System:</strong> Get hints (costs points) when stuck</li>
+                    <li><strong>Show Answer:</strong> View the correct solution if needed</li>
+                    <li><strong>Pause Feature:</strong> Take a break during gameplay</li>
+                    <li><strong>Learning Summaries:</strong> Key concepts after each level</li>
+                    <li><strong>Score Tracking:</strong> Keep track of your best scores</li>
+                </ul>
+
+                <h3>💡 Tips for Success</h3>
+                <ul>
+                    <li>Start with Easy mode to learn the basics</li>
+                    <li>Use hints wisely—they cost points!</li>
+                    <li>Read the error messages carefully</li>
+                    <li>Complete all levels before time runs out</li>
+                    <li>Review the learning summaries to master concepts</li>
+                </ul>
+
+                <h3>👨‍💻 Built By</h3>
+                <p><strong>Team-132</strong> | Version 1.0.0</p>
+                <p>Crafted with ❤️ to help developers master the art of debugging.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW TO PLAY -->
     <div class="how-to-play-box">
         <h2>🕹️ How to Play</h2>
         <ul>
             <li>Each level shows a small code snippet containing hidden <strong>bugs</strong>.</li>
-            <li>Click on the lines that contain the mistake or suspicious pattern.</li>
-            <li>Every correct bug you catch increases your score.</li>
-            <li>Clicking a clean line gives a penalty — debug carefully!</li>
-            <li>Finish all levels before the timer ends to win!</li>
+            <li>Edit the code to fix the errors.</li>
+            <li>You earn points for every correct solution.</li>
+            <li>Hints cost points, so use them wisely.</li>
+            <li>Finish all levels before the timer ends!</li>
         </ul>
     </div>
 
@@ -131,7 +261,6 @@
 
     <!-- JavaScript -->
     <script src="home_page.js" defer></script>
-
 
 </body>
 

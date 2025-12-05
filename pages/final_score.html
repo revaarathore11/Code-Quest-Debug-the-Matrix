@@ -6,27 +6,68 @@
     <title>Final Score — CodeQuest</title>
 
     <link rel="stylesheet" href="pages_style/game.css" />
-    <link rel="stylesheet" href="pages_style/final_score.css" />
+    <link rel="stylesheet" href="final_score.css" />
 </head>
 <body>
+
+    <!-- Background FX -->
+    <div class="stars" id="stars"></div>
+    <div class="pixel-particles"></div>
 
     <div class="final-score-container">
         <div class="score-card">
 
-            <h1 class="final-title">🎉 Final Score 🎉</h1>
+            <h1 class="final-title">Mission Complete!</h1>
 
+            <!-- Stars Display -->
             <div id="starsDisplay" class="stars-display"></div>
 
-            <div class="score-number" id="finalScore">0</div>
+            <!-- Score Message -->
+            <div id="scoreMessage" class="score-message"></div>
 
-            <div class="btn-row">
-                <button id="playAgainBtn" class="btn green">Play Again</button>
-                <button id="homeBtn" class="btn blue">Home</button>
+            <!-- Score Display -->
+            <div class="score-display">
+                <span class="score-label">Final Score</span>
+                <div class="score-number" id="finalScore">0</div>
             </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-label">Levels Completed</span>
+                    <span class="stat-value" id="levelsCompleted">5</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Difficulty</span>
+                    <span class="stat-value" id="difficultyDisplay">Easy</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Accuracy</span>
+                    <span class="stat-value" id="accuracyDisplay">100%</span>
+                </div>
+            </div>
+
+            <!-- Achievement Section -->
+            <div class="achievement-section">
+                <h3>🏆 Achievements</h3>
+                <div id="achievementsList" class="achievements-list"></div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="btn-row">
+                <button id="playAgainBtn" class="btn primary-btn">Play Again</button>
+                <button id="homeBtn" class="btn secondary-btn">Home</button>
+            </div>
+
+            <!-- Footer -->
+            <div class="score-footer">
+                <p id="motivationalText" class="motivational"></p>
+            </div>
+
         </div>
     </div>
 
-    <script src="pages_script/final_score.js"></script>
+    <script src="final_score.js"></script>
 
 </body>
 </html>

@@ -273,78 +273,88 @@ footer:hover {
     }
 }
 /* Knight Pixel Character */
+/* Dust container FIXED (only one copy) */
 #dust-container {
     position: fixed;
-    bottom: 20px;
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 80px;
+    height: 120px;
     pointer-events: none;
-    z-index: 10;
+    z-index: 5;
 }
 
-#dust-container {
-    position: fixed;
-    left: 0;
-    top: 0;
-    pointer-events: none;
-    z-index: 10;
-}
-
+/* Dust particle */
 .dust {
     position: absolute;
     width: 6px;
     height: 6px;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 50%;
-    animation: dustFade 0.5s ease-out forwards;
+    opacity: 1;
+    image-rendering: pixelated;
+    transform: translateY(0px) scale(1);
+
+    animation: dustFade 0.45s ease-out forwards;
 }
 
+/* Dust fade animation */
 @keyframes dustFade {
-    from { transform: scale(1); opacity: 0.9; }
-    to   { transform: scale(0.2) translateY(-12px); opacity: 0; }
+    0% {
+        opacity: 1;
+        transform: translateY(-4px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.3);
+    }
 }
 /* Knight Wrapper = movement + scaling */
+/* Knight container handles movement + direction */
 .knight-wrapper {
     position: fixed;
     bottom: 40px;
-    left: 0;
+    left: -80px;
     width: 64px;
     height: 64px;
     z-index: 20;
-    
-    /* MAKE THE KNIGHT BIGGER */
-    transform: scale(2.1);      /* change size here */
-    transform-origin: bottom left;
 
+    transform-origin: bottom left;
     animation: knightWalkAcross 14s linear infinite;
+    --scale: 2.1; /* You can change size globally here */
 }
 
-/* Knight Sprite = frame animation only */
+/* Knight sprite sheet frames */
 .knight-sprite {
     width: 64px;
     height: 64px;
 
     background: url("./assets/sprites/blue_knight.png") no-repeat;
-    background-size: 256px 64px;  /* 4 frames × 64px */
+    background-size: 256px 64px; /* 4 walking frames */
     image-rendering: pixelated;
 
-    animation: knightSpriteWalk 0.8s steps(4) infinite;
+    animation: knightWalkFrames 0.8s steps(4) infinite;
 }
 
-/* Walking frame animation */
-@keyframes knightSpriteWalk {
-    from { background-position:   0px 0; }
+/* Walking frames */
+@keyframes knightWalkFrames {
+    from { background-position: 0 0; }
     to   { background-position: -256px 0; }
 }
 
-/* Walk across screen + flip */
+/* WALK ACROSS + AUTOMATIC FLIP */
 @keyframes knightWalkAcross {
-    0%   { left: -80px; transform: scale(2.1) scaleX(1); }
-    45%  { left: calc(100% - 140px); transform: scale(2.1) scaleX(1); }
-    50%  { transform: scale(2.1) scaleX(-1); }
-    95%  { left: -80px; transform: scale(2.1) scaleX(-1); }
-    100% { transform: scale(2.1) scaleX(1); }
+    0%   { left: -80px; transform: scale(var(--scale)) scaleX(1); }
+    47%  { left: calc(100% - 160px); transform: scale(var(--scale)) scaleX(1); }
+    50%  { transform: scale(var(--scale)) scaleX(-1); }
+    97%  { left: -80px; transform: scale(var(--scale)) scaleX(-1); }
+    100% { transform: scale(var(--scale)) scaleX(1); }
+}
+
+/* Sword swing (2 frames only) */
+@keyframes knightSwordSwing {
+    from { background-position: 0 -64px; }
+    to   { background-position: -128px -64px; } /* 2 sword frames */
 }
 /* For better readability of the written content */
 .storyline {
@@ -416,4 +426,287 @@ footer:hover {
 .type-cursor {
     position: relative;
     top: -2px;
+}
+
+/* ===== ABOUT POPUP STYLING ===== */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
+}
+
+.popup-overlay.hidden {
+    display: none !important;
+}
+
+.popup-box {
+    background: rgba(14, 22, 41, 0.95);
+    border: 3px solid #00eaff;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    max-height: 70vh;
+    overflow-y: auto;
+    box-shadow: 0 0 25px rgba(0, 234, 255, 0.4),
+                inset 0 0 15px rgba(0, 234, 255, 0.1);
+    position: relative;
+}
+
+.popup-box h2 {
+    color: #00eaff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    text-shadow: 0 0 10px rgba(0, 234, 255, 0.6);
+}
+
+.popup-box h3 {
+    color: #00ff88;
+    margin-top: 16px;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.about-content {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #d8ffe6;
+    line-height: 1.6;
+}
+
+.about-content p {
+    margin-bottom: 12px;
+    text-align: justify;
+}
+
+.about-content p strong {
+    color: #00eaff;
+}
+
+.about-content ul {
+    margin-left: 20px;
+    margin-bottom: 12px;
+}
+
+.about-content li {
+    margin-bottom: 6px;
+    color: #d8ffe6;
+}
+
+.about-content li strong {
+    color: #00ff88;
+}
+
+/* Close button (X) */
+.close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: 2px solid #ff4747;
+    color: #ff4747;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255, 71, 71, 0.2);
+    box-shadow: 0 0 10px rgba(255, 71, 71, 0.5);
+    transform: scale(1.1);
+}
+
+.close-btn:active {
+    transform: scale(0.95);
+}
+
+/* ===== VOLUME CONTENT STYLING ===== */
+.volume-content {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #d8ffe6;
+}
+
+.volume-control {
+    margin-bottom: 25px;
+}
+
+.volume-control label {
+    display: block;
+    margin-bottom: 8px;
+    color: #00eaff;
+    font-weight: bold;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+}
+
+.volume-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.volume-slider {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, 
+        #00eaff 0%, 
+        #00ff88 50%, 
+        #00eaff 100%);
+    border: 2px solid rgba(0, 234, 255, 0.4);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #00ff88;
+    border: 2px solid #00eaff;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+    transition: all 0.2s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #00ff88;
+    border: 2px solid #00eaff;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+    transition: all 0.2s ease;
+}
+
+.volume-slider::-moz-range-thumb:hover {
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+}
+
+.volume-percentage {
+    min-width: 45px;
+    text-align: right;
+    color: #00ff88;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+}
+
+.volume-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.volume-btn {
+    background: rgba(0, 234, 255, 0.15);
+    border: 2px solid #00eaff;
+    color: #00eaff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 234, 255, 0.3);
+}
+
+.volume-btn:hover:not(.hidden) {
+    background: rgba(0, 234, 255, 0.3);
+    box-shadow: 0 0 15px rgba(0, 234, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.volume-btn:active:not(.hidden) {
+    transform: translateY(0);
+}
+
+.volume-btn.hidden {
+    display: none;
+}
+
+.volume-note {
+    margin-top: 15px;
+    text-align: center;
+    color: #afffe3;
+    font-size: 11px;
+    font-style: italic;
+}
+
+/* Controls Content Styling */
+.controls-content {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #d8ffe6;
+    line-height: 1.8;
+}
+
+.controls-content p {
+    margin-bottom: 12px;
+    color: #00eaff;
+    font-weight: bold;
+}
+
+.controls-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.controls-table tr {
+    border-bottom: 1px solid rgba(0, 234, 255, 0.3);
+}
+
+.controls-table td {
+    padding: 10px 8px;
+    text-align: left;
+}
+
+.controls-table td:first-child {
+    width: 40%;
+    text-align: center;
+}
+
+.controls-table kbd {
+    background: rgba(0, 234, 255, 0.2);
+    border: 2px solid #00eaff;
+    border-radius: 4px;
+    padding: 4px 8px;
+    color: #00ff88;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    display: inline-block;
+    box-shadow: 0 2px 5px rgba(0, 234, 255, 0.2);
+}
+
+.controls-table td:last-child {
+    color: #d8ffe6;
 }

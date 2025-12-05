@@ -33,6 +33,9 @@
 
     <main id="gameArea" class="game-area"></main>
 
+    <!-- Question Display -->
+    <section id="questionDisplay" class="question-display"></section>
+
     <section class="challenge-box">
         <pre id="codeSnippet" contenteditable="true"></pre>
     </section>
@@ -55,7 +58,9 @@
     <section class="game-controls">
         <button id="startGameBtn">Start Game</button>
         <button id="resetGameBtn">Reset Game</button>
+        <button id="pauseGameBtn">⏸ Pause</button>
         <button id="showAnswerBtn" class="show-answer-btn">Show Answer</button>
+        <button id="homeBtn" class="home-btn">🏠 Home</button>
     </section>
 
 </div>
@@ -80,6 +85,46 @@
 
  <!-- DONE BUTTON (INSIDE POPUP) -->
 <button id="doneShowAnswer" class="done-btn hidden">Done</button>
+
+<div id="pausePopup" class="popup-overlay hidden">
+    <div class="popup-box">
+        <h2>⏸ Game Paused</h2>
+        <p>Resume to continue playing.</p>
+
+        <div class="popup-buttons">
+            <button id="resumeGameBtn" class="confirm-btn">▶ Resume</button>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================
+                     TIME UP POPUP
+========================================================== -->
+
+<div id="timeUpPopup" class="popup-overlay hidden">
+    <div class="popup-box">
+        <h2>⏰ Time's Up!</h2>
+        <p>You ran out of time. Try again from Level 1.</p>
+
+        <div class="popup-buttons">
+            <button id="timeUpResetBtn" class="confirm-btn">Try Again</button>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================
+                   LEVEL SUMMARY POPUP
+========================================================== -->
+
+<div id="summaryPopup" class="popup-overlay hidden">
+    <div class="popup-box summary-box">
+        <h2>🎓 Level Complete!</h2>
+        <div id="summaryContent" class="summary-content"></div>
+        <div class="popup-buttons">
+            <button id="closeSummaryBtn" class="confirm-btn">Continue</button>
+        </div>
+    </div>
+</div>
 
 <script>
     window.currentLevel = 5;
