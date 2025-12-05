@@ -12,6 +12,11 @@
 
 <body>
 
+    <!-- PROFILE AVATAR BUTTON (Top Right) -->
+    <button id="profileAvatarBtn" class="profile-avatar-btn" aria-label="Open profile menu">
+        <span id="avatarDisplay">🐴</span>
+    </button>
+
     <!-- ⭐ Background Stars -->
     <div class="stars" id="stars"></div>
 
@@ -251,6 +256,51 @@
             <li>Hints cost points, so use them wisely.</li>
             <li>Finish all levels before the timer ends!</li>
         </ul>
+    </div>
+
+    <!-- USER PROFILE POPUP -->
+    <div id="profilePopup" class="popup-overlay hidden">
+        <div class="popup-box">
+            <button id="closeProfileBtn" class="close-btn" aria-label="Close profile popup">✕</button>
+            <h2>👤 User Profile</h2>
+            
+            <div class="profile-content">
+                <!-- Username Input -->
+                <div class="profile-section">
+                    <label for="usernameInput"><strong>Username:</strong></label>
+                    <input type="text" id="usernameInput" class="profile-input" placeholder="3-20 characters" maxlength="20" aria-label="Username input">
+                    <small id="usernameError" class="error-msg hidden"></small>
+                </div>
+
+                <!-- Avatar Selection -->
+                <div class="profile-section">
+                    <label><strong>Choose Avatar:</strong></label>
+                    <div class="avatar-grid">
+                        <button class="avatar-btn" data-avatar="knight" title="Knight">🐴</button>
+                        <button class="avatar-btn" data-avatar="wizard" title="Wizard">🧙</button>
+                        <button class="avatar-btn" data-avatar="robot" title="Robot">🤖</button>
+                        <button class="avatar-btn" data-avatar="bug" title="Bug Catcher">🐛</button>
+                        <button class="avatar-btn" data-avatar="fire" title="Fire Mage">🔥</button>
+                        <button class="avatar-btn" data-avatar="code" title="Code Master">💻</button>
+                    </div>
+                </div>
+
+                <!-- Profile Stats -->
+                <div class="profile-section">
+                    <h3>📊 Profile Stats</h3>
+                    <div class="stats-display">
+                        <p><strong>Highest Score:</strong> <span id="profileHighScore">0</span></p>
+                        <p><strong>Total Playtime:</strong> <span id="profilePlaytime">0 min</span></p>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="profile-buttons">
+                    <button id="saveProfileBtn" class="confirm-btn">Save Profile</button>
+                    <button id="resetProfileBtn" class="cancel-btn">Reset Profile</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- FOOTER -->

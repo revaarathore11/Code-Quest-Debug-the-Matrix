@@ -1,6 +1,31 @@
 
 console.log("game.js loaded");
 
+// ===== GLOBAL PLAYTIME TRACKING =====
+let globalPlaytimeInterval = null;
+
+function startGlobalPlaytimeTracking() {
+    // Start tracking playtime in 1-second intervals
+    globalPlaytimeInterval = setInterval(() => {
+        const profile = JSON.parse(localStorage.getItem("codequestUserProfile")) || {
+            username: "Player",
+            avatar: "knight",
+            playtimeSeconds: 0,
+            createdAt: Date.now()
+        };
+        
+        profile.playtimeSeconds += 1;
+        localStorage.setItem("codequestUserProfile", JSON.stringify(profile));
+    }, 1000);
+}
+
+function stopGlobalPlaytimeTracking() {
+    if (globalPlaytimeInterval) {
+        clearInterval(globalPlaytimeInterval);
+        globalPlaytimeInterval = null;
+    }
+}
+
 // Optional: save progress (not heavily used yet, but kept)
 function saveGameProgress(level, score, difficulty) {
     const data = {
@@ -66,6 +91,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Pause / time flags
     let isPaused = false;
     let isTimeUp = false;
+
+    // Start playtime tracking
+    startGlobalPlaytimeTracking();
 
     // ==========================================================
     //                  LEVELS BY DIFFICULTY
@@ -904,6 +932,8 @@ print(safe_divide(10, 0))`,
         if (isPaused) return;
 
         isPaused = true;
+        stopGlobalPlaytimeTracking(); // Pause playtime tracking
+        
         if (gameContainer) gameContainer.classList.add("paused-blur");
         if (pausePopup) {
             pausePopup.classList.remove("hidden");
@@ -919,6 +949,7 @@ print(safe_divide(10, 0))`,
     function resumeGame() {
         if (!isPaused || isTimeUp) return;
         isPaused = false;
+        startGlobalPlaytimeTracking(); // Resume playtime tracking
 
         if (gameContainer) gameContainer.classList.remove("paused-blur");
         if (pausePopup) {
@@ -950,6 +981,8 @@ print(safe_divide(10, 0))`,
     // ===== HOME BUTTON =====
     if (homeBtn) {
         homeBtn.addEventListener("click", () => {
+            stopGlobalPlaytimeTracking(); // Stop tracking playtime when leaving
+            
             // Save current level and game state
             const gameProgress = {
                 level: currentLevel,
@@ -1044,6 +1077,8 @@ print(safe_divide(10, 0))`,
 //               NEXT LEVEL NAVIGATION
 // ==========================================================
 function goToNextLevel() {
+    stopGlobalPlaytimeTracking(); // Stop tracking when moving to next level
+    
     const next = Number(window.currentLevel) + 1;
 
     // After Level 5 → Final Score page
