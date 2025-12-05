@@ -5,6 +5,7 @@
 // Load data from localStorage
 let score = Number(localStorage.getItem("codequestScore")) || 0;
 const difficulty = localStorage.getItem("codequestDifficulty") || "easy";
+const highestScore = Number(localStorage.getItem("codequestHighScore")) || 0;
 
 // Elements
 const scoreEl = document.getElementById("finalScore");
@@ -13,6 +14,7 @@ const scoreMessage = document.getElementById("scoreMessage");
 const motivationalText = document.getElementById("motivationalText");
 const levelsCompletedEl = document.getElementById("levelsCompleted");
 const difficultyDisplay = document.getElementById("difficultyDisplay");
+const highestScoreEl = document.getElementById("highestScore");
 const achievementsList = document.getElementById("achievementsList");
 
 // Set max score
@@ -20,6 +22,9 @@ const maxScore = 250;
 
 // Display score
 scoreEl.textContent = score + " / " + maxScore;
+
+// Display highest score
+if (highestScoreEl) highestScoreEl.textContent = highestScore;
 
 // Convert score → star rating
 function getStars(score) {

@@ -1048,6 +1048,14 @@ function goToNextLevel() {
 
     // After Level 5 → Final Score page
     if (next > 5) {
+        // 🔥 Update highest score if current score is higher
+        const currentScore = Number(localStorage.getItem(`codequestScore_${localStorage.getItem("codequestDifficulty")}`)) || 0;
+        const highestScore = Number(localStorage.getItem("codequestHighScore")) || 0;
+        
+        if (currentScore > highestScore) {
+            localStorage.setItem("codequestHighScore", currentScore);
+        }
+        
         window.location.href = "../final_score.html";
         return;
     }
