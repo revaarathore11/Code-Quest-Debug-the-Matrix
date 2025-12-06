@@ -430,7 +430,8 @@ const defaultProfile = {
     username: "Player",
     avatar: "knight",
     playtimeSeconds: 0,
-    createdAt: Date.now()
+    createdAt: Date.now(),
+    preferredDifficulty: "easy"
 };
 
 // Load profile from localStorage or create new

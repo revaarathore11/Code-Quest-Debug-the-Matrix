@@ -11,11 +11,13 @@ function startGlobalPlaytimeTracking() {
             username: "Player",
             avatar: "knight",
             playtimeSeconds: 0,
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            preferredDifficulty: "easy"
         };
         
         profile.playtimeSeconds += 1;
         localStorage.setItem("codequestUserProfile", JSON.stringify(profile));
+        console.log(`⏱️ Playtime: ${profile.playtimeSeconds}s`);
     }, 1000);
 }
 
@@ -92,8 +94,22 @@ document.addEventListener("DOMContentLoaded", () => {
     let isPaused = false;
     let isTimeUp = false;
 
+    // ===== BADGE TRACKING VARIABLES =====
+    let hintsUsedThisLevel = 0;
+    let totalSubmissions = 0;
+    let levelAttempts = 0;
+    let pauseCountSession = 0;
+    let hackerCodeTriggered = false;
+    let settingsViewedThisSession = false;
+    let timeRemaining = 60;
+
     // Start playtime tracking
     startGlobalPlaytimeTracking();
+    
+    // Check and unlock Code Explorer badge on first game start
+    if (!localStorage.getItem("codeQuestFirstStart")) {
+        localStorage.setItem("codeQuestFirstStart", "true");
+    }
 
     // ==========================================================
     //                  LEVELS BY DIFFICULTY
@@ -832,6 +848,9 @@ print(safe_divide(10, 0))`,
             return;
         }
 
+        // Track total submissions for Bug Sniper badge
+        totalSubmissions++;
+
         // 🔒 Prevent answering after showing the answer
         if (answerShown) {
             gameMessage.textContent = "⚠️ Submit disabled after showing the answer.";
@@ -916,6 +935,9 @@ print(safe_divide(10, 0))`,
         totalScore -= getHintCost();
         localStorage.setItem(scoreKey, totalScore);
         scoreDisplay.textContent = `Score: ${totalScore}`;
+        
+        // Track hint usage for badges
+        hintsUsedThisLevel++;
 
         hintTextEl.textContent = hints[hintStep];
         hintTextEl.classList.remove("hidden");
