@@ -728,7 +728,15 @@ print(safe_divide(10, 0))`,
 
     // Score stored per difficulty
     const scoreKey  = `codequestScore_${difficulty}`;
-    let totalScore  = 0;  // Start fresh at 0 for this game session
+    
+    // Reset score when starting a fresh game (Level 1 with no prior session)
+    if (currentLevel === 1 && !localStorage.getItem("codeQuestGameInProgress")) {
+        localStorage.setItem(scoreKey, "0");
+        localStorage.setItem("codeQuestGameInProgress", "true");
+    }
+    
+    // Load accumulated score from localStorage (persists across levels)
+    let totalScore  = Number(localStorage.getItem(scoreKey)) || 0;
     
     // Initialize score display
     if (scoreDisplay) {
@@ -1080,6 +1088,9 @@ print(safe_divide(10, 0))`,
     if (homeBtn) {
         homeBtn.addEventListener("click", () => {
             stopGlobalPlaytimeTracking(); // Stop tracking playtime when leaving
+            
+            // Clear the game in progress flag so next game starts fresh
+            localStorage.removeItem("codeQuestGameInProgress");
             
             // Save current level and game state
             const gameProgress = {
