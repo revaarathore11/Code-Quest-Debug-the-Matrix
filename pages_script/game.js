@@ -111,9 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("codeQuestFirstStart", "true");
     }
 
-    // ==========================================================
     //                  LEVELS BY DIFFICULTY
-    // ==========================================================
+
     const levelsByDifficulty = {
         // ---------------------- EASY ----------------------
         easy: [
@@ -729,10 +728,15 @@ print(safe_divide(10, 0))`,
 
     // Score stored per difficulty
     const scoreKey  = `codequestScore_${difficulty}`;
-    let totalScore  = Number(localStorage.getItem(scoreKey)) || 0;
+    let totalScore  = 0;  // Start fresh at 0 for this game session
+    
+    // Initialize score display
+    if (scoreDisplay) {
+        scoreDisplay.textContent = `Score: ${totalScore}`;
+    }
 
     function getHintCost() {
-        return 10 * (hintStep + 1);
+        return 10 ;
     }
 
     function updateHintCostUI() {
