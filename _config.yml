@@ -1,0 +1,5 @@
+# GitHub Pages Configuration
+theme: null
+plugins: []
+include: [".gitignore"]
+exclude: [".DS_Store", "node_modules", ".git"]

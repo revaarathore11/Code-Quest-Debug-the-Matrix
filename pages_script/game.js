@@ -1,6 +1,33 @@
 
 console.log("game.js loaded");
 
+// ===== GLOBAL PLAYTIME TRACKING =====
+let globalPlaytimeInterval = null;
+
+function startGlobalPlaytimeTracking() {
+    // Start tracking playtime in 1-second intervals
+    globalPlaytimeInterval = setInterval(() => {
+        const profile = JSON.parse(localStorage.getItem("codequestUserProfile")) || {
+            username: "Player",
+            avatar: "knight",
+            playtimeSeconds: 0,
+            createdAt: Date.now(),
+            preferredDifficulty: "easy"
+        };
+        
+        profile.playtimeSeconds += 1;
+        localStorage.setItem("codequestUserProfile", JSON.stringify(profile));
+        console.log(`⏱️ Playtime: ${profile.playtimeSeconds}s`);
+    }, 1000);
+}
+
+function stopGlobalPlaytimeTracking() {
+    if (globalPlaytimeInterval) {
+        clearInterval(globalPlaytimeInterval);
+        globalPlaytimeInterval = null;
+    }
+}
+
 // Optional: save progress (not heavily used yet, but kept)
 function saveGameProgress(level, score, difficulty) {
     const data = {
@@ -67,15 +94,32 @@ document.addEventListener("DOMContentLoaded", () => {
     let isPaused = false;
     let isTimeUp = false;
 
-    // ==========================================================
+    // ===== BADGE TRACKING VARIABLES =====
+    let hintsUsedThisLevel = 0;
+    let totalSubmissions = 0;
+    let levelAttempts = 0;
+    let pauseCountSession = 0;
+    let hackerCodeTriggered = false;
+    let settingsViewedThisSession = false;
+    let timeRemaining = 60;
+
+    // Start playtime tracking
+    startGlobalPlaytimeTracking();
+    
+    // Check and unlock Code Explorer badge on first game start
+    if (!localStorage.getItem("codeQuestFirstStart")) {
+        localStorage.setItem("codeQuestFirstStart", "true");
+    }
+
     //                  LEVELS BY DIFFICULTY
-    // ==========================================================
+
     const levelsByDifficulty = {
         // ---------------------- EASY ----------------------
         easy: [
             {
                 number: 1,
                 question: "Fix the code: Arrays are 0-indexed. Change items[3] to the correct index and use the correct function to get the list length.",
+                highlightLines: [2, 3, 3],
                 snippet: `items = ["pen", "book", "bag"]
 print(items[3])
 print(items.length)`,
@@ -108,6 +152,7 @@ print(len(items))`,
             {
                 number: 2,
                 question: "Fix the code: Add proper indentation to the loop, fix the variable name typo, and ensure the print statement uses the correct variable name.",
+                highlightLines: [5, 5, 7, 4, 5],
                 snippet: `numbers = [1, 2, 3, 4]
 total = 0
 
@@ -149,6 +194,7 @@ print(total)`,
             {
                 number: 3,
                 question: "Fix the code: Complete the function definition with proper syntax, fix variable name typos, remove inappropriate modifications, and use the correct return variable.",
+                highlightLines: [1, 3, 5, 6, 10],
                 snippet: `def sumList(nums)
 total = 0
 for i in range(len(num)):
@@ -197,6 +243,7 @@ print(sumList(numbers))`,
             {
                 number: 4,
                 question: "Fix the code: Replace the incorrect assignment with the correct list method to add words to the collection. Use .append() instead of replacing the list.",
+                highlightLines: [9, 9, 9, 9],
                 snippet: `def collect_unique_words(text):
     words = text.split()
     unique = []
@@ -253,6 +300,7 @@ print(collect_unique_words(sentence))`,
             {
                 number: 5,
                 question: "Fix the code: The function arguments are in the wrong order. Look at the function definition and call it with the correct parameter order.",
+                highlightLines: [11, 11, 11, 11],
                 snippet: `def get_user_age(users, name):
     for user in users:
         if user["name"] == name:
@@ -303,6 +351,7 @@ print(get_user_age(users, "Alice"))`,
             {
                 number: 1,
                 question: "Fix the code: In the if statement condition, use the comparison operator '==' instead of the assignment operator '=' to check if numbers are even.",
+                highlightLines: [3, 3, 3],
                 snippet: `numbers = [2, 4, 6, 8]
 for n in numbers:
     if n % 2 = 0:
@@ -335,6 +384,7 @@ for n in numbers:
             {
                 number: 2,
                 question: "Fix the code: Add proper indentation to the function body and provide both required arguments when calling the function.",
+                highlightLines: [2, 4, 4],
                 snippet: `def multiply(a, b):
 return a * b
 
@@ -368,6 +418,7 @@ print(multiply(5, 3))`,
             {
                 number: 3,
                 question: "Fix the code: The 'gender' key doesn't exist in the dictionary. Use the safe .get() method instead of direct indexing to avoid a KeyError.",
+                highlightLines: [2, 2, 2],
                 snippet: `user = {"name": "Ava", "age": 20}
 print(user["gender"])`,
                 hints: [
@@ -396,6 +447,7 @@ print(user.get("gender", "Not specified"))`,
             {
                 number: 4,
                 question: "Fix the code: Initialize max with the first element of the list to handle negative numbers correctly, and rename the variable to avoid shadowing built-in functions.",
+                highlightLines: [2, 2, 2],
                 snippet: `def find_max(nums):
     max = 0
     for n in nums:
@@ -438,6 +490,7 @@ print(find_max([-5, -10, -3]))`,
             {
                 number: 5,
                 question: "Fix the code: Add the required colon at the end of the for loop statement. Python requires a colon before any indented block.",
+                highlightLines: [1, 1],
                 snippet: `for i in range(1, 5)
     print(i)`,
                 hints: [
@@ -469,6 +522,7 @@ print(find_max([-5, -10, -3]))`,
             {
                 number: 1,
                 question: "Fix the code: Replace the mutable default argument [] with None to avoid data persisting across function calls. Create a new list inside the function instead.",
+                highlightLines: [1, 1, 1, 1],
                 snippet: `def add_item(item, items=[]):
     items.append(item)
     return items
@@ -510,6 +564,7 @@ print(add_item("banana"))`,
             {
                 number: 2,
                 question: "Fix the code: The base case for recursion is wrong. In mathematics, 0! equals 1, not 0. Fix the return statement for the base case.",
+                highlightLines: [3, 3, 3, 3],
                 snippet: `def factorial(n):
     if n == 0:
         return 0
@@ -551,6 +606,7 @@ print(factorial(0))`,
             {
                 number: 3,
                 question: "Fix the code: The file.close() method is missing parentheses and won't execute. Use a 'with' statement (context manager) for proper file handling instead.",
+                highlightLines: [5, 5, 5, 5],
                 snippet: `file = open("data.txt", "r")
 lines = file.readlines()
 for line in lines:
@@ -586,6 +642,7 @@ file.close`,
             {
                 number: 4,
                 question: "Fix the code: The variable name in the list comprehension doesn't match the expression. Use 'n' in the loop variable to match the 'n * n' expression.",
+                highlightLines: [2, 2, 2, 2],
                 snippet: `nums = [1, 2, 3, 4]
 squares = [n * n for i in nums]
 print(squares)`,
@@ -617,6 +674,7 @@ print(squares)`,
             {
                 number: 5,
                 question: "Fix the code: Replace the bare 'except:' clause with a specific exception type (ZeroDivisionError). Bare except clauses hide bugs and catch all exceptions.",
+                highlightLines: [4, 4, 4, 4],
                 snippet: `def safe_divide(a, b):
     try:
         return a / b
@@ -670,10 +728,23 @@ print(safe_divide(10, 0))`,
 
     // Score stored per difficulty
     const scoreKey  = `codequestScore_${difficulty}`;
+    
+    // Reset score when starting a fresh game (Level 1 with no prior session)
+    if (currentLevel === 1 && !localStorage.getItem("codeQuestGameInProgress")) {
+        localStorage.setItem(scoreKey, "0");
+        localStorage.setItem("codeQuestGameInProgress", "true");
+    }
+    
+    // Load accumulated score from localStorage (persists across levels)
     let totalScore  = Number(localStorage.getItem(scoreKey)) || 0;
+    
+    // Initialize score display
+    if (scoreDisplay) {
+        scoreDisplay.textContent = `Score: ${totalScore}`;
+    }
 
     function getHintCost() {
-        return 10 * (hintStep + 1);
+        return 10 ;
     }
 
     function updateHintCostUI() {
@@ -687,9 +758,9 @@ print(safe_divide(10, 0))`,
         });
     }
 
-    // ==========================================================
+    
     //                        LOAD LEVEL
-    // ==========================================================
+   
     function loadLevel(levelNum) {
         const level = levels[levelNum - 1];
         if (!level) return;
@@ -745,9 +816,9 @@ print(safe_divide(10, 0))`,
         }, 1000);
     }
 
-    // ==========================================================
+   
     //                   TIME UP HANDLER
-    // ==========================================================
+   
     function handleTimeUp() {
         isTimeUp = true;
 
@@ -794,9 +865,8 @@ print(safe_divide(10, 0))`,
         loadLevel(currentLevel);
     }
 
-    // ==========================================================
-    //                        CHECK ANSWER
-    // ==========================================================
+   
+    //                        CHECK ANSWER 
     function checkAnswer() {
         if (isPaused || isTimeUp) {
             gameMessage.textContent = isTimeUp
@@ -804,6 +874,9 @@ print(safe_divide(10, 0))`,
                 : "⏸️ Game is paused — resume to continue.";
             return;
         }
+
+        // Track total submissions for Bug Sniper badge
+        totalSubmissions++;
 
         // 🔒 Prevent answering after showing the answer
         if (answerShown) {
@@ -855,9 +928,9 @@ print(safe_divide(10, 0))`,
         nextLevelBtn.classList.remove("hidden");
     }
 
-    // ==========================================================
+    
     //                           HINTS
-    // ==========================================================
+    
     function showHint() {
         if (!gameStarted) {
             gameMessage.textContent = "❗ Start the game first!";
@@ -889,12 +962,72 @@ print(safe_divide(10, 0))`,
         totalScore -= getHintCost();
         localStorage.setItem(scoreKey, totalScore);
         scoreDisplay.textContent = `Score: ${totalScore}`;
+        
+        // Track hint usage for badges
+        hintsUsedThisLevel++;
 
         hintTextEl.textContent = hints[hintStep];
         hintTextEl.classList.remove("hidden");
 
+        // Highlight buggy line after any hint is shown
+        if (level.highlightLines && level.highlightLines[hintStep] && !isPaused && !isTimeUp && !answerShown) {
+            highlightBuggyLine(level.highlightLines[hintStep]);
+        }
+
         hintStep++;
         updateHintCostUI();
+    }
+
+    // ==========================================================
+    //                   HIGHLIGHT BUGGY LINE
+    //
+    // Highlights the specified line of the code snippet with a visual indicator
+    function highlightBuggyLine(lineNumber) {
+        const code = codeSnippetEl.textContent;
+        const lines = code.split('\n');
+        
+        // Validate line number (1-based index)
+        if (lineNumber < 1 || lineNumber > lines.length) return;
+        
+        // Get the buggy line (convert to 0-based index)
+        const buggyLineIndex = lineNumber - 1;
+        
+        // Build HTML with highlights
+        let htmlContent = '';
+        for (let i = 0; i < lines.length; i++) {
+            if (i === buggyLineIndex) {
+                // Wrap the buggy line in highlight span
+                htmlContent += `<span class="highlight-hint-line">${escapeHtml(lines[i])}</span>`;
+            } else {
+                htmlContent += escapeHtml(lines[i]);
+            }
+            
+            // Add newline after each line except the last
+            if (i < lines.length - 1) {
+                htmlContent += '\n';
+            }
+        }
+        
+        // Update the code snippet with highlighted line
+        codeSnippetEl.innerHTML = htmlContent;
+        
+        // Re-enable editing after setting innerHTML
+        if (gameStarted && !answerShown && !levelCompleted) {
+            codeSnippetEl.contentEditable = "true";
+            codeSnippetEl.style.pointerEvents = "auto";
+        }
+    }
+
+    // Helper function to escape HTML special characters
+    function escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, m => map[m]);
     }
 
     // ==========================================================
@@ -905,6 +1038,8 @@ print(safe_divide(10, 0))`,
         if (isPaused) return;
 
         isPaused = true;
+        stopGlobalPlaytimeTracking(); // Pause playtime tracking
+        
         if (gameContainer) gameContainer.classList.add("paused-blur");
         if (pausePopup) {
             pausePopup.classList.remove("hidden");
@@ -920,6 +1055,7 @@ print(safe_divide(10, 0))`,
     function resumeGame() {
         if (!isPaused || isTimeUp) return;
         isPaused = false;
+        startGlobalPlaytimeTracking(); // Resume playtime tracking
 
         if (gameContainer) gameContainer.classList.remove("paused-blur");
         if (pausePopup) {
@@ -951,6 +1087,11 @@ print(safe_divide(10, 0))`,
     // ===== HOME BUTTON =====
     if (homeBtn) {
         homeBtn.addEventListener("click", () => {
+            stopGlobalPlaytimeTracking(); // Stop tracking playtime when leaving
+            
+            // Clear the game in progress flag so next game starts fresh
+            localStorage.removeItem("codeQuestGameInProgress");
+            
             // Save current level and game state
             const gameProgress = {
                 level: currentLevel,
@@ -1045,10 +1186,20 @@ print(safe_divide(10, 0))`,
 //               NEXT LEVEL NAVIGATION
 // ==========================================================
 function goToNextLevel() {
+    stopGlobalPlaytimeTracking(); // Stop tracking when moving to next level
+    
     const next = Number(window.currentLevel) + 1;
 
     // After Level 5 → Final Score page
     if (next > 5) {
+        // 🔥 Update highest score if current score is higher
+        const currentScore = Number(localStorage.getItem(`codequestScore_${localStorage.getItem("codequestDifficulty")}`)) || 0;
+        const highestScore = Number(localStorage.getItem("codequestHighScore")) || 0;
+        
+        if (currentScore > highestScore) {
+            localStorage.setItem("codequestHighScore", currentScore);
+        }
+        
         window.location.href = "../final_score.html";
         return;
     }

@@ -372,17 +372,196 @@ setInterval(() => {
     dust.classList.add("dust");
 
     // Detect direction based on scaleX
-    const goingLeft = getComputedStyle(knightWrapper).transform.includes("-1");
+    const style = window.getComputedStyle(knightWrapper);
+    const matrix = new DOMMatrix(style.transform);
+    const goingLeft = matrix.a < 0;
 
     const xOffset = goingLeft ? 20 : 42;
+
+    // Randomize dust properties
+    const driftX = (Math.random() * 20 + 10) * (goingLeft ? 1 : -1); // Drift opposite to movement
+    const driftY = -(Math.random() * 15 + 5); // Upwards
+    const size = Math.random() * 4 + 2; // 2px to 6px
 
     dust.style.left = rect.left + xOffset + "px";
     dust.style.top = rect.bottom - 8 + "px";
 
+    dust.style.width = `${size}px`;
+    dust.style.height = `${size}px`;
+    dust.style.setProperty('--drift-x', `${driftX}px`);
+    dust.style.setProperty('--drift-y', `${driftY}px`);
+
     dustContainer.appendChild(dust);
 
-    setTimeout(() => dust.remove(), 460);
-}, 140);
+    setTimeout(() => dust.remove(), 600);
+}, 100); // Slightly faster dust generation
 
 /* Start default state */
 playWalking();
+
+// ==========================================================
+//          USER PROFILE SYSTEM
+// ==========================================================
+
+const profileAvatarBtn = document.getElementById("profileAvatarBtn");
+const avatarDisplay = document.getElementById("avatarDisplay");
+const profilePopup = document.getElementById("profilePopup");
+const closeProfileBtn = document.getElementById("closeProfileBtn");
+const usernameInput = document.getElementById("usernameInput");
+const usernameError = document.getElementById("usernameError");
+const avatarBtns = document.querySelectorAll(".avatar-btn");
+const saveProfileBtn = document.getElementById("saveProfileBtn");
+const resetProfileBtn = document.getElementById("resetProfileBtn");
+const profileHighScore = document.getElementById("profileHighScore");
+const profilePlaytime = document.getElementById("profilePlaytime");
+
+// Avatar emoji mapping
+const avatarEmojis = {
+    knight: "🐴",
+    wizard: "🧙",
+    robot: "🤖",
+    bug: "🐛",
+    fire: "🔥",
+    code: "💻"
+};
+
+// Default profile structure
+const defaultProfile = {
+    username: "Player",
+    avatar: "knight",
+    playtimeSeconds: 0,
+    createdAt: Date.now(),
+    preferredDifficulty: "easy"
+};
+
+// Load profile from localStorage or create new
+function loadProfile() {
+    const stored = localStorage.getItem("codequestUserProfile");
+    return stored ? JSON.parse(stored) : { ...defaultProfile };
+}
+
+// Update avatar display in top right
+function updateAvatarDisplay() {
+    const profile = loadProfile();
+    const emoji = avatarEmojis[profile.avatar] || "🐴";
+    avatarDisplay.textContent = emoji;
+}
+
+// Initialize avatar on page load
+updateAvatarDisplay();
+
+// Save profile to localStorage
+function saveProfile(profile) {
+    localStorage.setItem("codequestUserProfile", JSON.stringify(profile));
+}
+
+// Initialize profile UI
+function initProfileUI() {
+    const profile = loadProfile();
+    
+    // Load username
+    usernameInput.value = profile.username;
+    
+    // Load avatar
+    avatarBtns.forEach(btn => {
+        btn.classList.remove("selected");
+        if (btn.dataset.avatar === profile.avatar) {
+            btn.classList.add("selected");
+        }
+    });
+    
+    // Load stats
+    const highScore = Number(localStorage.getItem("codequestHighScore")) || 0;
+    const playtimeMinutes = Math.floor(profile.playtimeSeconds / 60);
+    
+    profileHighScore.textContent = highScore;
+    profilePlaytime.textContent = playtimeMinutes + " min";
+}
+
+// Validate username
+function validateUsername(username) {
+    const trimmed = username.trim();
+    if (trimmed.length < 3) {
+        usernameError.textContent = "Username must be at least 3 characters";
+        usernameError.classList.remove("hidden");
+        return false;
+    }
+    if (trimmed.length > 20) {
+        usernameError.textContent = "Username must be at most 20 characters";
+        usernameError.classList.remove("hidden");
+        return false;
+    }
+    usernameError.classList.add("hidden");
+    return true;
+}
+
+// Get selected avatar
+function getSelectedAvatar() {
+    for (let btn of avatarBtns) {
+        if (btn.classList.contains("selected")) {
+            return btn.dataset.avatar;
+        }
+    }
+    return "knight";
+}
+
+// Profile Avatar Button Click (Top Right)
+if (profileAvatarBtn) {
+    profileAvatarBtn.addEventListener("click", () => {
+        initProfileUI();
+        profilePopup.classList.remove("hidden");
+    });
+}
+
+// Close Profile Button
+if (closeProfileBtn) {
+    closeProfileBtn.addEventListener("click", () => {
+        profilePopup.classList.add("hidden");
+    });
+}
+
+// Avatar Selection
+avatarBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        avatarBtns.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+    });
+});
+
+// Save Profile
+if (saveProfileBtn) {
+    saveProfileBtn.addEventListener("click", () => {
+        const username = usernameInput.value;
+        
+        if (!validateUsername(username)) {
+            return;
+        }
+        
+        const profile = loadProfile();
+        profile.username = username.trim();
+        profile.avatar = getSelectedAvatar();
+        
+        saveProfile(profile);
+        
+        // Update avatar display in top right
+        updateAvatarDisplay();
+        
+        // Close popup
+        profilePopup.classList.add("hidden");
+        
+        // Visual feedback
+        alert("✅ Profile saved successfully!");
+    });
+}
+
+// Reset Profile
+if (resetProfileBtn) {
+    resetProfileBtn.addEventListener("click", () => {
+        if (confirm("⚠️ Are you sure? This will reset your profile to default.")) {
+            localStorage.removeItem("codequestUserProfile");
+            localStorage.removeItem("codequestPlaytimeStart");
+            initProfileUI();
+            alert("✅ Profile reset!");
+        }
+    });
+}
