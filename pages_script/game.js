@@ -1200,7 +1200,7 @@ function goToNextLevel() {
             localStorage.setItem("codequestHighScore", currentScore);
         }
         
-        window.location.href = "../final_score.html";
+        window.location.href = "../pages/final_score.html";
         return;
     }
 

@@ -3,8 +3,9 @@
 // ==========================================================
 
 // Load data from localStorage
-let score = Number(localStorage.getItem("codequestScore")) || 0;
 const difficulty = localStorage.getItem("codequestDifficulty") || "easy";
+const scoreKey = `codequestScore_${difficulty}`;
+let score = Number(localStorage.getItem(scoreKey)) || 0;
 const highestScore = Number(localStorage.getItem("codequestHighScore")) || 0;
 
 // Elements
@@ -133,7 +134,8 @@ createStars();
 
 // 🔄 PLAY AGAIN → go to Level 1
 document.getElementById("playAgainBtn").addEventListener("click", () => {
-    localStorage.setItem("codequestScore", "0");
+    localStorage.removeItem(scoreKey);
+    localStorage.removeItem("codeQuestGameInProgress");
     window.location.href = "../levels/level1.html";
 });
 
