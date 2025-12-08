@@ -123,13 +123,18 @@ window.addEventListener("load", () => {
     initStars();
 });
 
-// Button Actions
+// 🔄 PLAY AGAIN → Reset score and go to Level 1
 document.getElementById("playAgainBtn").addEventListener("click", () => {
-    localStorage.removeItem("codequestScore");
-    localStorage.removeItem("codequestCurrentLevel");
+    // Clear all game data for fresh start
+    localStorage.removeItem(scoreKey);  // Remove difficulty-specific score
+    localStorage.removeItem("codeQuestGameInProgress");  // Reset game session
+    localStorage.setItem("codeQuestStreakCount", "0");  // Reset streak
+    
+    // Navigate to level 1
     window.location.href = "../levels/level1.html";
 });
 
+// 🏠 HOME PAGE
 document.getElementById("homeBtn").addEventListener("click", () => {
     window.location.href = "../home_page.html";
 });
@@ -150,17 +155,3 @@ function createStars() {
 }
 
 createStars();
-
-// BUTTONS
-
-// 🔄 PLAY AGAIN → go to Level 1
-document.getElementById("playAgainBtn").addEventListener("click", () => {
-    localStorage.removeItem(scoreKey);
-    localStorage.removeItem("codeQuestGameInProgress");
-    window.location.href = "../levels/level1.html";
-});
-
-// 🏠 HOME PAGE
-document.getElementById("homeBtn").addEventListener("click", () => {
-    window.location.href = "../home_page.html";
-});

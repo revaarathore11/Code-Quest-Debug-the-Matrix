@@ -1,6 +1,6 @@
-// ==========================================================
+
 //                HOME PAGE – FINAL JS
-// ==========================================================
+
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -19,9 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const highScoreEl = document.getElementById("highScore");
     if (highScoreEl) highScoreEl.textContent = globalHighScore;
 
-    /* ----------------------------------------------------
+    /*
        START BUTTON → Fade → Go to selected difficulty + level
-    ----------------------------------------------------- */
+    */
     startBtn?.addEventListener("click", () => {
 
         // Get selected difficulty and level
@@ -31,8 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
         // Save difficulty globally
         localStorage.setItem("codequestDifficulty", difficulty);
 
-        // Reset score for new game
-        localStorage.setItem("codequestScore", "0");
+        // Reset score for new game with difficulty-specific key
+        localStorage.setItem(`codequestScore_${difficulty}`, "0");
+        
+        // Clear game progress flag to mark fresh start
+        localStorage.removeItem("codeQuestGameInProgress");
+        
+        // Reset streak for new game session
+        localStorage.setItem("codeQuestStreakCount", "0");
 
         // Page transition
         transition.classList.add("active");

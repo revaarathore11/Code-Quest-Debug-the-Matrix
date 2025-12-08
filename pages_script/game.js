@@ -818,14 +818,18 @@ print(safe_divide(10, 0))`,
     // Score stored per difficulty
     const scoreKey  = `codequestScore_${difficulty}`;
     
-    // Reset score when starting a fresh game (Level 1 with no prior session)
-    if (currentLevel === 1 && !localStorage.getItem("codeQuestGameInProgress")) {
+    // Check if this is a fresh game start from home page or Play Again
+    // If score is 0 in localStorage, it means we're starting fresh
+    const storedScore = Number(localStorage.getItem(scoreKey)) || 0;
+    let totalScore = storedScore;
+    
+    // If we're on Level 1 AND the game is not in progress, this is a fresh start
+    if (currentLevel === 1) {
+        // Always start fresh on Level 1
+        totalScore = 0;
         localStorage.setItem(scoreKey, "0");
         localStorage.setItem("codeQuestGameInProgress", "true");
     }
-    
-    // Load accumulated score from localStorage (persists across levels)
-    let totalScore  = Number(localStorage.getItem(scoreKey)) || 0;
     
     // Initialize score display
     if (scoreDisplay) {
@@ -986,6 +990,8 @@ print(safe_divide(10, 0))`,
         // Prevent multiple scoring on same level
         if (!levelCompleted) {
             totalScore += 50;
+            // Cap score at maximum 250
+            totalScore = Math.min(totalScore, 250);
             localStorage.setItem(scoreKey, totalScore);
             levelCompleted = true;
             saveGameProgress(currentLevel, totalScore, difficulty);
@@ -1050,8 +1056,9 @@ print(safe_divide(10, 0))`,
             return;
         }
 
-        // Deduct score for hint
+        // Deduct score for hint (never go below 0)
         totalScore -= getHintCost();
+        totalScore = Math.max(totalScore, 0);
         localStorage.setItem(scoreKey, totalScore);
         scoreDisplay.textContent = `Score: ${totalScore}`;
         
