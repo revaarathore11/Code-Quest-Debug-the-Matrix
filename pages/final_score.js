@@ -6,7 +6,15 @@
 const difficulty = localStorage.getItem("codequestDifficulty") || "easy";
 const scoreKey = `codequestScore_${difficulty}`;
 let score = Number(localStorage.getItem(scoreKey)) || 0;
-const highestScore = Number(localStorage.getItem("codequestHighScore")) || 0;
+
+// Load global highest score (from any user)
+let globalHighScore = Number(localStorage.getItem("codequestGlobalHighScore")) || 0;
+
+// Update global highest score if current score is higher
+if (score > globalHighScore) {
+    globalHighScore = score;
+    localStorage.setItem("codequestGlobalHighScore", globalHighScore);
+}
 
 // Elements
 const scoreEl = document.getElementById("finalScore");
@@ -24,8 +32,8 @@ const maxScore = 250;
 // Display score
 scoreEl.textContent = score + " / " + maxScore;
 
-// Display highest score
-if (highestScoreEl) highestScoreEl.textContent = highestScore;
+// Display global highest score (from any user)
+if (highestScoreEl) highestScoreEl.textContent = globalHighScore;
 
 // Convert score → star rating
 function getStars(score) {

@@ -1192,12 +1192,12 @@ function goToNextLevel() {
 
     // After Level 5 → Final Score page
     if (next > 5) {
-        // 🔥 Update highest score if current score is higher
+        // 🔥 Update global highest score if current score is higher
         const currentScore = Number(localStorage.getItem(`codequestScore_${localStorage.getItem("codequestDifficulty")}`)) || 0;
-        const highestScore = Number(localStorage.getItem("codequestHighScore")) || 0;
+        const globalHighScore = Number(localStorage.getItem("codequestGlobalHighScore")) || 0;
         
-        if (currentScore > highestScore) {
-            localStorage.setItem("codequestHighScore", currentScore);
+        if (currentScore > globalHighScore) {
+            localStorage.setItem("codequestGlobalHighScore", currentScore);
         }
         
         window.location.href = "../pages/final_score.html";

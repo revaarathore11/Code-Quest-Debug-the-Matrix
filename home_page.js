@@ -13,11 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const difficultySelect = document.getElementById("difficultySelect");
     const settingsSelect = document.getElementById("settingsSelect");
 
-    /*  LOAD HIGH SCORE */
-
-    const highScore = Number(localStorage.getItem("codequestHighScore")) || 0;
+    /*  LOAD GLOBAL HIGH SCORE */
+    // Load the highest score achieved by ANY user from localStorage
+    const globalHighScore = Number(localStorage.getItem("codequestGlobalHighScore")) || 0;
     const highScoreEl = document.getElementById("highScore");
-    if (highScoreEl) highScoreEl.textContent = highScore;
+    if (highScoreEl) highScoreEl.textContent = globalHighScore;
 
     /* ----------------------------------------------------
        START BUTTON → Fade → Go to selected difficulty + level
