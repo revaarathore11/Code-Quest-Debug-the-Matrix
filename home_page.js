@@ -455,6 +455,67 @@ function saveProfile(profile) {
     localStorage.setItem("codequestUserProfile", JSON.stringify(profile));
 }
 
+// Load and display achievements in profile
+function loadAchievementsUI() {
+    const achievementsContainer = document.getElementById("profileAchievements");
+    if (!achievementsContainer) return;
+    
+    // Clear previous achievements
+    achievementsContainer.innerHTML = "";
+    
+    // Load achievements from localStorage
+    const achievements = JSON.parse(localStorage.getItem("codeQuestAchievements")) || {
+        noHintNinja: false,
+        speedrunner: false,
+        streakMaster: false,
+        bugSlayer: false
+    };
+    
+    // Define achievement data
+    const achievementsList = [
+        {
+            id: "noHintNinja",
+            emoji: "🏅",
+            name: "No-Hint Ninja",
+            description: "Complete a level without hints"
+        },
+        {
+            id: "speedrunner",
+            emoji: "⏱️",
+            name: "Speedrunner",
+            description: "Finish with 15+ seconds remaining"
+        },
+        {
+            id: "streakMaster",
+            emoji: "🔥",
+            name: "Streak Master",
+            description: "Complete all 5 levels in a row"
+        },
+        {
+            id: "bugSlayer",
+            emoji: "🎓",
+            name: "Bug Slayer",
+            description: "Master all 3 difficulties"
+        }
+    ];
+    
+    // Render each achievement
+    achievementsList.forEach(achievement => {
+        const isUnlocked = achievements[achievement.id];
+        
+        const badge = document.createElement("div");
+        badge.className = `achievement-badge ${isUnlocked ? "" : "locked"}`;
+        badge.title = achievement.description;
+        
+        badge.innerHTML = `
+            <span class="achievement-emoji">${achievement.emoji}</span>
+            <span class="achievement-name">${achievement.name}</span>
+        `;
+        
+        achievementsContainer.appendChild(badge);
+    });
+}
+
 // Initialize profile UI
 function initProfileUI() {
     const profile = loadProfile();
@@ -476,6 +537,9 @@ function initProfileUI() {
     
     profileHighScore.textContent = highScore;
     profilePlaytime.textContent = playtimeMinutes + " min";
+    
+    // Load achievements
+    loadAchievementsUI();
 }
 
 // Validate username

@@ -53,16 +53,29 @@ function getMessage(score) {
     return "Keep practicing — you'll get better!";
 }
 
-// Get achievements
+// Get achievements (including unlocked badges from gameplay)
 function getAchievements(score, difficulty) {
     const achievements = [];
-    if (score === maxScore) achievements.push("Perfect Score!");
-    if (score >= 230) achievements.push("Legendary Debugger");
-    else if (score >= 200) achievements.push("Pro Debugger");
-    else if (score >= 150) achievements.push("Good Debugger");
-    if (difficulty === "hard" && score >= 150) achievements.push("Hard Master");
-    if (score >= 150) achievements.push("Swift Solver");
-    achievements.push("Mission Accomplished");
+    
+    // Load unlocked badges from game achievements
+    const achievementsData = JSON.parse(localStorage.getItem("codeQuestAchievements")) || {};
+    
+    // Add unlocked badges first
+    if (achievementsData.noHintNinja) achievements.push("🏅 No-Hint Ninja");
+    if (achievementsData.speedrunner) achievements.push("⏱️ Speedrunner");
+    if (achievementsData.streakMaster) achievements.push("🔥 Streak Master");
+    if (achievementsData.bugSlayer) achievements.push("🎓 Bug Slayer");
+    
+    // Add score-based achievements
+    if (score === maxScore) achievements.push("🌟 Perfect Score");
+    if (score >= 230) achievements.push("👑 Legendary Debugger");
+    else if (score >= 200) achievements.push("⭐ Pro Debugger");
+    else if (score >= 150) achievements.push("💪 Good Debugger");
+    
+    if (difficulty === "hard" && score >= 150) achievements.push("🔥 Hard Master");
+    if (score >= 150) achievements.push("⚡ Swift Solver");
+    
+    achievements.push("✅ Mission Accomplished");
     return achievements;
 }
 

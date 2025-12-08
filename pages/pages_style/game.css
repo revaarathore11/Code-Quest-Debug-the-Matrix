@@ -1135,3 +1135,69 @@ body {
     border: 2px solid #0f0;
     box-shadow: 0 0 20px #0f0;
 }
+
+/* ===== ACHIEVEMENT POPUP STYLING ===== */
+.achievement-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateX(400px) scale(0.8);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+}
+
+.achievement-popup.show {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+}
+
+.achievement-popup-content {
+    background: linear-gradient(135deg, rgba(0, 255, 200, 0.95) 0%, rgba(0, 200, 150, 0.95) 100%);
+    border: 3px solid #00ffcc;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 204, 0.6),
+        inset 0 0 15px rgba(0, 255, 204, 0.2);
+    max-width: 300px;
+    font-family: 'Press Start 2P', monospace;
+    color: #000;
+}
+
+.achievement-emoji {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    display: block;
+    animation: achievementBounce 0.6s ease-in-out;
+}
+
+.achievement-popup-content h3 {
+    color: #001a1a;
+    font-size: 16px;
+    margin: 10px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 1px;
+}
+
+.achievement-popup-content p {
+    color: #003333;
+    font-size: 11px;
+    margin: 8px 0 0 0;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+}
+
+@keyframes achievementBounce {
+    0% {
+        transform: scale(0) rotateZ(-20deg);
+    }
+    50% {
+        transform: scale(1.15) rotateZ(5deg);
+    }
+    100% {
+        transform: scale(1) rotateZ(0deg);
+    }
+}

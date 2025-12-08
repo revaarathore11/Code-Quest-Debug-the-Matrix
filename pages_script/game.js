@@ -103,6 +103,95 @@ document.addEventListener("DOMContentLoaded", () => {
     let settingsViewedThisSession = false;
     let timeRemaining = 60;
 
+    // ===== ACHIEVEMENTS SYSTEM =====
+    // Load achievements from localStorage
+    const achievementsKey = "codeQuestAchievements";
+    let achievements = JSON.parse(localStorage.getItem(achievementsKey)) || {
+        noHintNinja: false,
+        speedrunner: false,
+        streakMaster: false,
+        bugSlayer: false
+    };
+
+    // Load streak count and difficulty completion tracking
+    let streakCount = Number(localStorage.getItem("codeQuestStreakCount")) || 0;
+    const difficultyCompletionKey = "codeQuestDifficultyCompletion";
+    let difficultyCompletion = JSON.parse(localStorage.getItem(difficultyCompletionKey)) || {
+        easy: false,
+        medium: false,
+        hard: false
+    };
+
+    // Achievement unlock popup function
+    function showAchievementPopup(title, emoji, message) {
+        const popup = document.createElement("div");
+        popup.className = "achievement-popup";
+        popup.innerHTML = `
+            <div class="achievement-popup-content">
+                <div class="achievement-emoji">${emoji}</div>
+                <h3>${title}</h3>
+                <p>${message}</p>
+            </div>
+        `;
+        document.body.appendChild(popup);
+        
+        // Trigger animation
+        setTimeout(() => popup.classList.add("show"), 10);
+        
+        // Remove after animation
+        setTimeout(() => {
+            popup.classList.remove("show");
+            setTimeout(() => popup.remove(), 500);
+        }, 3000);
+    }
+
+    // Check and unlock achievements
+    function checkAchievements() {
+        // 1. No-Hint Ninja: Complete level without hints
+        if (hintStep === 0 && !achievements.noHintNinja) {
+            achievements.noHintNinja = true;
+            localStorage.setItem(achievementsKey, JSON.stringify(achievements));
+            showAchievementPopup("No-Hint Ninja", "🏅", "Completed a level without using any hints!");
+        }
+
+        // 2. Speedrunner: Finish with 15+ seconds remaining
+        if (timer >= 15 && !achievements.speedrunner) {
+            achievements.speedrunner = true;
+            localStorage.setItem(achievementsKey, JSON.stringify(achievements));
+            showAchievementPopup("Speedrunner", "⏱️", "You finished fast! 15+ seconds remaining!");
+        }
+
+        // 3. Streak Master: Complete all 5 levels without quitting/failing
+        if (currentLevel === 5 && !levelCompleted) {
+            // Increment streak when starting level 5
+            if (streakCount < 5) {
+                streakCount++;
+                localStorage.setItem("codeQuestStreakCount", streakCount);
+            }
+        }
+
+        // Check if streak is complete (all 5 levels done)
+        if (currentLevel === 5 && levelCompleted && streakCount === 5 && !achievements.streakMaster) {
+            achievements.streakMaster = true;
+            localStorage.setItem(achievementsKey, JSON.stringify(achievements));
+            showAchievementPopup("Streak Master", "🔥", "Completed all 5 levels in a row!");
+        }
+
+        // 4. Bug Slayer: Complete all 3 difficulties
+        const currentDifficulty = localStorage.getItem("codequestDifficulty") || "easy";
+        if (currentLevel === 5 && levelCompleted) {
+            difficultyCompletion[currentDifficulty] = true;
+            localStorage.setItem(difficultyCompletionKey, JSON.stringify(difficultyCompletion));
+
+            // Check if all difficulties are completed
+            if (difficultyCompletion.easy && difficultyCompletion.medium && difficultyCompletion.hard && !achievements.bugSlayer) {
+                achievements.bugSlayer = true;
+                localStorage.setItem(achievementsKey, JSON.stringify(achievements));
+                showAchievementPopup("Bug Slayer", "🎓", "You mastered all difficulties!");
+            }
+        }
+    }
+
     // Start playtime tracking
     startGlobalPlaytimeTracking();
     
@@ -900,6 +989,9 @@ print(safe_divide(10, 0))`,
             localStorage.setItem(scoreKey, totalScore);
             levelCompleted = true;
             saveGameProgress(currentLevel, totalScore, difficulty);
+            
+            // Check for achievement unlocks
+            checkAchievements();
         }
 
         scoreDisplay.textContent = `Score: ${totalScore}`;
@@ -1091,6 +1183,9 @@ print(safe_divide(10, 0))`,
             
             // Clear the game in progress flag so next game starts fresh
             localStorage.removeItem("codeQuestGameInProgress");
+            
+            // Reset streak count when returning to home (they quit the game)
+            localStorage.setItem("codeQuestStreakCount", "0");
             
             // Save current level and game state
             const gameProgress = {
